@@ -413,6 +413,7 @@
                         
                     </fields>
                 </events>
+                <!--  DA VERIFICARE
                 <storage translate="label" module="contactlab_hub">
                     <label>Profile keeping</label>
                     <frontend_type>text</frontend_type>
@@ -530,6 +531,8 @@
                         </tags>
                     </fields>
                 </params>
+                 -->
+                
                 <cron_events translate="label">
                     <label>Cron Export Events Settings</label>
                     <frontend_type>text</frontend_type>
@@ -596,6 +599,7 @@
                         </repeat_hours>                                  
                     </fields>
                 </cron_events>
+                <!-- 
                 <cron_previous_customers translate="label">
                     <label>Cron Previous Customers Settings</label>
                     <frontend_type>text</frontend_type>
@@ -625,10 +629,10 @@
                     	</previous_date>     
                     	<limit>
                     		<label>Limit Customers to export</label>                    		
-                    		<!-- 
+                    		
                             <frontend_type>select</frontend_type>
                         	<source_model>contactlab_hub/adminhtml_system_config_source_cron_customersLimit</source_model>
-                        	 -->
+                        	 
                         	 <frontend_type>text</frontend_type>
                         	<sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
@@ -693,6 +697,7 @@
 	                   	</extra_properties>                                  
                     </fields>                   
                 </cron_previous_customers>
+                
                 <cron_subscribers translate="label">
                     <label>Cron Import Subscribers</label>
                     <frontend_type>text</frontend_type>
@@ -760,6 +765,7 @@
                         </repeat_hours>                                  
                     </fields>
                 </cron_subscribers>
+                †
             	<email translate="label">
             		<label>Email</label>
                     <frontend_type>text</frontend_type>
@@ -815,6 +821,7 @@
 						</queue_pause>
 					</fields>
             	</email>
+            	-->
             </groups>
         </contactlab_hub>
     </sections>

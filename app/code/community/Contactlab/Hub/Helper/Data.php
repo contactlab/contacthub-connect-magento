@@ -98,7 +98,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 		{			
 			$searchQuery = Mage::app()->getRequest()->getParam('q');	
 			$currentLayer = Mage::registry('current_layer');
-			$searchResult = ($currentLayer instanceof Varien_Object)?$currentLayer->getProductCollection()->getAllIds():[];
+			$searchResult = ($currentLayer instanceof Varien_Object)?$currentLayer->getProductCollection()->getAllIds():array();
 			$tracking.= "";				
 			if($this->getCustomer())
 			{

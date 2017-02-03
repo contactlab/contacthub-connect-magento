@@ -215,7 +215,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
 		    $objProduct->id = $product->getEntityId();
 		    $objProduct->sku = $product->getSku();
 		    $objProduct->name = $product->getName();
-		    $objProduct->price = (float)Mage::getModel('directory/currency')->formatTxt($product->getPrice(), [ 'display' => Zend_Currency::NO_SYMBOL ]);
+		    $objProduct->price = (float)Mage::getModel('directory/currency')->formatTxt($product->getPrice(), array( 'display' => Zend_Currency::NO_SYMBOL ));
 		    $objProduct->imageUrl = Mage::getModel('catalog/product_media_config')->getMediaUrl($product->getImage());
 		    $objProduct->linkUrl = Mage::getUrl($product->getUrlPath());;
 		    $objProduct->shortDescription = $product->getShortDescription();
