@@ -1,0 +1,23 @@
+<div class="grid box-left" style="margin-top: 50px">
+    <div class="hor-scroll">
+        <h3 style="margin-top: 30px">Export previous customers and subscribers</h3>
+        <table class="data" cellspacing="0">
+            <thead>
+                <tr class="headings">
+                    <th colspan="3"><?php echo $this->__('Use this panel to manually queue import, export and statistics reset tasks') ?></th>
+                </tr>
+            </thead>
+            <tbody>                
+                <tr class="even">
+                    <td><?php echo $this->__('Queue <strong>export previous customer and subscribers</strong> task') ?></td>
+                    <td><?php echo $this->getChildHtml('contactlab.hub.customers.export') ?></td>
+                    <td><a href="<?php echo $this->getUrl('adminhtml/system_config/edit', array('section' => 'contactlab_hub_options')) ?>"><?php echo $this->__('Configure') ?></a></td>
+                </tr>
+                <tr class="even">
+                    <td><?php echo $this->__('Reset Queue <strong>export of all previous customers and subscribers</strong> task') ?></td>
+                    <td colspan="2"><?php echo $this->getChildHtml('contactlab.hub.resetexport') ?></td>                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

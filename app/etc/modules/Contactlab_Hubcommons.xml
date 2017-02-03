@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Contactlab_Hubcommons>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_AdminNotification />
+            </depends>
+        </Contactlab_Hubcommons>
+    </modules>
+</config>

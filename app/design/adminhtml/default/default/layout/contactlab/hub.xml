@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <adminhtml_contactlab_commons_tasks_index>
+        <reference name="content">
+            <block type="adminhtml/template" name="contactlab.commons.hub" before="contactlab.commons.version"
+                   template="contactlab/hub/hub.phtml">
+                <block type="contactlab_commons/adminhtml_widget_button"
+                       name="contactlab.hub.customers.export"
+                       as="contactlab.hub.customers.export">
+                    <action method="setLabel" translate="label">
+                        <label>Queue Customer export job</label>
+                    </action>
+                    <action method="setUrl">
+                        <url>adminhtml/contactlab_hub_export/queue</url>
+                    </action>
+                    <action method="setConfirm" translate="confirm">
+                        <confirm>Are you sure you want to do this?</confirm>
+                    </action>
+                </block>                                
+                <block type="contactlab_commons/adminhtml_widget_button"
+                       name="contactlab.hub.resetexport"
+                       as="contactlab.hub.resetexport">
+                    <action method="setLabel" translate="label">
+                        <label>Reset export Previous Customers</label>
+                    </action>
+                    <action method="setUrl">
+                        <url>adminhtml/contactlab_hub_export/reset</url>
+                    </action>
+                    <action method="setConfirm" translate="confirm">
+                        <confirm>Are you sure you want to do this?</confirm>
+                    </action>
+                </block>
+            </block>
+        </reference>
+    </adminhtml_contactlab_commons_tasks_index>
+</layout>

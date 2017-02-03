@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <adminhtml_contactlab_hubcommons_logs_index>
+        <reference name="content">
+            <block type="contactlab_hubcommons/adminhtml_logs" name="contactlab.hubcommons.log" />
+        </reference>
+    </adminhtml_contactlab_hubcommons_logs_index>
+    <adminhtml_contactlab_hubcommons_logs_grid>
+        <reference name="content">
+            <block type="contactlab_hubcommons/adminhtml_logs_grid" name="contactlab.hubcommons.logs.grid" output="toHtml"/>
+        </reference>
+    </adminhtml_contactlab_hubcommons_logs_grid>
+    <adminhtml_contactlab_hubcommons_tasks_index>
+        <reference name="content">
+            <block type="contactlab_hubcommons/adminhtml_tasks" name="contactlab.hubcommons.tasks" as="tasks" />
+            <block type="contactlab_hubcommons/adminhtml_tasks_js" name="contactlab.hubcommons.tasks.js" as="tasks.js" />
+            <block type="contactlab_hubcommons/adminhtml_tasks_status" name="contactlab.hubcommons.tasks.status" as="tasks.status" />
+            <block type="contactlab_hubcommons/adminhtml_version" name="contactlab.hubcommons.version" as="version" after="-" />
+        </reference>
+        <reference name="head">
+            <action method="addJs"><file>contactlab_hubcommons/adminhtml/tasks.js</file></action>
+        </reference>
+    </adminhtml_contactlab_hubcommons_tasks_index>
+    <adminhtml_contactlab_hubcommons_tasks_grid>
+        <reference name="content">
+            <block type="contactlab_hubcommons/adminhtml_tasks_grid" name="contactlab.hubcommons.tasks.grid" output="toHtml"/>
+        </reference>
+    </adminhtml_contactlab_hubcommons_tasks_grid>
+    <adminhtml_contactlab_hubcommons_events_index>
+        <reference name="content">
+            <block type="contactlab_hubcommons/adminhtml_events" name="contactlab.hubcommons.events" />
+        </reference>
+    </adminhtml_contactlab_hubcommons_events_index>
+    <adminhtml_contactlab_hubcommons_events_grid>
+        <reference name="content">
+            <block type="contactlab_hubcommons/adminhtml_events_grid" name="contactlab.hubcommons.events.grid" output="toHtml"/>
+        </reference>
+    </adminhtml_contactlab_hubcommons_events_grid>
+    <adminhtml_contactlab_hubcommons_test_index>
+        <reference name="content">
+            <block type="contactlab_hubcommons/adminhtml_test" name="contactlab.hubcommons.test" />
+        </reference>
+    </adminhtml_contactlab_hubcommons_test_index>
+    <adminhtml_contactlab_hubcommons_releasenotes_index>
+        <reference name="content">
+            <block type="contactlab_hubcommons/adminhtml_releaseNotes" name="contactlab_hubcommons_adminhtml_releasenotes"
+                   template="contactlab/hubcommons/releasenotes.phtml"/>
+        </reference>
+    </adminhtml_contactlab_hubcommons_releasenotes_index>
+    <adminhtml_contactlab_hubcommons_configurationcheck_index>
+        <reference name="content">
+            <block type="contactlab_hubcommons/adminhtml_configurationCheck" name="contactlab_hubcommons_adminhtml_configurationcheck"
+                   template="contactlab/hubcommons/configurationcheck.phtml"/>
+        </reference>
+    </adminhtml_contactlab_hubcommons_configurationcheck_index>
+</layout>
