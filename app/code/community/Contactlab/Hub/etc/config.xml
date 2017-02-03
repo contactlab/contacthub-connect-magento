@@ -340,21 +340,17 @@
                 <logfilename>contactlabhub.log</logfilename>
             </settings>
             <events>
-                <enabled>0</enabled>                
-                <transferonfly>0</transferonfly>
+            	<!-- 
                 <evtgeneric_eventname>genericActiveEvent</evtgeneric_eventname>
-                <evtregister>1</evtregister>
-                <!--<evtregister_eventname>completedRegistration</evtregister_eventname>-->
+                <evtregister>1</evtregister>                
                 <evtregister_eventname>formCompiled</evtregister_eventname>
                 <evtlogin>1</evtlogin>
                 <evtlogin_eventname>loggedIn</evtlogin_eventname>
                 <evtlogout>1</evtlogout>
                 <evtlogout_eventname>loggedOut</evtlogout_eventname>
-                <evtsub_on>1</evtsub_on>
-                <!--<evtsub_on_eventname>newsletterSubscribed</evtsub_on_eventname>-->
+                <evtsub_on>1</evtsub_on>                
                 <evtsub_on_eventname>campaignSubscribed</evtsub_on_eventname>
-                <evtsub_off>1</evtsub_off>
-                <!--<evtsub_off_eventname>newsletterUnsubscribed</evtsub_off_eventname>-->
+                <evtsub_off>1</evtsub_off>                
                 <evtsub_off_eventname>campaignUnsubscribed</evtsub_off_eventname>
                 <evtlocale>1</evtlocale>
                 <evtlocale_eventname>changedSetting</evtlocale_eventname>
@@ -376,25 +372,37 @@
                 <evtcompare_remove_eventname>removedCompare</evtcompare_remove_eventname>
                 <evtview>1</evtview>
                 <evtview_eventname>viewedProduct</evtview_eventname>
-            </events>
-            <storage>
-                <session>1</session>
-                <cookie>1</cookie>
-                <cookie_verificationkey>thisIsAKey</cookie_verificationkey>
-            </storage>
-            <params>
-                <enabled>1</enabled>
-                <prefix>clab-</prefix>
-                <emailkey>clab-email</emailkey>
-                <session>1</session>
-                <cookie>1</cookie>
-                <cookie_verificationkey>thisIsAKey</cookie_verificationkey>
-            </params>
+                 -->                
+				<evtregister>1</evtregister>
+                <loggedIn>1</loggedIn>
+                <loggedOut>1</loggedOut>
+                <campaignName>Magento_Campaign</campaignName>
+               	<campaignSubscribed>1</campaignSubscribed>
+                <campaignUnsubscribed>1</campaignUnsubscribed>
+                <changedSetting>1</changedSetting>
+               	<completedOrder>1</completedOrder>
+                <searched>1</searched>
+                <addedProduct>1</addedProduct>
+                <removedProduct>1</removedProduct>
+                <abandonedCart>1</abandonedCart >
+                <send_to_not_subscribed>0</send_to_not_subscribed>
+                <min_minutes_from_last_update>120</min_minutes_from_last_update>
+                <max_minutes_from_last_update>1440</max_minutes_from_last_update>                           
+                <addedWishlist>1</addedWishlist>
+                <removedWishlist>1</removedWishlist>
+                <addedCompare>1</addedCompare>
+                <removedCompare>1</removedCompare>
+                <viewedProduct>1</viewedProduct>
+                <viewedProductCategory>1</viewedProductCategory>
+                <orderShipped>1</orderShipped>                
+            </events>      
             <cron_events>
+            	<limit>30</limit>
             	<frequency>I</frequency>
-            	<repeat_minutes>5</repeat_minutes>
+            	<repeat_minutes>1</repeat_minutes>
             </cron_events>
             <cron_previous_customers>
+            	<limit>50</limit>
             	<frequency>I</frequency>
             	<repeat_minutes>5</repeat_minutes>
             </cron_previous_customers>

@@ -14,10 +14,6 @@ class Contactlab_Hub_Model_Cron extends Mage_Core_Model_Abstract
 		return $this->_helper()->getConfigData($key);
 	}
 	
-	private function _isEnabled() {
-		return $this->_getConfig('events/enabled')?true:false;
-	}
-	
 	private function _isExportPreviousCustomersEnabled() {
 		return $this->_getConfig('cron_previous_customers/enabled')?true:false;
 	}
@@ -40,20 +36,13 @@ class Contactlab_Hub_Model_Cron extends Mage_Core_Model_Abstract
 	}
 	
 	public function exportEvents()
-	{
-		if (!$this->_isEnabled())
-		{
-			return;
-		}
-	
-		$this->logCronCall("addExportEventsQueue");
-	
+	{		
+		$this->logCronCall("addExportEventsQueue");	
 		return Mage::getModel("contactlab_hubcommons/task")
-		->setTaskCode("ExportEventsTask")
-		->setModelName('contactlab_hub/task_exportEvents')
-		->setDescription('Export Events')
-		->save();
-	
+			->setTaskCode("ExportEventsTask")
+			->setModelName('contactlab_hub/task_exportEvents')
+			->setDescription('Export Events')
+			->save();
 	}
 	
 	public function exportPreviousCustomers()
