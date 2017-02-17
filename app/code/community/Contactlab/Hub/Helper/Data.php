@@ -74,7 +74,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 	{
 		$customer = $this->getCustomer();
 		$customerInfo = array(
-					"externalId" 	=> $customer->getEntityId(),				
+					//"externalId" 	=> $customer->getEntityId(),				
 					"base"	=> array( 							
 								"firstName"	=> $customer->getFirstname(),
 								"lastName"	=> $customer->getLastname(),

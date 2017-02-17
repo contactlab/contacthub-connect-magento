@@ -27,9 +27,9 @@ class Contactlab_Hub_Model_Observer
     {
     	if ($this->_isEnabled())
     	{
-    		if(!$this->_getConfig('cron_previous_customers/previus_date'))
+    		if(!$this->_getConfig('cron_previous_customers/previous_date'))
     		{
-    			$this->_helper()->setConfigData('cron_previous_customers/previus_date', date('Y-m-d H:i:s'));
+    			$this->_helper()->setConfigData('cron_previous_customers/previous_date', date('Y-m-d H:i:s'));
     		}
     	}
     }
@@ -74,13 +74,18 @@ class Contactlab_Hub_Model_Observer
 				break;
 	
 		}
-	
+	/*
 		$hubJs.="
 				</script>
 				<script async src='".Mage::getBaseUrl()."js/contactlab/hub/contacthub.min.js'></script>
 				<!-- END ContactHubJs -->
 		";
-	
+	*/
+		$hubJs.="
+				</script>	
+				<script async src='https://assets.contactlab.it/contacthub/sdk-browser/latest/contacthub.min.js'></script>
+				<!-- END ContactHubJs -->
+		";
 		
 		if($hubJs)
 		{
@@ -106,6 +111,17 @@ class Contactlab_Hub_Model_Observer
 	
     public function traceCustomerLogin($observer) 
     {    	       
+    	if (isset($_COOKIE['_ch'])) 
+    	{
+    		$cooke = json_decode(Mage::getModel('core/cookie')->get('_ch'));    		
+    		if($cooke->customerId)
+    		{
+    			unset($_COOKIE['_ch']);    		
+    			setcookie('_ch', null, -1, '/');    		
+    			Mage::getModel('core/cookie')->delete('_ch');
+    		}
+    	}    	
+    	
 		$event = Mage::getModel('contactlab_hub/event_login');
 		$event->setEvent($observer->getEvent());
 		$event->trace();		

@@ -141,50 +141,7 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <fields>
-                    	<!-- 
-                        <heading_general translate="label">
-                            <label>Settings</label>
-                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
-                            <sort_order>1</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </heading_general>
-                        <enabled translate="label">
-                            <label>Enabled: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>3</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                        </enabled>                       
-                        <buffer translate="label">
-                            <label>Keep anonymous event in session: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>5</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                        </buffer>
-                        <transferonfly translate="label">
-                            <label>Transfer events on fly (no cron): </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>6</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                        </transferonfly>
-                         -->
-                         
-                         
-                         
+                    <fields>                                     
                         <heading_events translate="label">
                             <label>Event settings</label>
                             <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
@@ -193,7 +150,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </heading_events>
-                        
 						<!--  NON C'è EVENTO?-->  				
 						<evtregister translate="label">
                             <label>Registered: </label>
@@ -298,7 +254,7 @@
                             <label>Product removed from cart: </label>
                             <comment></comment>
                             <frontend_type>radios</frontend_type>
-                            <sort_order>90</sort_order>
+                            <sort_order>85</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -601,7 +557,8 @@
                         </repeat_hours>                                  
                     </fields>
                 </cron_events>
-                <!-- 
+ 
+<!-- 
                 <cron_previous_customers translate="label">
                     <label>Cron Previous Customers Settings</label>
                     <frontend_type>text</frontend_type>
@@ -623,7 +580,7 @@
                     	<previous_date>
                     		<label>Previous Date</label>                    		                    		                            
                     		<frontend_type>text</frontend_type>
-                        	<frontend_model>contactlab_hub/adminhtml_system_config_source_previousDate</frontend_model>                        	                         	
+                        	<frontend_model>contactlab_hub/adminhtml_system_config_source_date</frontend_model>                        	                         	
                         	<sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -699,7 +656,8 @@
 	                   	</extra_properties>                                  
                     </fields>                   
                 </cron_previous_customers>
-                
+-->
+    <!--             
                 <cron_subscribers translate="label">
                     <label>Cron Import Subscribers</label>
                     <frontend_type>text</frontend_type>
@@ -767,7 +725,7 @@
                         </repeat_hours>                                  
                     </fields>
                 </cron_subscribers>
-                †
+                
             	<email translate="label">
             		<label>Email</label>
                     <frontend_type>text</frontend_type>

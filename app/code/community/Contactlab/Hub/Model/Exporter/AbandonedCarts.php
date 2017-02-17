@@ -104,11 +104,11 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 			$collection->getSelect()->join( array('subscribers'=> newsletter_subscriber), 'subscribers.subscriber_email = main_table.customer_email', array());
 			$collection->addFieldToFilter('subscribers.subscriber_status', array('eq' => Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED));
 		}
-		
+		/*
 		$this->_helper()->log('ABANDONED CART');
 		$this->_helper()->log($collection->getSelect());
 		$this->_helper()->log('FINE ABANDONED CART');
-		
+		*/
 		
 		echo $collection->getSelect()."\n\n";
 		

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Contactlab_Hub>
-            <version>0.1.0</version>
+            <version>0.9.0</version>
         </Contactlab_Hub>
     </modules>
     <global>
@@ -339,40 +339,7 @@
                 <log>0</log>
                 <logfilename>contactlabhub.log</logfilename>
             </settings>
-            <events>
-            	<!-- 
-                <evtgeneric_eventname>genericActiveEvent</evtgeneric_eventname>
-                <evtregister>1</evtregister>                
-                <evtregister_eventname>formCompiled</evtregister_eventname>
-                <evtlogin>1</evtlogin>
-                <evtlogin_eventname>loggedIn</evtlogin_eventname>
-                <evtlogout>1</evtlogout>
-                <evtlogout_eventname>loggedOut</evtlogout_eventname>
-                <evtsub_on>1</evtsub_on>                
-                <evtsub_on_eventname>campaignSubscribed</evtsub_on_eventname>
-                <evtsub_off>1</evtsub_off>                
-                <evtsub_off_eventname>campaignUnsubscribed</evtsub_off_eventname>
-                <evtlocale>1</evtlocale>
-                <evtlocale_eventname>changedSetting</evtlocale_eventname>
-                <evtcheckout>1</evtcheckout>
-                <evtcheckout_eventname>completedOrder</evtcheckout_eventname>
-                <evtsearch>1</evtsearch>
-                <evtsearch_eventname>searched</evtsearch_eventname>
-                <evtcart_add>1</evtcart_add>
-                <evtcart_add_eventname>addedProduct</evtcart_add_eventname>
-                <evtcart_remove>1</evtcart_remove>
-                <evtcart_remove_eventname>removedProduct</evtcart_remove_eventname>
-                <evtwishlist_add>1</evtwishlist_add>
-                <evtwishlist_add_eventname>addedWishlist</evtwishlist_add_eventname>
-                <evtwishlist_remove>1</evtwishlist_remove>
-                <evtwishlist_remove_eventname>removedWishlist</evtwishlist_remove_eventname>
-                <evtcompare_add>1</evtcompare_add>
-                <evtcompare_add_eventname>addedCompare</evtcompare_add_eventname>
-                <evtcompare_remove>1</evtcompare_remove>
-                <evtcompare_remove_eventname>removedCompare</evtcompare_remove_eventname>
-                <evtview>1</evtview>
-                <evtview_eventname>viewedProduct</evtview_eventname>
-                 -->                
+            <events>              
 				<evtregister>1</evtregister>
                 <loggedIn>1</loggedIn>
                 <loggedOut>1</loggedOut>

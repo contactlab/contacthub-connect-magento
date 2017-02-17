@@ -38,15 +38,20 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 		$this->_helper()->log(__METHOD__);
 		try {
 			$response = $this->curlPost($this->_getApiUrl('customers'), json_encode($data), true);
-			if (!$response->id) 
-			{
-				$response = json_decode($response);			
+			$response = json_decode($response);
+			if ($response->curl_http_code == 409) 
+			{							
 				unset($data->nodeId);
 				$data->id = $response->data->customer->id;
 				//unset($data->subscriptions);
-				$response = $this->curlPost($response->data->customer->href, json_encode($data), true, null, "PATCH");									
+				$response = $this->curlPost($response->data->customer->href, json_encode($data), true, null, "PATCH");
+				return json_decode($response);
 			}			
-			return json_decode($response);
+			else 
+			{
+				json_decode($response);
+				return $response->id;
+			}
 		} catch (\Exception $e) {
 			throw $e;
 		}
@@ -147,9 +152,11 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 	
 	private function curlPost($url, $data = null, $authNeeded = true, $customHeader = null, $customRequest = null) 
 	{
-		$this->_helper()->log(__METHOD__);
-		//$this->_helper()->log('CurlPost url: '.$url.', data: ');
-		//$this->_helper()->log(print_r($data, true));
+		$this->_helper()->log(__METHOD__);		
+		$this->_helper()->log("CURL URL:");
+		$this->_helper()->log($url);
+		$this->_helper()->log("FINE CURL URL:");
+		
 		$curl = curl_init();
 		$this->_helper()->log($url);
 	
@@ -203,6 +210,10 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 		$this->_helper()->log("CURL HTTP CODE:");
 		$this->_helper()->log(curl_getinfo($curl, CURLINFO_HTTP_CODE));
 		$this->_helper()->log("FINE CURL HTTP CODE:");
+		
+		$response = json_decode($response);
+		$response->curl_http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+		$response = json_encode($response);
 		
 		//FIXME La post su session in realtà non torna un vero e proprio errore ma una notice...
 		$tmp = explode('/', $url);		

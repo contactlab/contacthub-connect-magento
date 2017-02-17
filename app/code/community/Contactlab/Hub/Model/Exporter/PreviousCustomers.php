@@ -62,7 +62,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 	
 	protected function _getPreviousDate()
 	{		
-		return $this->_getConfig('cron_previous_customers/previus_date');
+		return Mage::getModel('core/date')->date('Y-m-d', strtotime($this->_getConfig('cron_previous_customers/previous_date')));
 	}
 	
 	/**
@@ -117,6 +117,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		
 		$this->_init();
 		$this->_fillPreviousCustomerTable();
+		/*
 		$this->_writeTranche();
 	
 		if ($this->_useLocalServer()) 
@@ -133,8 +134,11 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 			unlink(realpath($filename));
 		}
 		$this->afterFileCopy();
+		*/
+		$this->_createEvents();
 		
-	
+		$this->_setExportedTranche();
+		
 		return "Export done";
 	}
 	
@@ -183,6 +187,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 			}
 		}
 		//echo $query."\n";
+		//Mage::log($query, null, 'fra.log');
 		$results = $this->_getReadConnection()->fetchAll($query);			
 		foreach ($results as $row)
 		{
@@ -222,6 +227,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 			}
 		}
 		//echo $query."\n";
+		Mage::log($query, null, 'fra.log');
 		$results = $this->_getReadConnection()->fetchAll($query);
 		foreach ($results as $row)
 		{				
@@ -383,7 +389,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		}
 		return $extraProperties;
 	}
-	
+	/*
 	protected function _writeTranche()
 	{
 		if(count($this->_getPreviousCustomers()) > 0)
@@ -439,7 +445,36 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		$this->_setExportedTranche();
 		return $this;
 	}
+	*/
 	
+	
+	protected function _createEvents()
+	{
+		if(count($this->_getPreviousCustomers()) > 0)
+		{			
+			$this->_tranche = $this->_getPreviousCustomers();
+			
+			foreach($this->_tranche as $previousCustomer)
+			{			
+				$event = Mage::getModel('contactlab_hub/event');
+				$event->setName('loggedIn')
+						->setModel('login')
+						->setCreatedAt($previousCustomer['created_at'])
+						->setStoreId($previousCustomer['store_id'])
+						->setIdentityEmail($previousCustomer['email'])
+						->setNeedUpdateIdentity(true)
+				;
+				$event->save();			
+								
+			}			
+		}
+		else
+		{
+			Mage::helper("contactlab_hubcommons")->logNotice("No previous customers to export");
+			Mage::helper('contactlab_hub')->setConfigData('cron_previous_customers/enabled', 0);
+		}
+		return $this;
+	}
 
 	protected function _setUnexported()
 	{

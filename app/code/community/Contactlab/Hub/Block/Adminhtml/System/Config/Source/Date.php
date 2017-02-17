@@ -1,5 +1,6 @@
 <?php 
-class Contactlab_Hub_Block_Adminhtml_System_Config_Source_PreviousDate extends Mage_Adminhtml_Block_System_Config_Form_Field
+class Contactlab_Hub_Block_Adminhtml_System_Config_Source_Date 
+extends Mage_Adminhtml_Block_System_Config_Form_Field
 {
     protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element)
     {
