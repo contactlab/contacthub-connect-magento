@@ -3,7 +3,10 @@ class Contactlab_Hub_Model_Event_Checkout extends Contactlab_Hub_Model_Event
 {
 	protected function _assignData()
 	{				
-		//$eventModel = 'order';		
+		if(!$this->_getSid())
+		{
+			return;
+		}		
 		$order = $this->getEvent()->getOrder();		
 		$eventData = array(
 						'increment_id' => $order->getIncrementId(),						
@@ -42,18 +45,21 @@ class Contactlab_Hub_Model_Event_Checkout extends Contactlab_Hub_Model_Event
 		$arrayProducts = array();
 		foreach($order->getAllItems() as $item)
 		{
-			$objProduct = $this->_getObjProduct($item->getProductId());			
-			$objProduct->type = 'sale';
-			$objProduct->price = (float)$item->getPrice();
-			$objProduct->subtotal = (float)$item->getRowTotal();
-			$objProduct->quantity = (int)$item->getQtyOrdered();
-			$objProduct->discount = (float)$item->getDiscountAmount();
-			$objProduct->tax = (float)$item->getTaxAmount();
-			if($order->getCouponCode())
+			if(!$item->getParentItemId())
 			{
-				$objProduct->coupon = $order->getCouponCode();
+				$objProduct = $this->_getObjProduct($item->getProductId());			
+				$objProduct->type = 'sale';
+				$objProduct->price = (float)$item->getPrice();
+				$objProduct->subtotal = (float)$item->getRowTotal();
+				$objProduct->quantity = (int)$item->getQtyOrdered();
+				$objProduct->discount = (float)$item->getDiscountAmount();
+				$objProduct->tax = (float)$item->getTaxAmount();
+				if($order->getCouponCode())
+				{
+					$objProduct->coupon = $order->getCouponCode();
+				}
+				$arrayProducts[] = $objProduct;	
 			}
-			$arrayProducts[] = $objProduct;			
 		}
 		$this->_eventForHub->properties->products = $arrayProducts;
 		

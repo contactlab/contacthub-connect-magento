@@ -3,33 +3,36 @@ class Contactlab_Hub_Model_Event_ChangeStore extends Contactlab_Hub_Model_Event
 {
 	protected function _assignData()
 	{				
-		//$eventModel = 'customer';	
-	
+		if(!$this->_getSid())
+		{
+			return;
+		}
 		$tostore = Mage::app()->getRequest()->getParam('___store');
 		$fromstore = Mage::app()->getRequest()->getParam('___from_store');
-		if (!empty($tostore)) 
+		if (empty($tostore)) 
 		{
-			$newValue = Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getStoreId());	
-			$oldValue = '';
-			if (!empty($fromstore)) 
-			{
-				$storeId = Mage::getConfig()->getNode('stores')->{$fromstore}->{'system'}->{'store'}->{'id'};
-				$oldValue = Mage::getStoreConfig('general/locale/code', intval($storeId));				
-			}
-			if (!empty($newValue)) 
-			{				
-				$eventData = array(
-					'setting' 	=> 'LANGUAGE',
-					'old_value' => $oldValue,
-					'new_value' => $newValue
-				);
-				$this->setName('changedSetting')
-					->setModel('changeStore')
-					->setNeedUpdateIdentity(true)
-					->setEventData(json_encode($eventData));
-			}
-		}					
-		return parent::_assignData();
+			return;
+		}
+		$newValue = Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getStoreId());	
+		$oldValue = '';
+		if (!empty($fromstore)) 
+		{
+			$storeId = Mage::getConfig()->getNode('stores')->{$fromstore}->{'system'}->{'store'}->{'id'};
+			$oldValue = Mage::getStoreConfig('general/locale/code', intval($storeId));				
+		}
+		if (!empty($newValue)) 
+		{				
+			$eventData = array(
+				'setting' 	=> 'LANGUAGE',
+				'old_value' => $oldValue,
+				'new_value' => $newValue
+			);
+			$this->setName('changedSetting')
+				->setModel('changeStore')
+				->setNeedUpdateIdentity(true)
+				->setEventData(json_encode($eventData));
+		}
+		return parent::_assignData();					
 	}
 	
 	protected function _composeHubEvent()

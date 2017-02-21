@@ -3,7 +3,10 @@ class Contactlab_Hub_Model_Event_AddToWishlist extends Contactlab_Hub_Model_Even
 {
 	protected function _assignData()
 	{				
-		//$eventModel = 'product';	
+		if(!$this->_getSid())
+		{
+			return;
+		}
 		$product = $this->getEvent()->getItem()->getProduct();				
 		$eventData = array(
 						'product_id' => $product->getId()

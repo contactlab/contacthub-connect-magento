@@ -2,7 +2,11 @@
 class Contactlab_Hub_Model_Event_AddToCart extends Contactlab_Hub_Model_Event
 {
 	protected function _assignData()
-	{					
+	{		
+		if(!$this->_getSid())
+		{
+			return;
+		}
 		$item = $this->getEvent()->getQuoteItem();
 		$product = $this->getEvent()->getProduct();		
 		if($product)

@@ -3,7 +3,10 @@ class Contactlab_Hub_Model_Event_RemoveToCompare extends Contactlab_Hub_Model_Ev
 {
 	protected function _assignData()
 	{				
-		//$eventModel = 'product';	
+		if(!$this->_getSid())
+		{
+			return;
+		}	
 		$product = $this->getEvent()->getProduct();				
 		$eventData = array(
 						'product_id' => $product->getId()

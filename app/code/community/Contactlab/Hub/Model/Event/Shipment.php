@@ -2,8 +2,7 @@
 class Contactlab_Hub_Model_Event_Shipment extends Contactlab_Hub_Model_Event
 {
 	protected function _assignData()
-	{				
-		//$eventModel = 'shipment';		
+	{					
 		$shipment = $this->getEvent()->getShipment();
 		$order = $shipment->getOrder();	
 		$eventData = array(

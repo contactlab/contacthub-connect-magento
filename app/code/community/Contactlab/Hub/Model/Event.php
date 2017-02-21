@@ -99,13 +99,26 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	return $this;
     }
     
+    protected function _getSid()
+    {
+    	$cookie = json_decode(Mage::getModel('core/cookie')->get('_ch'));
+    	if($cookie->sid)
+    	{
+    		$this->setSessionId($cookie->sid);
+    	}
+    	else
+    	{
+    		$this->_helper()->log('Cookie disabled');    		
+    	}
+    	return $this->getSessionId();
+    }
     
     protected function _assignData()
-    {    	    	
-    	$cookie = json_decode(Mage::getModel('core/cookie')->get('_ch'));
+    {    	    	    	
+    	
     	$this->setCreatedAt(date('Y-m-d H:i:s'))
-    		->setEnvUserAgent($this->_helper()->getUserAgent())    		  	
-    		->setSessionId($cookie->sid);
+    		->setEnvUserAgent($this->_helper()->getUserAgent());    		  	
+    		
     	if(!$this->getEnvRemoteIp())
     	{
     		$this->setEnvRemoteIp($this->_helper()->getRemoteIpAddress());

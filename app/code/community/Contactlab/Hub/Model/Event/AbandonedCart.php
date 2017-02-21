@@ -2,8 +2,7 @@
 class Contactlab_Hub_Model_Event_AbandonedCart extends Contactlab_Hub_Model_Event
 {
 	protected function _assignData()
-	{				
-		//$eventModel = 'order';		
+	{					
 		$quote = $this->getEvent()->getQuote();		
 		
 		$eventData = array(
@@ -44,18 +43,21 @@ class Contactlab_Hub_Model_Event_AbandonedCart extends Contactlab_Hub_Model_Even
 		$arrayProducts = array();
 		foreach($quote->getAllItems() as $item)
 		{
-			$objProduct = $this->_getObjProduct($item->getProductId());			
-			$objProduct->type = 'sale';
-			$objProduct->price = (float)$item->getPrice();
-			$objProduct->subtotal = (float)$item->getRowTotal();
-			$objProduct->quantity = (int)$item->getQty();
-			$objProduct->discount = (float)$item->getDiscountAmount();
-			$objProduct->tax = (float)$item->getTaxAmount();
-			if($quote->getCouponCode())
+			if(!$item->getParentItemId())
 			{
-				$objProduct->coupon = $quote->getCouponCode();
+				$objProduct = $this->_getObjProduct($item->getProductId());			
+				$objProduct->type = 'sale';
+				$objProduct->price = (float)$item->getPrice();
+				$objProduct->subtotal = (float)$item->getRowTotal();
+				$objProduct->quantity = (int)$item->getQty();
+				$objProduct->discount = (float)$item->getDiscountAmount();
+				$objProduct->tax = (float)$item->getTaxAmount();
+				if($quote->getCouponCode())
+				{
+					$objProduct->coupon = $quote->getCouponCode();
+				}
+				$arrayProducts[] = $objProduct;
 			}
-			$arrayProducts[] = $objProduct;			
 		}
 		$this->_eventForHub->properties->products = $arrayProducts;
 		

@@ -2,7 +2,11 @@
 class Contactlab_Hub_Model_Event_Logout extends Contactlab_Hub_Model_Event
 {
 	protected function _assignData()
-	{						
+	{	
+		if(!$this->_getSid())
+		{
+			return;
+		}
 		$eventData = array();
 		$this->setName('loggedOut')
 			->setModel('logout')			

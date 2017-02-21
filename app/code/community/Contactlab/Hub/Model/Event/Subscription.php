@@ -3,6 +3,10 @@ class Contactlab_Hub_Model_Event_Subscription extends Contactlab_Hub_Model_Event
 {
 	protected function _assignData()
 	{	
+		if(!$this->_getSid())
+		{
+			return;
+		}
 		$evtName = 'campaignUnsubscribed';		
 		$eventData = array();		
 		$email = $this->getEvent()->getSubscriber()->getEmail();

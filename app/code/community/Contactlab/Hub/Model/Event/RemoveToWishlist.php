@@ -3,7 +3,10 @@ class Contactlab_Hub_Model_Event_RemoveToWishlist extends Contactlab_Hub_Model_E
 {
 	protected function _assignData()
 	{						
-		//$eventModel = 'product';	
+		if(!$this->_getSid())
+		{
+			return;
+		}
 		$item = $this->getEvent()->getData('data_object');
     	$product = $item->getProduct();				
 		$eventData = array(
