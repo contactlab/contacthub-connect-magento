@@ -557,8 +557,7 @@
                         </repeat_hours>                                  
                     </fields>
                 </cron_events>
- 
-<!-- 
+
                 <cron_previous_customers translate="label">
                     <label>Cron Previous Customers Settings</label>
                     <frontend_type>text</frontend_type>
@@ -656,7 +655,6 @@
 	                   	</extra_properties>                                  
                     </fields>                   
                 </cron_previous_customers>
--->
     <!--             
                 <cron_subscribers translate="label">
                     <label>Cron Import Subscribers</label>

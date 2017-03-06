@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS {$installer->getTable('contactlab_hub/previouscustome
   `gender` varchar(1) COLLATE utf8_bin DEFAULT NULL,
   `email` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT '',
   `taxvat` varchar(100) COLLATE utf8_bin DEFAULT '',
+  `remote_ip` varchar(100) COLLATE utf8_bin DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `billing_prefix` varchar(10) COLLATE utf8_bin DEFAULT NULL,
   `billing_firstname` varchar(50) COLLATE utf8_bin DEFAULT NULL,

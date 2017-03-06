@@ -93,7 +93,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 	{
 		$category = Mage::registry('current_category');
 		$tracking = "";			
-		$evtName = 'events/evtcategoryview';
+		$evtName = 'events/viewedProductCategory';
 		if ($this->getConfigData($evtName)) 
 		{			
 			$searchQuery = Mage::app()->getRequest()->getParam('q');	
@@ -125,7 +125,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 	public function getProductPageTracking()
 	{
 		$tracking = "";			
-		$evtName = 'events/evtview';
+		$evtName = 'events/viewedProduct';
 		if ($this->getConfigData($evtName)) 
 		{
 			$product = Mage::registry('current_product');				
@@ -167,7 +167,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 	public function getSearchTracking()
 	{		
 		$tracking = "";			
-		$evtName = 'events/evtsearch';
+		$evtName = 'events/searched';
 		if ($this->getConfigData($evtName)) 
 		{			
 			$searchQuery = Mage::app()->getRequest()->getParam('q');	

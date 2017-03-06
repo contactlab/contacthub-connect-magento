@@ -164,10 +164,9 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     			{
     				$customerData->session = $this->getSessionId();
     				$this->_setRemoteCustomerHubSession($customerData);
-    			}
+    			}    			
     		}
-    	
-    	}   
+    	}       	
     	$this->_helper()->log(__METHOD__);
     	return $this;
     }
@@ -190,7 +189,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	$this->_eventForHub->contextInfo->store->type = "ECOMMERCE";    	    
     	$this->_eventForHub->contextInfo->client->userAgent = "".$this->getEnvUserAgent();
     	$this->_eventForHub->contextInfo->client->ip = "".$this->getEnvRemoteIp();  
-    	
+    	Mage::log('customer id -------> '.$this->_remoteCustomerHubId, null, 'fra.log');
     	if($this->_remoteCustomerHubId)
     	{
     		$this->_eventForHub->customerId = $this->_remoteCustomerHubId;
@@ -243,10 +242,13 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	if($this->getIdentityEmail())
     	{
 	    	$remoteCustomerHub = $this->_getHub()->getRemoteCustomerHub($customerData);
-	    	if ($remoteCustomerHub) {
+	    	if ($remoteCustomerHub->id) 
+	    	{
+	    		Mage::log($remoteCustomerHub, null, 'fra.log');
 	    		return $remoteCustomerHub->id;
 	    	}
     	}
+    	Mage::log($remoteCustomerHub, null, 'fra.log');
     	return $remoteCustomerHub;
     }
     

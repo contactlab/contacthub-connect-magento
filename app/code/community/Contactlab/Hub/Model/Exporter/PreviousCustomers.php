@@ -62,7 +62,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 	
 	protected function _getPreviousDate()
 	{		
-		return Mage::getModel('core/date')->date('Y-m-d', strtotime($this->_getConfig('cron_previous_customers/previous_date')));
+		return Mage::getModel('core/date')->date('Y-m-d H:i:s', strtotime($this->_getConfig('cron_previous_customers/previous_date')));
 	}
 	
 	/**
@@ -106,8 +106,8 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		return $this;
 	}
 	
-	public function export(Contactlab_Hubcommons_Model_Task_Interface $task)
-	//public function export()
+	//public function export(Contactlab_Hubcommons_Model_Task_Interface $task)
+	public function export()
 	{	
 		if ((!$this->isEnabled()) || (!$this->_getPreviousDate())) 
 		{
@@ -246,6 +246,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 				$row['email'] = $customer->getEmail();
 				$row['taxvat'] = $customer->getTaxvat();
 				$row['created_at'] = date('Y-m-d H:i:s', strtotime($customer->getCreatedAt()));
+				$row['remote_ip'] = $this->_getRemoteIp($customer->getEntityId());
 				/* BILLING INFORMATIONS */
 				$billing = $customer->getDefaultBillingAddress();
 				if($billing)
@@ -319,6 +320,29 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		return Mage::getStoreConfig('general/locale/code', $storeId);
 	}
 	
+	protected function _getRemoteIp($customerId)
+	{
+		$query= "SELECT remote_ip FROM sales_flat_quote WHERE customer_id = ".$customerId." ORDER BY created_at limit 0,1";
+		$remoteIp = $this->_getReadConnection()->fetchOne($query);
+		if(!$remoteIp)
+		{
+			if (!empty($_SERVER['HTTP_CLIENT_IP'])) 
+			{
+    			$remoteIp =  $_SERVER['HTTP_CLIENT_IP'];
+			} 
+			else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) 
+			{
+    			$ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+    			$remoteIp =  trim($ips[count($ips) - 1]); //real IP address behind proxy IP			
+			} 
+			else 
+			{
+    			$remoteIp =  $_SERVER['REMOTE_ADDR']; //no proxy found
+			}
+		}
+		return $remoteIp;
+	}
+		
 	protected function _getExtraProperties($customer)
 	{
 		$extraProperties = array();
@@ -462,6 +486,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 						->setCreatedAt($previousCustomer['created_at'])
 						->setStoreId($previousCustomer['store_id'])
 						->setIdentityEmail($previousCustomer['email'])
+						->setEnvRemoteIp($previousCustomer['remote_ip'])
 						->setNeedUpdateIdentity(true)
 				;
 				$event->save();			

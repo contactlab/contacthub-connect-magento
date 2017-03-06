@@ -86,7 +86,8 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 		$collection = Mage::getModel('sales/quote')->getCollection();
 		$collection->addFieldToSelect(array('store_id','customer_email','created_at','updated_at','remote_ip'));					
 		$collection->addFieldToFilter('main_table.reserved_order_id', array('null' => true))
-					->addFieldToFilter('main_table.customer_email', array('notnull' => true));
+					->addFieldToFilter('main_table.customer_email', array('notnull' => true))
+					->addFieldToFilter('main_table.items_count', array('gt' => 0));
 		if($minMinutes)
 		{
 			//$collection->addFieldToFilter('main_table.updated_at', array('gt' => $minMinutesFromLastUpdate->get('YYYY-MM-dd HH:mm:ss')));			

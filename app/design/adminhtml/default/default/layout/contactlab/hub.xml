@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-    <adminhtml_contactlab_commons_tasks_index>
+    <adminhtml_contactlab_hubcommons_tasks_index>
         <reference name="content">
-            <block type="adminhtml/template" name="contactlab.commons.hub" before="contactlab.commons.version"
+            <block type="adminhtml/template" name="contactlab.hubcommons.hub" before="contactlab.hubcommons.version"
                    template="contactlab/hub/hub.phtml">
-                <block type="contactlab_commons/adminhtml_widget_button"
+                <block type="contactlab_hubcommons/adminhtml_widget_button"
                        name="contactlab.hub.customers.export"
                        as="contactlab.hub.customers.export">
                     <action method="setLabel" translate="label">
@@ -17,7 +17,7 @@
                         <confirm>Are you sure you want to do this?</confirm>
                     </action>
                 </block>                                
-                <block type="contactlab_commons/adminhtml_widget_button"
+                <block type="contactlab_hubcommons/adminhtml_widget_button"
                        name="contactlab.hub.resetexport"
                        as="contactlab.hub.resetexport">
                     <action method="setLabel" translate="label">
@@ -32,5 +32,5 @@
                 </block>
             </block>
         </reference>
-    </adminhtml_contactlab_commons_tasks_index>
+    </adminhtml_contactlab_hubcommons_tasks_index>
 </layout>

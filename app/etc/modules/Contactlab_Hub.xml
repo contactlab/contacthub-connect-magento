@@ -4,6 +4,9 @@
         <Contactlab_Hub>
             <active>true</active>
             <codePool>community</codePool>
+            <depends>
+                <Contactlab_Hubcommons />
+            </depends>
         </Contactlab_Hub>
     </modules>
 </config>
