@@ -39,7 +39,7 @@ class Contactlab_Hub_Model_Exporter_Events extends Contactlab_Hubcommons_Model_E
 	 */
 	protected function isEnabled() 
 	{	
-		return true; //$this->_getConfig('cron_previous_customers/enabled')?true:false;
+		return true;
 	}
 	
 	protected function getFileName() {

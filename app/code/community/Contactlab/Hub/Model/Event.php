@@ -56,7 +56,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	$this->_assignData();    	
     	$websiteId = Mage::getModel('core/store')->load($this->getStoreId())->getWebsiteId();
     	$customer = Mage::getModel("customer/customer")->setWebsiteId($websiteId)->loadByEmail($this->getIdentityEmail());
-    	if ($this->_helper()->getConfigData('events/'.$this->getName()))
+    	if ($this->_helper()->getConfigData('events/'.$this->getName(), $this->getStoreId()))
     	{    		    		    	    		
 	    	if($customer || $this->_helper()->sendAnonymousEvent())
 	    	{    
@@ -143,7 +143,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     {
     	if(!$this->_hub)
     	{
-    		$this->_hub = Mage::getModel('contactlab_hub/hub');
+    		$this->_hub = Mage::getModel('contactlab_hub/hub')->setStoreId($this->getStoreId());
     	}
     	return $this->_hub;
     }
@@ -198,7 +198,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	{
     		$this->_eventForHub->bringBackProperties->type = "SESSION_ID";
     		$this->_eventForHub->bringBackProperties->value = $this->getSessionId();
-    		$this->_eventForHub->bringBackProperties->nodeId = $this->_helper()->getConfigData('settings/apinodeid');
+    		$this->_eventForHub->bringBackProperties->nodeId = $this->_helper()->getConfigData('settings/apinodeid', $this->getStoreId());
     	}
     	
     	return $this->_eventForHub;
@@ -261,7 +261,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     protected function _getCustomerDataForHub()
    	{
    
-   		$customerData->nodeId = $this->_helper()->getConfigData('settings/apinodeid');
+   		$customerData->nodeId = $this->_helper()->getConfigData('settings/apinodeid', $this->getStoreId());
    		$customerData->base->contacts->email = $this->getIdentityEmail();   		
    		$locale = Mage::getStoreConfig('general/locale/code', $this->getStoreId());
    		//$customerData->extra->locale = !empty($tmpval) ? $tmpval : '';
@@ -329,7 +329,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
    		if ($subscriber->getId()) 
    		{
    			$subcriberObj = new stdClass();
-   			$subcriberObj->id = $this->_helper()->getConfigData('events/campaignName');
+   			$subcriberObj->id = $this->_helper()->getConfigData('events/campaignName', $this->getStoreId());
    			$subcriberObj->kind = "DIGITAL_MESSAGE";
    			$tmpval = $subscriber->getData('subscriber_status') == Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED;
    			$subcriberObj->subscribed = $tmpval ? true : false;

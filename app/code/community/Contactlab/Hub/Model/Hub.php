@@ -20,12 +20,12 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 		
 	public function __construct()
 	{		
-		$this->_apiUrl = $this->_helper()->getConfigData('settings/apiurl');		
-		$this->_apiToken = $this->_helper()->getConfigData('settings/apitoken');
-		$this->_apiWorkspace = $this->_helper()->getConfigData('settings/apiworkspaceid');
-		$this->_apiNodeId = $this->_helper()->getConfigData('settings/apinodeid');
-		$this->_apiContext = $this->_helper()->getConfigData('settings/apicontext');
-		$this->_apiProxy = $this->_helper()->getConfigData('settings/useproxy') ? $this->_helper()->getConfigData('settings/apiproxy') : false;		
+		$this->_apiUrl = $this->_helper()->getConfigData('settings/apiurl', $this->getStoreId());		
+		$this->_apiToken = $this->_helper()->getConfigData('settings/apitoken', $this->getStoreId());
+		$this->_apiWorkspace = $this->_helper()->getConfigData('settings/apiworkspaceid', $this->getStoreId());
+		$this->_apiNodeId = $this->_helper()->getConfigData('settings/apinodeid', $this->getStoreId());
+		$this->_apiContext = $this->_helper()->getConfigData('settings/apicontext', $this->getStoreId());
+		$this->_apiProxy = $this->_helper()->getConfigData('settings/useproxy', $this->getStoreId()) ? $this->_helper()->getConfigData('settings/apiproxy', $this->getStoreId()) : false;		
 			
 		if (substr($this->_apiUrl, -1) != '/') 
 		{

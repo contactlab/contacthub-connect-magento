@@ -12,16 +12,18 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
         $this->_logFilename = $this->getConfigData('settings/logfilename')?:'contactlabhub.log';
     }
 
-    public function getConfigData($key) {
-		/*$result = $this->getConfigStoredData($key);
-		if ($result == null) {
-			$result = $this->getConfigDefaultData($key);
-		}*/
-		return $this->getConfigStoredData($key);
+    public function getConfigData($key, $storeId=null)
+    {
+		if(!$storeId)
+		{
+			$storeId = $this->getStore()->getStoreId();
+		}
+		return $this->getConfigStoredData($key, $storeId);
 	}
 
-	public function getConfigStoredData($key) {
-		return Mage::getStoreConfig('contactlab_hub/'.$key);
+	public function getConfigStoredData($key, $storeId=null) 
+	{
+		return Mage::getStoreConfig('contactlab_hub/'.$key, $storeId);
 	}
 
 	public function getConfigDefaultData($key) {
@@ -35,6 +37,11 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
         Mage::app()->reinitStores();
 	}
 
+	public function getStore()
+	{
+		return Mage::app()->getStore();
+	}
+	
     /**
      * @param $message
      * @param null $level
@@ -50,14 +57,17 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 	}
 	
 	public function getJsConfigData()
-	{		
-		$config = array(
-					"workspaceId" 	=> $this->getConfigData('settings/apiworkspaceid'),
-					"nodeId"		=> $this->getConfigData('settings/apinodeid'),
-					"token"			=> $this->getConfigData('settings/apitoken'),
-					"context"		=> 'ECOMMERCE'					
-				);
-		return json_encode($config);
+	{
+		$config->workspaceId = $this->getConfigData('settings/apiworkspaceid');
+		$config->nodeId = $this->getConfigData('settings/apinodeid');
+		$config->token = $this->getConfigData('settings/apitoken');
+		$config->context = 'ECOMMERCE';		
+		$config->contextInfo->store->id = "".Mage::app()->getStore()->getStoreId();
+		$config->contextInfo->store->name = Mage::app()->getStore()->getName();
+		$config->contextInfo->store->country = Mage::getStoreConfig('general/country/default');
+		$config->contextInfo->store->website = Mage::getUrl('', array('_store' => Mage::app()->getStore()->getStoreId()));
+		$config->contextInfo->store->type = "ECOMMERCE";
+		return "\nch('config', ".json_encode($config).");";
 	}
 	
 	public function getCustomer()
@@ -72,21 +82,14 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 	
 	protected function _getJsCoustomerInfo()
 	{
-		$customer = $this->getCustomer();
-		$customerInfo = array(
-					//"externalId" 	=> $customer->getEntityId(),				
-					"base"	=> array( 							
-								"firstName"	=> $customer->getFirstname(),
-								"lastName"	=> $customer->getLastname(),
-								"contacts"	=>	array(
-											"email"	=> $customer->getEmail()
-								)														
-							
-					)			
-					
-		);
-		
-		return json_encode($customerInfo);
+		if(!$customer = $this->getCustomer())
+		{
+			return null;
+		}
+		$customerInfo->base->firstName = $customer->getFirstname();
+		$customerInfo->base->lastName = $customer->getLastname();
+		$customerInfo->base->contacts->email = $customer->getEmail();
+		return "\nch('customer',".json_encode($customerInfo).");";
 	}
 	
 	public function getCategoryPageTracking()
@@ -100,20 +103,11 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 			$currentLayer = Mage::registry('current_layer');
 			$searchResult = ($currentLayer instanceof Varien_Object)?$currentLayer->getProductCollection()->getAllIds():array();
 			$tracking.= "";				
-			if($this->getCustomer())
-			{
-				$tracking.= " 
-					ch('customer',".$this->_getJsCoustomerInfo().");";
-			}
-			$tracking.= " 									
-					ch('event', {
-	            			type: 'viewedProductCategory',	            			
-	            			additionalProperties:false,
-	            			properties:{
-	            				category:'".$this->clearStrings($category->getName())."',	            					            					            			
-							}
-	        		});				
-			";
+			$tracking.= $this->_getJsCoustomerInfo();
+			$categoryJs->type = 'viewedProductCategory';
+			$categoryJs->additionalProperties = false;
+			$categoryJs->properties->category = $this->clearStrings($category->getName());
+			$tracking.= "\nch('event',".json_encode($categoryJs).");";			
 		}
 		else 
 		{
@@ -136,26 +130,17 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 				$categories[] = $category->getName();
 			}
 			$tracking.= "";
-			if($this->getCustomer())
-			{
-				$tracking.= " 
-					ch('customer',".$this->_getJsCoustomerInfo().");";
-			}
-			$tracking.= " 
-					ch('event', {
-	            			type: 'viewedProduct',
-	            			properties: {
-								id: '".$product->getEntityId()."',
-								sku: '".$product->getSku()."',
-								name: '".$this->clearStrings($product->getName())."',
-								price: ".round($product->getFinalPrice(),2).",
-								imageUrl: '".$product->getImageUrl()."',
-								linkUrl: '".$product->getProductUrl()."',
-								shortDescription:'".$this->clearStrings($product->getShortDescription())."',
-								category: ".json_encode($categories).",                
-							}
-	        		}); 									
-			";
+			$tracking.= $this->_getJsCoustomerInfo();				
+			$productJs->type = 'viewedProduct';
+			$productJs->properties->id = $product->getEntityId();
+			$productJs->properties->sku = $product->getSku();
+			$productJs->properties->name = $this->clearStrings($product->getName());
+			$productJs->properties->price = round($product->getFinalPrice(),2);
+			$productJs->properties->imageUrl = $product->getEntityId();
+			$productJs->properties->linkUrl = $product->getProductUrl();
+			$productJs->properties->shortDescription = $this->clearStrings($product->getShortDescription());
+			$productJs->properties->category = $categories;
+			$tracking.= "\nch('event',".json_encode($productJs).");";
 		}
 		else 
 		{
@@ -174,20 +159,11 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 			$currentLayer = Mage::registry('current_layer');
 			$searchResult = ($currentLayer instanceof Varien_Object) ? count($currentLayer->getProductCollection()->getAllIds()) : 0;
 			$tracking.= "";
-			if($this->getCustomer())
-			{
-				$tracking.= " 
-					ch('customer',".$this->_getJsCoustomerInfo().");";
-			}
-			$tracking.= " 					
-					ch('event', {
-	            			type: 'searched',	            				            			
-	            			properties:{
-	            				keyword:'".$this->clearStrings($searchQuery)."',
-	            				resultCount:".$searchResult."	            					            			 
-							}
-	        		}); 					
-			";
+			$tracking.= $this->_getJsCoustomerInfo();
+			$searchJs->type = 'searched';
+			$searchJs->properties->keyword = $this->clearStrings($searchQuery);
+			$searchJs->properties->resultCount = $searchResult;
+			$tracking.= "\nch('event',".json_encode($searchJs).");";			
 		}
 		else 
 		{
@@ -199,6 +175,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 	public function clearStrings($string) 
 	{
 		return trim(str_replace("''", "", str_replace("\n", " ",strip_tags($string))));
+		//return json_encode(str_replace(PHP_EOL, ' ', strip_tags(trim($string))));
 	}
 	
 	public function getUserAgent()

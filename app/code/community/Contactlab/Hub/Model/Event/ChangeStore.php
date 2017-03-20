@@ -43,7 +43,7 @@ class Contactlab_Hub_Model_Event_ChangeStore extends Contactlab_Hub_Model_Event
 			$this->_eventForHub = new stdClass();
 		}
 		$eventData = json_decode($this->getEventData());
-		$this->_eventForHub->properties->setting = "language";
+		$this->_eventForHub->properties->setting = "LANGUAGE";
 		$this->_eventForHub->properties->oldValue = $eventData->old_value;
 		$this->_eventForHub->properties->newValue = $eventData->new_value;
 	

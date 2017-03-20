@@ -51,12 +51,7 @@ class Contactlab_Hub_Model_Observer
 		$controllerRoute = $routeName.'_'.$controllerName.'_'.$actionName;
 		//echo '<pre>'.$controllerRoute.'</pre>';
 		
-		$hubJs = "
-				<!-- ContactHubJs -->
-				<script>
-					window.ch=function(){(ch.q=ch.q||[]).push(arguments)};
-					ch('config', ".$this->_helper()->getJsConfigData().");
-		";
+		$hubJs = "\n<!-- ContactHubJs -->\n<script>\nwindow.ch=function(){(ch.q=ch.q||[]).push(arguments)}; ".$this->_helper()->getJsConfigData();						
 		
 		switch ($controllerRoute)
 		{
@@ -81,11 +76,7 @@ class Contactlab_Hub_Model_Observer
 				<!-- END ContactHubJs -->
 		";
 	*/
-		$hubJs.="
-				</script>	
-				<script async src='https://assets.contactlab.it/contacthub/sdk-browser/latest/contacthub.min.js'></script>
-				<!-- END ContactHubJs -->
-		";
+		$hubJs.="\n</script>\n<script async src='https://assets.contactlab.it/contacthub/sdk-browser/latest/contacthub.min.js'></script>\n<!-- END ContactHubJs -->";
 		
 		if($hubJs)
 		{
