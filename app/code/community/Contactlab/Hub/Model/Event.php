@@ -291,7 +291,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
    			}   			
    			if ($customer->getDob()) 
    			{   				
-   				$customerData->base->dob = date(DATE_ISO8601, strtotime($customer->getDob()));
+   				$customerData->base->dob = date('Y-m-d', strtotime($customer->getDob()));
    			}
    			$customerAddressId = $customer->getDefaultBilling();
    			
