@@ -14,8 +14,15 @@ class Contactlab_Hub_Model_Cron extends Mage_Core_Model_Abstract
 		return $this->_helper()->getConfigData($key);
 	}
 	
-	private function _isExportPreviousCustomersEnabled() {
-		return $this->_getConfig('cron_previous_customers/enabled')?true:false;
+	private function _isExportPreviousCustomersEnabled() 
+	{
+		$enable = false;
+		$allStores = Mage::app()->getStores();
+		foreach ($allStores as $storeId => $val)
+		{
+			$enable = $enable || $this->_helper()->getConfigData('cron_previous_customers/enabled', $storeId);
+		}
+		return $enable;
 	}
 	
 	private function _isImportSubscribersEnabled() {
@@ -54,10 +61,10 @@ class Contactlab_Hub_Model_Cron extends Mage_Core_Model_Abstract
 	
 		$this->logCronCall("addExportPreviousCustomersQueue");		
 		return Mage::getModel("contactlab_hubcommons/task")		
-		->setTaskCode("ExportPreviousCustomersTask")
-		->setModelName('contactlab_hub/task_exportPreviousCustomers')
-		->setDescription('Export Previous Coustomers')	
-		->save();
+			->setTaskCode("ExportPreviousCustomersTask")
+			->setModelName('contactlab_hub/task_exportPreviousCustomers')
+			->setDescription('Export Previous Coustomers')	
+			->save();
 	}
 	
 	public function getAbandonedCarts()
@@ -76,10 +83,10 @@ class Contactlab_Hub_Model_Cron extends Mage_Core_Model_Abstract
 		}		
 		$this->logCronCall("addImportSubscribersQueue", $storeId);
 		return Mage::getModel("contactlab_hubcommons/task")		
-		->setTaskCode("ImportSubscribersTask")
-		->setModelName('contactlab_hub/task_importSubscribers')
-		->setDescription('Import Subscribers')
-		->save();
+			->setTaskCode("ImportSubscribersTask")
+			->setModelName('contactlab_hub/task_importSubscribers')
+			->setDescription('Import Subscribers')
+			->save();
 	}
 	
 }

@@ -370,127 +370,7 @@
                         </orderShipped>
                         
                     </fields>
-                </events>
-                <!--  DA VERIFICARE
-                <storage translate="label" module="contactlab_hub">
-                    <label>Profile keeping</label>
-                    <frontend_type>text</frontend_type>
-                    <sort_order>30</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <session translate="label">
-                            <label>Keep profile email in session: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                        </session>
-                        <cookie translate="label">
-                            <label>Keep  profile email profile in cookie: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                        </cookie>
-                        <cookie_verificationkey translate="label">
-                            <label>Cookie verification key: </label>
-                            <comment>String key for data validation</comment>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </cookie_verificationkey>
-                    </fields>
-                </storage>
-                <params translate="label" module="contactlab_hub">
-                    <label>Query parameters</label>
-                    <frontend_type>text</frontend_type>
-                    <sort_order>30</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <enabled translate="label">
-                            <label>Read Url parameters: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </enabled>
-                        <prefix translate="label">
-                            <label>Contactlab key prefix: </label>
-                            <comment></comment>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </prefix>
-                        <emailkey translate="label">
-                            <label>Contactlab email key: </label>
-                            <comment>Email key (prefix included if present)</comment>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </emailkey>
-                        <session translate="label">
-                            <label>Save Url parameters in session: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                        </session>
-                        <cookie translate="label">
-                            <label>Save Url parameters in cookie: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                        </cookie>
-                        <cookie_verificationkey translate="label">
-                            <label>Cookie verification key: </label>
-                            <comment>String key for data validation</comment>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>60</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </cookie_verificationkey>
-                        <tags translate="label">
-                            <label>Tags: </label>
-                            <comment></comment>
-                            <frontend_type>text</frontend_type>
-                            <frontend_model>contactlab_hub/system_config_form_field_tags</frontend_model>
-                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
-                            <sort_order>70</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </tags>
-                    </fields>
-                </params>
-                 -->
-                
+                </events>                       
                 <cron_events translate="label">
                     <label>Cron Export Events Settings</label>
                     <frontend_type>text</frontend_type>
@@ -505,8 +385,8 @@
                         	<source_model>contactlab_hub/adminhtml_system_config_source_cron_eventsLimit</source_model>
                         	<sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
                     	</limit>                                           
                         <frequency translate="label">
                             <label>Frequency</label>
@@ -515,16 +395,16 @@
                             <backend_model>contactlab_hub/adminhtml_system_config_backend_hub_cron_events</backend_model>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
                         </frequency>
                         <time translate="label">
                             <label>Start Time</label>
                             <frontend_type>time</frontend_type>
                             <sort_order>21</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
                             <depends>
 								<frequency separator="|">
 	        						<value>D|W|M</value>
@@ -537,8 +417,8 @@
                         	<source_model>contactlab_hub/adminhtml_system_config_source_cron_minutes</source_model>
                         	<sort_order>22</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
                             <depends>
 								<frequency>I</frequency>                            	                            
                             </depends>
@@ -549,8 +429,8 @@
                         	<source_model>contactlab_hub/adminhtml_system_config_source_cron_hours</source_model>
                         	<sort_order>23</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
                             <depends>
 								<frequency>H</frequency>                            	                            
                             </depends>
@@ -564,15 +444,15 @@
                     <sort_order>70</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>0</show_in_website>
-                    <show_in_store>0</show_in_store>
+                    <show_in_store>1</show_in_store>
                     <fields>     
                     	 <enabled translate="label">
                             <label>Enable</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment>Enable or disable export Previous Customers</comment>
                         </enabled>                  
@@ -580,41 +460,39 @@
                     		<label>Previous Date</label>                    		                    		                            
                     		<frontend_type>text</frontend_type>
                         	<frontend_model>contactlab_hub/adminhtml_system_config_source_date</frontend_model>                        	                         	
-                        	<sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
+                        	<sort_order>20</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>0</show_in_website>
                             <show_in_store>1</show_in_store>
                     	</previous_date>     
                     	<limit>
-                    		<label>Limit Customers to export</label>                    		
-                    		
+                    		<label>Limit Customers to export</label>                    		                    		
                             <frontend_type>select</frontend_type>
-                        	<source_model>contactlab_hub/adminhtml_system_config_source_cron_customersLimit</source_model>
-                        	 
-                        	 <frontend_type>text</frontend_type>
-                        	<sort_order>10</sort_order>
+                        	<source_model>contactlab_hub/adminhtml_system_config_source_cron_customersLimit</source_model>                        	 
+                        	<frontend_type>text</frontend_type>
+                        	<sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>       
                     	</limit>                                           
-                        <frequency translate="label">
+                        <frequency translate="label, tooltip">
                             <label>Frequency</label>
                             <frontend_type>select</frontend_type>
                             <source_model>contactlab_hub/adminhtml_system_config_source_cron_frequency</source_model>
-                            <backend_model>contactlab_hub/adminhtml_system_config_backend_hub_cron_previousCustomers</backend_model>
-                            <sort_order>20</sort_order>
+                            <backend_model>contactlab_hub/adminhtml_system_config_backend_hub_cron_previousCustomers</backend_model>                            
+                            <sort_order>40</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
                         </frequency>
                         <time translate="label">
                             <label>Start Time</label>
                             <frontend_type>time</frontend_type>
-                            <sort_order>21</sort_order>
+                            <sort_order>41</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <depends>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>                            	
 								<frequency separator="|">
 	        						<value>D|W|M</value>
 	    						</frequency>                            	                            
@@ -624,11 +502,11 @@
                         	<label>Repeats</label>
                             <frontend_type>select</frontend_type>
                         	<source_model>contactlab_hub/adminhtml_system_config_source_cron_minutes</source_model>
-                        	<sort_order>22</sort_order>
+                        	<sort_order>42</sort_order>
                             <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <depends>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>                            	
 								<frequency>I</frequency>                            	                            
                             </depends>
                         </repeat_minutes>
@@ -636,150 +514,17 @@
                         	<label>Repeats</label>
                             <frontend_type>select</frontend_type>
                         	<source_model>contactlab_hub/adminhtml_system_config_source_cron_hours</source_model>
-                        	<sort_order>23</sort_order>
+                        	<sort_order>43</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <depends>
+                            <show_in_store>0</show_in_store>
+                            <depends>                            	
 								<frequency>H</frequency>                            	                            
                             </depends>
-                        </repeat_hours>
-                        <extra_properties>
-	                   		<label>Export Extra Properties</label>
-	                           <frontend_type>multiselect</frontend_type>
-	                       	<source_model>contactlab_hub/adminhtml_system_config_source_cron_extraProperties</source_model>
-	                       	<sort_order>10</sort_order>
-	                           <show_in_default>1</show_in_default>
-	                           <show_in_website>1</show_in_website>
-	                           <show_in_store>1</show_in_store>
-	                   	</extra_properties>                                  
+                        </repeat_hours>                          
                     </fields>                   
                 </cron_previous_customers>
-    <!--             
-                <cron_subscribers translate="label">
-                    <label>Cron Import Subscribers</label>
-                    <frontend_type>text</frontend_type>
-                    <sort_order>80</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>0</show_in_website>
-                    <show_in_store>0</show_in_store>
-                    <fields>      
-                    	<enabled translate="label">
-                            <label>Enable</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <comment>Enable or disable import Subscribers</comment>
-                        </enabled>                                                       
-                        <frequency translate="label">
-                            <label>Frequency</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>contactlab_hub/adminhtml_system_config_source_cron_frequency</source_model>
-                            <backend_model>contactlab_hub/adminhtml_system_config_backend_hub_cron_subscribers</backend_model>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </frequency>
-                        <time translate="label">
-                            <label>Start Time</label>
-                            <frontend_type>time</frontend_type>
-                            <sort_order>21</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <depends>
-								<frequency separator="|">
-	        						<value>D|W|M</value>
-	    						</frequency>                            	                            
-                            </depends>                            
-                        </time>             
-                        <repeat_minutes>
-                        	<label>Repeats</label>
-                            <frontend_type>select</frontend_type>
-                        	<source_model>contactlab_hub/adminhtml_system_config_source_cron_minutes</source_model>
-                        	<sort_order>22</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <depends>
-								<frequency>I</frequency>                            	                            
-                            </depends>
-                        </repeat_minutes>
-                        <repeat_hours>
-                        	<label>Repeats</label>
-                            <frontend_type>select</frontend_type>
-                        	<source_model>contactlab_hub/adminhtml_system_config_source_cron_hours</source_model>
-                        	<sort_order>23</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <depends>
-								<frequency>H</frequency>                            	                            
-                            </depends>
-                        </repeat_hours>                                  
-                    </fields>
-                </cron_subscribers>
-                
-            	<email translate="label">
-            		<label>Email</label>
-                    <frontend_type>text</frontend_type>
-                    <sort_order>70</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-					<fields>
-						<enabled>
-                            <label>Enabled</label>
-                            <comment></comment>
-                            <frontend_type>select</frontend_type>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                        </enabled>
-                        <heading_apisetting translate="label">
-                            <label>These settings are for Magento 1.9.1 onwards. They will have no affect on versions before that. You can disable the usage of the email queue below. You can also tweak how many emails are sent with each run of cron, and how long to pause between emails.</label>
-                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </heading_apisetting>
-                        <queue_bypass translate="label">
-		                      <label>Bypass Queue</label>		                      
-		                      <frontend_type>select</frontend_type>
-		                      <source_model>adminhtml/system_config_source_yesno</source_model>
-		                      <sort_order>30</sort_order>
-		                      <show_in_default>1</show_in_default>
-		                      <show_in_website>0</show_in_website>
-		                      <show_in_store>0</show_in_store>
-						</queue_bypass>
-						<queue_percron translate="label">
-		                      <label>Emails to Send</label>
-		                      <comment>Number of emails to send per cron invocation. Leave blank for default of 100 messages sent per cron.</comment>
-		                      <frontend_type>text</frontend_type>
-		                      <sort_order>40</sort_order>
-		                      <show_in_default>1</show_in_default>
-		                      <show_in_website>0</show_in_website>
-		                      <show_in_store>0</show_in_store>
-						</queue_percron>
-						<queue_pause translate="label">
-		                      <label>Pause between emails (ms)</label>
-		                      <comment>Some SMTP servers restrict email sending rates as an anti-spam measure. Add a delay between each email being sent. Leave blank for default 0 ms.</comment>
-		                      <frontend_type>text</frontend_type>
-		                      <sort_order>50</sort_order>
-		                      <show_in_default>1</show_in_default>
-		                      <show_in_website>0</show_in_website>
-		                      <show_in_store>0</show_in_store>
-						</queue_pause>
-					</fields>
-            	</email>
-            	-->
+  
             </groups>
         </contactlab_hub>
     </sections>

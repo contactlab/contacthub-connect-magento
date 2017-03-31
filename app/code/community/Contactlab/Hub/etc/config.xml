@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Contactlab_Hub>
-            <version>0.9.0</version>
+            <version>0.9.1</version>
         </Contactlab_Hub>
     </modules>
     <global>
@@ -32,15 +32,6 @@
             <contactlab_hub_eventhub>
                 <class>Contactlab_Hub_Model_Eventhub</class>
             </contactlab_hub_eventhub>
-            <!--  
-            <core>
-				<rewrite>
-					<email>Contactlab_Hub_Model_Email</email>
-					<email_template>Contactlab_Hub_Model_Email_Template</email_template>
-                    <email_queue>Contactlab_Hub_Model_Email_Queue</email_queue>
-				</rewrite>
-			</core>
-			-->
         </models>
         <resources>
             <contactlab_hub_setup>
@@ -107,10 +98,6 @@
 	                </contactlab_hub_check_subscription>
 	            </observers>
 			</controller_action_predispatch_newsletter_manage_index>
-
-
-
-
             <!-- PRODUCT EVENTS -->
 			<catalog_product_compare_add_product>
             	<observers>
@@ -157,8 +144,7 @@
                     </contactlab_hub>
                 </observers>
             </wishlist_item_delete_before>
-
-
+			<!-- SLASES EVENTS -->
             <checkout_submit_all_after>
                 <observers>
                     <contactlab_hub>
@@ -196,66 +182,11 @@
                     </contactlab_hub>
                 </observers>
             </sales_order_shipment_save_after>
-            
-            
-            <!-- checkout_onepage_controller_success_action>
-                <observers>
-                    <contactlab_hub>
-                        <type>singleton</type>
-                        <class>contactlab_hub/observer</class>
-                        <method>traceGenericEvent</method>
-                    </contactlab_hub>
-                </observers>
-            </checkout_onepage_controller_success_action -->
-     		<!-- checkout_cart_update_items_after>
-     			<observers>
-                    <contactlab_hub>
-     					<type>singleton</type>
-     					<class>contactlab_hub/observer</class>
-                        <method>traceCartUpdateEvent</method>
-                    </contactlab_hub>
-                </observers>
-     		</checkout_cart_update_items_after -->
-            
-            
-            <!-- wishlist_product_add_after>
-                <observers>
-                    <contactlab_hub>
-     					<type>singleton</type>
-     					<class>contactlab_hub/observer</class>
-                        <method>traceGenericEvent</method>
-                    </contactlab_hub>
-                </observers>
-            </wishlist_product_add_after -->
-            
-            <!-- catalog_category_collection_load_after>
-                <observers>
-                    <contactlab_hub>
-                        <type>singleton</type>
-                        <class>contactlab_hub/observer</class>
-                        <method>traceGenericEvent</method>
-                    </contactlab_hub>
-                </observers>
-            </catalog_category_collection_load_after -->
-
-
-
-     	</events>
-     
+     	</events>     
     </global>
+    
     <frontend>    	
-    	<events>
-    		<!-- 
-	        <controller_action_layout_render_before_catalogsearch_result_index>
-	            <observers>
-	                <contactlab_hub>
-	                    <type>singleton</type>
-	                    <class>contactlab_hub/observer</class>
-	                    <method>traceSearchResult</method>
-	                </contactlab_hub>
-	            </observers>
-	        </controller_action_layout_render_before_catalogsearch_result_index>
-		 	-->
+    	<events>    	
 	        <controller_action_predispatch>
 	            <observers>
 	                <contactlab_hub>
@@ -311,16 +242,16 @@
                 </contactlab_subscribers>
             </modules>
         </translate>
-		<events>
-			<admin_system_config_changed_section_contactlab_hub_options>
+		<events>			
+			<admin_system_config_changed_section_contactlab_hub>
 			    <observers>
 			        <contactlab_hub>
 			            <type>singleton</type>
 			            <class>contactlab_hub/observer</class>
-	                    <method>setEnabledFrom</method>
+	                    <method>handleConfigChanges</method>
 			        </contactlab_hub>
 			    </observers>
-			</admin_system_config_changed_section_contactlab_hub_options>
+			</admin_system_config_changed_section_contactlab_hub>			
 		</events>
 	</adminhtml>
     <default>

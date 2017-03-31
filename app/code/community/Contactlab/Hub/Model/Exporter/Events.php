@@ -58,9 +58,7 @@ class Contactlab_Hub_Model_Exporter_Events extends Contactlab_Hubcommons_Model_E
 		return "Export done";
 	}
 	
-	
-	
-	
+		
 	/** Put file into sftp or localhost. */
 	private function _putFile($filename, $realFilename) {
 		$sftp = new Contactlab_Hubcommons_Model_Ssh_Net_SFTP(

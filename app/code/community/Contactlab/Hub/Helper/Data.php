@@ -7,7 +7,8 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
     protected $_saveLog = false;
     protected $_logFilename = false;
 
-    public function __construct() {
+    public function __construct() 
+    {
         $this->_saveLog = $this->getConfigData('settings/log');
         $this->_logFilename = $this->getConfigData('settings/logfilename')?:'contactlabhub.log';
     }
@@ -26,14 +27,17 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 		return Mage::getStoreConfig('contactlab_hub/'.$key, $storeId);
 	}
 
-	public function getConfigDefaultData($key) {
+	public function getConfigDefaultData($key) 
+	{
 		return Mage::getConfig()->getNode('default/contactlab_hub/'.$key);
 	}
 
-	public function setConfigData($key, $value) {
+	public function setConfigData($path, $value, $scope='default', $scopeId=0) 
+	{		
 		Mage::getConfig()
-            ->saveConfig('contactlab_hub/'.$key, $value, 'default', 0)
+            ->saveConfig($path, $value, $scope, $scopeId)
             ->reinit();
+	
         Mage::app()->reinitStores();
 	}
 
@@ -49,8 +53,10 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @codeCoverageIgnore
      */
-	public function log($message, $level = null) {
-		if (!$this->_saveLog && $level == null) {
+	public function log($message, $level = null) 
+	{
+		if (!$this->_saveLog && $level == null) 
+		{
 			return false;
 		}
 		Mage::log($message, $level, $this->_logFilename);

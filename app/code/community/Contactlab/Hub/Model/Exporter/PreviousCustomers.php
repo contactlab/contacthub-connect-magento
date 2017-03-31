@@ -23,7 +23,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 	}
 	
 	private function _getConfig($key) {
-		return $this->_helper()->getConfigData($key);
+		return $this->_helper()->getConfigData($key, $this->getStoreId());
 	}
 	
 	protected function _getWriteConnection()
@@ -99,63 +99,73 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 	}
 	
 	public function resetExport()
-	{				
-		Mage::helper('contactlab_hub')->setConfigData('cron_previous_customers/enabled', 1);
-		Mage::helper('contactlab_hub')->setConfigData('cron_previous_customers/previous_date', date('Y-m-d H:i:s'));
-		$this->_setUnexported();
+	{
+		$allStores = Mage::app()->getStores();
+		foreach ($allStores as $storeId => $val)
+		{
+			$this->setStoreId($storeId);
+			Mage::helper('contactlab_hub')->setConfigData('contactlab_hub/cron_previous_customers/enabled', 1, 'stores', $this->getStoreId());
+			Mage::helper('contactlab_hub')->setConfigData('contactlab_hub/cron_previous_customers/previous_date', date('Y-m-d H:i:s'), 'stores', $this->getStoreId());
+			$this->_setUnexported();
+		}		
 		return $this;
 	}
 	
-	//public function export(Contactlab_Hubcommons_Model_Task_Interface $task)
-	public function export()
+	public function export(Contactlab_Hubcommons_Model_Task_Interface $task)
+	//public function export()
 	{	
-		if ((!$this->isEnabled()) || (!$this->_getPreviousDate())) 
-		{
-			Mage::helper("contactlab_hubcommons")->logWarn("Module export is disabled");
-			return "Module export is disabled";
-		}
 		
-		$this->_init();
-		$this->_fillPreviousCustomerTable();
-		/*
-		$this->_writeTranche();
-	
-		if ($this->_useLocalServer()) 
+		$allStores = Mage::app()->getStores();
+		foreach ($allStores as $storeId => $val)
 		{
-			Mage::helper("contactlab_hubcommons")->logNotice("Exporting locally to $filename");
-			rename($this->getFileName(), str_replace('.tmp', '', $this->getFileName()));
-		}
-		if ($this->_useRemoteServer()) 
-		{
-			$filename = str_replace('.tmp', '', $this->getFileName());
-			rename($this->getFileName(), $filename);
-			$this->_putFile(realpath($filename), basename($filename));
-			sleep(2);
-			unlink(realpath($filename));
-		}
-		$this->afterFileCopy();
-		*/
-		$this->_createEvents();
+			$this->setStoreId($storeId);			
+			if ((!$this->isEnabled()) || (!$this->_getPreviousDate())) 
+			{
+				Mage::helper("contactlab_hubcommons")->logWarn("Module export is disabled");
+				return "Module export is disabled";
+			}
+			
+			$this->_init();
+			$this->_fillPreviousCustomerTable();
+			/*
+			$this->_writeTranche();
 		
-		$this->_setExportedTranche();
-		
+			if ($this->_useLocalServer()) 
+			{
+				Mage::helper("contactlab_hubcommons")->logNotice("Exporting locally to $filename");
+				rename($this->getFileName(), str_replace('.tmp', '', $this->getFileName()));
+			}
+			if ($this->_useRemoteServer()) 
+			{
+				$filename = str_replace('.tmp', '', $this->getFileName());
+				rename($this->getFileName(), $filename);
+				$this->_putFile(realpath($filename), basename($filename));
+				sleep(2);
+				unlink(realpath($filename));
+			}
+			$this->afterFileCopy();
+			*/
+			$this->_createEvents();
+			
+			$this->_setExportedTranche();
+		}
 		return "Export done";
 	}
 	
 	protected function _fillPreviousCustomerTable()
 	{
-		$this->_insertSubscribers();
+		//$this->_insertSubscribers();
 		$this->_insertCustomers();					
 	}
 	
 	protected function _getPreviousCustomers()
 	{
-		$query = "	SELECT * FROM contactlab_hub_previouscustomers ";
+		$query = "	SELECT * FROM contactlab_hub_previouscustomers WHERE  store_id = ".$this->getStoreId();
 		
 		if($this->_mode == self::PARTIAL_EXPORT)
 		{
-			$query .="where is_exported = 0 LIMIT 0,".$this->_trancheLimit;
-		}		
+			$query .=" AND is_exported = 0 LIMIT 0,".$this->_trancheLimit;
+		}					
 		$results = $this->_getReadConnection()->fetchAll($query);
 		return $results;
 	}
@@ -177,13 +187,14 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 					INNER JOIN core_website as cw ON cs.website_id = cw.website_id
 					LEFT OUTER JOIN contactlab_hub_previouscustomers as chp ON ns.subscriber_email = chp.email
 					WHERE ns.customer_id = 0 
+					AND cs.store_id = ".$this->getStoreId()."
 					AND chp.id IS NULL	";
 		if($this->_mode == self::PARTIAL_EXPORT)
 		{
 			$exportable = $this->_trancheLimit - count($this->_getPreviousCustomers());
 			if($exportable > 0)
 			{
-				$query .="LIMIT 0, ". $exportable;
+				$query .=" LIMIT 0, ". $exportable;
 			}
 		}
 		//echo $query."\n";
@@ -217,13 +228,14 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 					INNER JOIN core_website as cw ON cs.website_id = cw.website_id
 					LEFT OUTER JOIN contactlab_hub_previouscustomers as chp ON ce.email = chp.email
 					WHERE ce.created_at < '".$this->_getPreviousDate()."'
+					AND cs.store_id = ".$this->getStoreId()."
 					AND chp.id IS NULL	";	
 		if($this->_mode == self::PARTIAL_EXPORT)
 		{
 			$exportable = $this->_trancheLimit - count($this->_getPreviousCustomers());
 			if($exportable > 0)
 			{
-				$query .="LIMIT 0, ". $exportable;
+				$query .=" LIMIT 0, ". $exportable;
 			}
 		}
 		//echo $query."\n";
@@ -496,14 +508,14 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		else
 		{
 			Mage::helper("contactlab_hubcommons")->logNotice("No previous customers to export");
-			Mage::helper('contactlab_hub')->setConfigData('cron_previous_customers/enabled', 0);
+			Mage::helper('contactlab_hub')->setConfigData('contactlab_hub/cron_previous_customers/enabled', 0, 'stores', $this->getStoreId());
 		}
 		return $this;
 	}
 
 	protected function _setUnexported()
 	{
-		$query = "UPDATE contactlab_hub_previouscustomers SET is_exported = 0";
+		$query = "UPDATE contactlab_hub_previouscustomers SET is_exported = 0 WHERE store_id = ".$this->getStoreId();
 		$this->_getWriteConnection()->query($query);
 		Mage::helper("contactlab_hubcommons")->logNotice("Previous customer export reset succesfull");
 		return $this;

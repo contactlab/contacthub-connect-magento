@@ -16,7 +16,7 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 	}
 	
 	private function _getConfig($key) {
-		return $this->_helper()->getConfigData($key);
+		return $this->_helper()->getConfigData($key, $this->getStoreId());
 	}
 	
 	protected function _getWriteConnection()
@@ -48,8 +48,8 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 	 * @return bool
 	 */
 	protected function isEnabled()
-	{
-		return true; //$this->_getConfig('cron_previous_customers/enabled')?true:false;
+	{		
+		return $this->_getConfig('events/abandonedCart') ? true : false;
 	}
 	
 	protected function getFileName() {
@@ -57,16 +57,22 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 	}
 	
 	
-	//public function export(Contactlab_Hubcommons_Model_Task_Interface $task)
-	public function export()
-	{	
-		if (!$this->isEnabled()) 
+	public function export(Contactlab_Hubcommons_Model_Task_Interface $task)
+	//public function export()
+	{
+		$allStores = Mage::app()->getStores();
+		foreach ($allStores as $storeId => $val)
 		{
-			Mage::helper("contactlab_hubcommons")->logWarn("Module export is disabled");
-			return "Module export is disabled";
-		}
-		$this->_collectAbandonedCarts();	
-		$this->_createEventsFromAbandonedCarts();
+			$this->setStoreId($storeId);			
+			if (!$this->isEnabled())
+			{
+				Mage::helper("contactlab_hubcommons")->logWarn("Module export is disabled");
+				return "Module export is disabled";
+			}
+			$this->_collectAbandonedCarts();
+			$this->_createEventsFromAbandonedCarts();
+			
+		}		
 		return "Export done";
 	}
 	
@@ -87,7 +93,8 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 		$collection->addFieldToSelect(array('store_id','customer_email','created_at','updated_at','remote_ip'));					
 		$collection->addFieldToFilter('main_table.reserved_order_id', array('null' => true))
 					->addFieldToFilter('main_table.customer_email', array('notnull' => true))
-					->addFieldToFilter('main_table.items_count', array('gt' => 0));
+					->addFieldToFilter('main_table.items_count', array('gt' => 0))
+					->addFieldToFilter('main_table.store_id', array('eq' => $this->getStoreId()));
 		if($minMinutes)
 		{
 			//$collection->addFieldToFilter('main_table.updated_at', array('gt' => $minMinutesFromLastUpdate->get('YYYY-MM-dd HH:mm:ss')));			

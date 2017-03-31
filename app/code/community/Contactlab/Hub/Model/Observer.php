@@ -23,13 +23,19 @@ class Contactlab_Hub_Model_Observer
     	return true;
     }
 	
-    public function setEnabledFrom($observer)
+    public function handleConfigChanges($observer)
+    {    	
+    	$this->_setEnabledFrom($observer);
+    }
+    
+    protected function _setEnabledFrom($observer)
     {
-    	if ($this->_isEnabled())
-    	{
+    	$allStores = Mage::app()->getStores();
+		foreach ($allStores as $storeId => $val)
+		{
     		if(!$this->_getConfig('cron_previous_customers/previous_date'))
     		{
-    			$this->_helper()->setConfigData('cron_previous_customers/previous_date', date('Y-m-d H:i:s'));
+    			$this->_helper()->setConfigData('contactlab_hub/cron_previous_customers/previous_date', date('Y-m-d H:i:s'), 'stores', $storeId);
     		}
     	}
     }
@@ -69,13 +75,7 @@ class Contactlab_Hub_Model_Observer
 				break;
 	
 		}
-	/*
-		$hubJs.="
-				</script>
-				<script async src='".Mage::getBaseUrl()."js/contactlab/hub/contacthub.min.js'></script>
-				<!-- END ContactHubJs -->
-		";
-	*/
+
 		$hubJs.="\n</script>\n<script async src='https://assets.contactlab.it/contacthub/sdk-browser/latest/contacthub.min.js'></script>\n<!-- END ContactHubJs -->";
 		
 		if($hubJs)
