@@ -184,11 +184,17 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	$store = Mage::getModel('core/store')->load($this->getStoreId());       
     	$this->_eventForHub->contextInfo->store->id = "".$this->getStoreId();
     	$this->_eventForHub->contextInfo->store->name = $store->getName();
-    	$this->_eventForHub->contextInfo->store->country = Mage::getStoreConfig('general/country/default');
+    	$this->_eventForHub->contextInfo->store->country = "".Mage::getStoreConfig('general/country/default', $this->getStoreId());
     	$this->_eventForHub->contextInfo->store->website = Mage::getUrl('', array('_store' => $this->getStoreId()));
     	$this->_eventForHub->contextInfo->store->type = "ECOMMERCE";    	    
-    	$this->_eventForHub->contextInfo->client->userAgent = "".$this->getEnvUserAgent();
-    	$this->_eventForHub->contextInfo->client->ip = "".$this->getEnvRemoteIp();  
+    	if($this->getEnvUserAgent())
+    	{
+    		$this->_eventForHub->contextInfo->client->userAgent = "".$this->getEnvUserAgent();
+    	}
+    	if($this->getEnvRemoteIp())
+    	{
+    		$this->_eventForHub->contextInfo->client->ip = "".$this->getEnvRemoteIp();
+    	}
     	Mage::log('customer id -------> '.$this->_remoteCustomerHubId, null, 'fra.log');
     	if($this->_remoteCustomerHubId)
     	{
@@ -321,9 +327,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
    					$country = Mage::getModel('directory/country')->load($address->getCountry())->getName();
    					$customerData->base->address->country = $country ?: '';
    				}
-   			}   			
-   			//$customerData->base->externalId = intval($customer->getId());
-   			//$customerData->base->registrationDate = date(DATE_ISO8601, strtotime($customer->getCreatedAt()));
+   			}   			   			
    		}
    		$subscriber = Mage::getModel('newsletter/subscriber')->loadByEmail($this->getIdentityEmail());
    		if ($subscriber->getId()) 
@@ -335,16 +339,16 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
    			$subcriberObj->subscribed = $tmpval ? true : false;
    			$subcriberObj->subscriberId = $subscriber->getSubscriberId();
    			
-   			$subcriberObj->updatedAt = date(DATE_ISO8601, strtotime($this->getCreatedAt()));
-   			$subcriberObj->registeredAt = date(DATE_ISO8601, strtotime($subscriber->getCreatedAt()));
-   			$subcriberObj->startDate = date(DATE_ISO8601, strtotime($subscriber->getLastSubscribedAt()));   			      			 
+   			$subcriberObj->updatedAt = date('Y-m-d', strtotime($this->getCreatedAt()));
+   			$subcriberObj->registeredAt = date('Y-m-d', strtotime($subscriber->getCreatedAt()));
+   			$subcriberObj->startDate = date('Y-m-d', strtotime($subscriber->getLastSubscribedAt()));   			      			 
    			if($subcriberObj->subscribed)
    			{   		   				
    				$subcriberObj->endDate = null;
    			}
    			else
    			{      				
-   				$subcriberObj->endDate = date(DATE_ISO8601, strtotime($this->getCreatedAt()));
+   				$subcriberObj->endDate = date('Y-m-d', strtotime($this->getCreatedAt()));
    			}   			
    			$subscriptions[] = $subcriberObj;
    			$customerData->base->subscriptions = $subscriptions;   			

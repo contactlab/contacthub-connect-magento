@@ -14,6 +14,23 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 	protected $_filename;
 	protected $_delimiter;
 	
+	protected $_customerTable;
+	protected $_subscriberTable;
+	protected $_storeTable;
+	protected $_storeGroupTable;
+	protected $_websiteTable;
+	protected $_previouscustomersTable;
+	
+	protected function _construct()
+    {
+		$this->_customerTable = Mage::getSingleton('core/resource')->getTableName('customer/entity');
+		$this->_subscriberTable = Mage::getSingleton('core/resource')->getTableName('newsletter/subscriber');		
+		$this->_storeTable = Mage::getSingleton('core/resource')->getTableName('core/store');		
+		$this->_storeGroupTable = Mage::getSingleton('core/resource')->getTableName('core/store_group');
+		$this->_websiteTable = Mage::getSingleton('core/resource')->getTableName('core/website');
+		$this->_previouscustomersTable = Mage::getSingleton('core/resource')->getTableName('contactlab_hub/previouscustomers');
+		$this->_quoteTable = Mage::getSingleton('core/resource')->getTableName('sales/quote');
+	}
 	
 	private function _helper() {
 		if ($this->_helper == null) {
@@ -160,7 +177,8 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 	
 	protected function _getPreviousCustomers()
 	{
-		$query = "	SELECT * FROM contactlab_hub_previouscustomers WHERE  store_id = ".$this->getStoreId();
+		$previouscustomersTable = Mage::getSingleton('core/resource')->getTableName('contactlab_hub/previouscustomers');
+		$query = "	SELECT * FROM ".$previouscustomersTable." WHERE  store_id = ".$this->getStoreId();
 		
 		if($this->_mode == self::PARTIAL_EXPORT)
 		{
@@ -171,7 +189,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 	}
 	
 	protected function _insertSubscribers()
-	{	
+	{			
 		$query = "	SELECT ns.subscriber_id
 					,1 as is_subscribed
 					,ns.subscriber_email as email
@@ -181,11 +199,11 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 					,cw.name as website_name
 					,cs.group_id
 					,csg.name as group_name						
-					FROM newsletter_subscriber as ns 
-					INNER JOIN core_store as cs ON ns.store_id = cs.store_id
-					INNER JOIN core_store_group as csg ON cs.group_id = csg.group_id
-					INNER JOIN core_website as cw ON cs.website_id = cw.website_id
-					LEFT OUTER JOIN contactlab_hub_previouscustomers as chp ON ns.subscriber_email = chp.email
+					FROM ".$this->_subscriberTable." as ns 
+					INNER JOIN ".$this->_storeTabel." as cs ON ns.store_id = cs.store_id
+					INNER JOIN ".$this->_storeGroupTable." as csg ON cs.group_id = csg.group_id
+					INNER JOIN ".$this->_websiteTable." as cw ON cs.website_id = cw.website_id
+					LEFT OUTER JOIN ".$this->_previouscustomersTable." as chp ON ns.subscriber_email = chp.email
 					WHERE ns.customer_id = 0 
 					AND cs.store_id = ".$this->getStoreId()."
 					AND chp.id IS NULL	";
@@ -203,14 +221,14 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		foreach ($results as $row)
 		{
 			$row['language'] = $this->_getStoreLocale($row['store_id']);				
-			$query = "	INSERT INTO contactlab_hub_previouscustomers SET ".$this->_buildInsertQuery($row);			  									 	
+			$query = "	INSERT INTO ".$this->_previouscustomersTable." SET ".$this->_buildInsertQuery($row);			  									 	
 			$this->_getWriteConnection()->query($query, $row);
 		}
 		return $this;
 	}
 	
 	protected function _insertCustomers()
-	{				
+	{			
 		$query = "	SELECT ce.entity_id as customer_id
 					,1 as is_customer
 					,ns.subscriber_id
@@ -221,12 +239,12 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 					,cw.name as website_name
 					,cs.group_id
 					,csg.name as group_name
-					FROM customer_entity as ce
-					LEFT OUTER JOIN newsletter_subscriber as ns ON ce.email = ns.subscriber_email
-					INNER JOIN core_store as cs ON ce.store_id = cs.store_id
-					INNER JOIN core_store_group as csg ON cs.group_id = csg.group_id
-					INNER JOIN core_website as cw ON cs.website_id = cw.website_id
-					LEFT OUTER JOIN contactlab_hub_previouscustomers as chp ON ce.email = chp.email
+					FROM ".$this->_customerTable." as ce
+					LEFT OUTER JOIN ".$this->_subscriberTable." as ns ON ce.email = ns.subscriber_email
+					INNER JOIN ".$this->_storeTable." as cs ON ce.store_id = cs.store_id
+					INNER JOIN ".$this->_storeGroupTable." as csg ON cs.group_id = csg.group_id
+					INNER JOIN ".$this->_websiteTable." as cw ON cs.website_id = cw.website_id
+					LEFT OUTER JOIN ".$this->_previouscustomersTable." as chp ON ce.email = chp.email
 					WHERE ce.created_at < '".$this->_getPreviousDate()."'
 					AND cs.store_id = ".$this->getStoreId()."
 					AND chp.id IS NULL	";	
@@ -239,7 +257,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 			}
 		}
 		//echo $query."\n";
-		Mage::log($query, null, 'fra.log');
+		//Mage::log($query, null, 'fra.log');
 		$results = $this->_getReadConnection()->fetchAll($query);
 		foreach ($results as $row)
 		{				
@@ -303,7 +321,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 				$row['language'] = $this->_getStoreLocale($row['store_id']);
 				$row['extra_properties'] = json_encode($this->_getExtraProperties($customer));
 				//var_dump($row);				
-				$query = "	INSERT INTO contactlab_hub_previouscustomers SET ".$this->_buildInsertQuery($row);						 						
+				$query = "	INSERT INTO ".$this->_previouscustomersTable." SET ".$this->_buildInsertQuery($row);						 						
 				//echo var_dump($row);				
 				$this->_getWriteConnection()->query($query, $row);	
 			}
@@ -334,7 +352,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 	
 	protected function _getRemoteIp($customerId)
 	{
-		$query= "SELECT remote_ip FROM sales_flat_quote WHERE customer_id = ".$customerId." ORDER BY created_at limit 0,1";
+		$query= "SELECT remote_ip FROM ".$this->_quoteTable." WHERE customer_id = ".$customerId." ORDER BY created_at limit 0,1";
 		$remoteIp = $this->_getReadConnection()->fetchOne($query);
 		if(!$remoteIp)
 		{
@@ -425,65 +443,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		}
 		return $extraProperties;
 	}
-	/*
-	protected function _writeTranche()
-	{
-		if(count($this->_getPreviousCustomers()) > 0)
-		{
-			$this->_writeHeader();
-			$this->_tranche = $this->_getPreviousCustomers();		
-			if($output = fopen($this->getFileName(),'a+'))
-			{				
-				foreach($this->_tranche as $previousCustomer)
-				{	
-					//var_dump($previousCustomer);
-					unset($previousCustomer['id']);
-					unset($previousCustomer['is_exported']);
-					fputcsv($output, $previousCustomer, $this->_delimiter);								
-				}
-				fclose($output);			
-			}
-			else 
-			{
-				Mage::helper("contactlab_hubcommons")->logAlert($this->getFileName()." is not writeable");
-			}		
-		}
-		else
-		{
-			Mage::helper("contactlab_hubcommons")->logNotice("No previous customers to export");
-			Mage::helper('contactlab_hub')->setConfigData('cron_previous_customers/enabled', 0);
-		}
-		return $this;
-	}
-	
-	protected function _writeHeader($header)
-	{						
-		if($output = fopen($this->getFileName(),'w+'))
-		{	
-			foreach($this->_getPreviousCustomers() as $previousCustomer)
-			{			
-				unset($previousCustomer['id']);
-				unset($previousCustomer['is_exported']);
-				fputcsv($output, array_keys($previousCustomer), $this->_delimiter);							
-				break;
-			}
-			fclose($output);
-		}
-		else
-		{
-			Mage::helper("contactlab_hubcommons")->logAlert($this->getFileName()." is not writeable");
-		}		
-		return $this;
-	}
-	
-	public function afterFileCopy()
-	{
-		$this->_setExportedTranche();
-		return $this;
-	}
-	*/
-	
-	
+		
 	protected function _createEvents()
 	{
 		if(count($this->_getPreviousCustomers()) > 0)
@@ -514,8 +474,8 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 	}
 
 	protected function _setUnexported()
-	{
-		$query = "UPDATE contactlab_hub_previouscustomers SET is_exported = 0 WHERE store_id = ".$this->getStoreId();
+	{			
+		$query = "UPDATE ".$this->_previouscustomersTable." SET is_exported = 0 WHERE store_id = ".$this->getStoreId();
 		$this->_getWriteConnection()->query($query);
 		Mage::helper("contactlab_hubcommons")->logNotice("Previous customer export reset succesfull");
 		return $this;
@@ -527,7 +487,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		{
 			foreach($this->_tranche as $previousCustomer)
 			{
-				$query = "UPDATE contactlab_hub_previouscustomers SET is_exported = 1 WHERE id = ".$previousCustomer['id'];
+				$query = "UPDATE ".$this->_previouscustomersTable." SET is_exported = 1 WHERE id = ".$previousCustomer['id'];
 				$this->_getWriteConnection()->query($query);
 			}
 			Mage::helper("contactlab_hubcommons")->logNotice(count($this->_tranche)." previous customers exported");

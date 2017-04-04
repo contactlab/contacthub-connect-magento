@@ -3,10 +3,17 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 {
 	protected $_helper;	
 	protected $_connectionWrite;
-	protected $_connectionRead;
-	
+	protected $_connectionRead;	
 	protected $_delimiter;
 	
+	protected $_abandonedCartTable;
+	protected $_subscriberTable;
+	
+	protected function _construct()
+	{
+		$this->_abandonedCartTable = Mage::getSingleton('core/resource')->getTableName('contactlab_hub/abandoned_carts');
+		$this->_subscriberTable = Mage::getSingleton('core/resource')->getTableName('newsletter/subscriber');
+	}
 	
 	private function _helper() {
 		if ($this->_helper == null) {
@@ -109,7 +116,7 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 		$subscribers = !$this->_helper()->getConfigData('events/send_to_not_subscribed');
 		if($subscribers)
 		{			
-			$collection->getSelect()->join( array('subscribers'=> newsletter_subscriber), 'subscribers.subscriber_email = main_table.customer_email', array());
+			$collection->getSelect()->join( array('subscribers'=> $this->_subscriberTable), 'subscribers.subscriber_email = main_table.customer_email', array());
 			$collection->addFieldToFilter('subscribers.subscriber_status', array('eq' => Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED));
 		}
 		/*
@@ -118,13 +125,13 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 		$this->_helper()->log('FINE ABANDONED CART');
 		*/
 		
-		echo $collection->getSelect()."\n\n";
+		//echo $collection->getSelect()."\n\n";
 		
 		
 		foreach ($collection as $cart)
 		{	
 			$query = "
-						SELECT * from contactlab_hub_abandoned_carts 
+						SELECT * from ".$this->_abandonedCartTable." 
 						WHERE quote_id = ".$cart->getEntityId()."
 						ORDER BY updated_at DESC
 						LIMIT 0,1											
@@ -133,48 +140,12 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 			if(strtotime($cart->getUpdatedAt()) > strtotime($oldAbandonedCart['updated_at']))
 			{
 				$query = "
-						INSERT INTO contactlab_hub_abandoned_carts (quote_id, store_id, email, created_at, updated_at, abandoned_at, remote_ip)
+						INSERT INTO ".$this->_abandonedCartTable." (quote_id, store_id, email, created_at, updated_at, abandoned_at, remote_ip)
 						VALUES (".$cart->getEntityId().", ".$cart->getStoreId().", '".$cart->getCustomerEmail()."', '".$cart->getCreatedAt()."', '".$cart->getUpdatedAt()."', '".date('Y-m-d H:i:s')."', '".$cart->getRemoteIp()."')
 				";			
 				$this->_getWriteConnection()->query($query);
 			}
 		}
-		/*
-		$query = "	
-					INSERT INTO contactlab_hub_abandoned_carts
-					SELECT 
-						NULL,
-						sfq.entity_id, 
-						sfq.store_id,
-						sfq.customer_email, 
-						sfq.created_at, 
-						sfq.updated_at,
-						'".date('Y-m-d H:i:s')."',
-						sfq.remote_ip,
-						0
-					FROM sales_flat_quote AS sfq
-					WHERE sfq.reserved_order_id IS NULL 
-						AND sfq.customer_email IS NOT NULL				
-						AND sfq.entity_id NOT IN ( SELECT quote_id FROM contactlab_hub_abandoned_carts AS chac WHERE sfq.customer_email = chac.email AND sfq.updated_at <= chac.update_at )						
-				";
-		if($minMinutes)
-		{
-			$query.=" AND (sfq.updated_at + INTERVAL ".$minMinutes." MINUTE) < '".date('Y-m-d H:i:s')."'";					
-		}
-		
-		if($maxMinutes)
-		{
-			$query.=" AND sfq.updated_at > '".  $maxMinutesFromLastUpdate->get('YYYY-MM-dd HH:mm:ss')."'";
-		}
-		
-
-		$this->_helper()->log('ABANDONED CART');
-		$this->_helper()->log($query);
-		$this->_helper()->log('FINE ABANDONED CART');
-		
-		$this->_getWriteConnection()->query($query);
-		*/
-		
 							
 		return $this;
 	}
@@ -182,7 +153,7 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 	
 	protected function _createEventsFromAbandonedCarts()
 	{
-		$query = "SELECT * FROM contactlab_hub_abandoned_carts WHERE is_exported = 0";		
+		$query = "SELECT * FROM ".$this->_abandonedCartTable." WHERE is_exported = 0";		
 		$abandonedCarts = $this->_getReadConnection()->fetchAll($query);
 		foreach ($abandonedCarts as $cart)
 		{
@@ -193,7 +164,7 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 			$event->setEvent($evt);
 			$event->trace();
 			
-			$query = "UPDATE contactlab_hub_abandoned_carts SET is_exported = 1 WHERE id = ".$cart->getId();
+			$query = "UPDATE ".$this->_abandonedCartTable." SET is_exported = 1 WHERE id = ".$cart->getId();
 			$this->_getWriteConnection()->query($query);
 		}
 	}
