@@ -176,9 +176,8 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 	}
 	
 	protected function _getPreviousCustomers()
-	{
-		$previouscustomersTable = Mage::getSingleton('core/resource')->getTableName('contactlab_hub/previouscustomers');
-		$query = "	SELECT * FROM ".$previouscustomersTable." WHERE  store_id = ".$this->getStoreId();
+	{		
+		$query = "	SELECT * FROM ".$this->_previouscustomersTable." WHERE  store_id = ".$this->getStoreId();
 		
 		if($this->_mode == self::PARTIAL_EXPORT)
 		{
