@@ -12,7 +12,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
 	protected $_unexportedEvents;
 	protected $_remoteCustomerHubId;
 	protected $_eventForHub;
-    
+    protected $_ciao; 
     
     protected function _construct()
     {
@@ -339,9 +339,9 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
    			$subcriberObj->subscribed = $tmpval ? true : false;
    			$subcriberObj->subscriberId = $subscriber->getSubscriberId();
    			
-   			$subcriberObj->updatedAt = date('Y-m-d', strtotime($this->getCreatedAt()));
-   			$subcriberObj->registeredAt = date('Y-m-d', strtotime($subscriber->getCreatedAt()));
-   			$subcriberObj->startDate = date('Y-m-d', strtotime($subscriber->getLastSubscribedAt()));   			      			 
+			$subcriberObj->updatedAt = date(DATE_ISO8601, strtotime($this->getCreatedAt()));
+			$subcriberObj->registeredAt = date(DATE_ISO8601, strtotime($subscriber->getCreatedAt()));
+			$subcriberObj->startDate = date(DATE_ISO8601, strtotime($subscriber->getLastSubscribedAt()));    			 
    			if($subcriberObj->subscribed)
    			{   		   				
    				$subcriberObj->endDate = null;
