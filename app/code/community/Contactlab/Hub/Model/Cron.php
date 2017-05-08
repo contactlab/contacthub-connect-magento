@@ -34,7 +34,7 @@ class Contactlab_Hub_Model_Cron extends Mage_Core_Model_Abstract
 	 * @param String $functionName
 	 * @param String $storeId
 	 */
-	public function logCronCall($functionName, $storeId, $storeId = false)
+	public function logCronCall($functionName, $storeId = false)
 	{
 		Mage::helper('contactlab_hubcommons')
 		->logCronCall(

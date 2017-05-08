@@ -29,19 +29,24 @@ class Contactlab_Hub_Model_Event_Checkout extends Contactlab_Hub_Model_Event
 		$eventData = json_decode($this->getEventData());
 		$order = Mage::getModel('sales/order')->loadByIncrementId($eventData->increment_id);
 		
-		$this->_eventForHub->properties->orderId = strval($order->getIncrementId());
-		$this->_eventForHub->properties->type = 'sale';
-		$this->_eventForHub->properties->storeCode = "".$order->getStoreId();
+		$properties = new stdClass();
+		$properties->orderId = strval($order->getIncrementId());
+		$properties->type = 'sale';
+		$properties->storeCode = "".$order->getStoreId();
 		/*"TODO paymentMethod -> cash","creditcard","debitcard","paypal","other" da definire in backoffice con un match 
-		$this->_eventForHub->properties->paymentMethod = 'cash';			
+		$properties->paymentMethod = 'cash';			
 		*/
-		$this->_eventForHub->properties->amount->total = (float)$order->getGrandTotal();
-		$this->_eventForHub->properties->amount->revenue = (float)($order->getGrandTotal() - $order->getShippingAmount() - $order->getShippingTaxAmount());
-		$this->_eventForHub->properties->amount->shipping = (float)($order->getShippingAmount() + $order->getShippingTaxAmount());
-		$this->_eventForHub->properties->amount->tax = (float)$order->getTaxAmount();
-		$this->_eventForHub->properties->amount->discount = (float)$order->getDiscountAmount();
-		$this->_eventForHub->properties->amount->local->currency = $order->getOrderCurrencyCode();
-		$this->_eventForHub->properties->amount->local->exchangeRate = (float)$order->getStoreToOrderRate();
+		$amount = new stdClass();
+		$amount->total = (float)$order->getGrandTotal();
+		$amount->revenue = (float)($order->getGrandTotal() - $order->getShippingAmount() - $order->getShippingTaxAmount());
+		$amount->shipping = (float)($order->getShippingAmount() + $order->getShippingTaxAmount());
+		$amount->tax = (float)$order->getTaxAmount();
+		$amount->discount = (float)$order->getDiscountAmount();
+		$local = new stdClass();
+		$local->currency = $order->getOrderCurrencyCode();
+		$local->exchangeRate = (float)$order->getStoreToOrderRate();
+		$amount->local = $local;
+		$properties->amount = $amount;
 		$arrayProducts = array();
 		foreach($order->getAllItems() as $item)
 		{
@@ -61,8 +66,8 @@ class Contactlab_Hub_Model_Event_Checkout extends Contactlab_Hub_Model_Event
 				$arrayProducts[] = $objProduct;	
 			}
 		}
-		$this->_eventForHub->properties->products = $arrayProducts;
-		
+		$properties->products = $arrayProducts;
+		$this->_eventForHub->properties = $properties;
 		return parent::_composeHubEvent();
 	}
 }

@@ -28,29 +28,30 @@ class Contactlab_Hub_Model_Event_Shipment extends Contactlab_Hub_Model_Event
 		$shipment = Mage::getModel('sales/order_shipment')->load($eventData->shipment_id);
 		$order = $shipment->getOrder();
 		
-		$this->_eventForHub->properties->orderId = strval($order->getIncrementId());		
-		//$this->_eventForHub->properties->storeCode = "".$shipment->getStoreId();
+		$properties = new stdClass();
+		$properties->orderId = strval($order->getIncrementId());		
+		//properties->storeCode = "".$shipment->getStoreId();
 		
 		foreach($shipment->getAllTracks() as $track)
 		{
 			if($track->getTitle())
 			{
-				$this->_eventForHub->properties->carrier = $track->getTitle();
+				$properties->carrier = $track->getTitle();
 			}
 			if($track->getTrackNumber())
 			{
-				$this->_eventForHub->properties->trackingCode = $track->getTrackNumber();
+				$properties->trackingCode = $track->getTrackNumber();
 			}
 			if($track->getWeight())
 			{
-				$this->_eventForHub->properties->weight = $track->getWeight();
+				$properties->weight = $track->getWeight();
 			}
 		}
 				
-		$this->_eventForHub->properties->trackingUrl = '';		
+		$properties->trackingUrl = '';		
 		if($shipment->getPackages())
 		{
-			$this->_eventForHub->properties->packages = $shipment->getPackages();
+			$properties->packages = $shipment->getPackages();
 		}
 					
 		$arrayProducts = array();
@@ -63,8 +64,10 @@ class Contactlab_Hub_Model_Event_Shipment extends Contactlab_Hub_Model_Event
 			
 			$arrayProducts[] = $objProduct;			
 		}
-		$this->_eventForHub->properties->extraProperties->products = $arrayProducts;
-		
+		$extraProperties = new stdClass();
+		$extraProperties->products = $arrayProducts;
+		$properties->extraProperties = $extraProperties;
+		$this->_eventForHub->properties = $properties;
 		return parent::_composeHubEvent();
 	}
 }

@@ -45,11 +45,10 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 				$data->id = $response->data->customer->id;
 				//unset($data->subscriptions);
 				$response = $this->curlPost($response->data->customer->href, json_encode($data), true, null, "PATCH");
-				return json_decode($response);
+				return $response;
 			}			
 			else 
-			{
-				json_decode($response);
+			{				
 				return $response->id;
 			}
 		} catch (\Exception $e) {

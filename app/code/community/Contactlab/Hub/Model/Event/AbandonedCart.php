@@ -30,16 +30,21 @@ class Contactlab_Hub_Model_Event_AbandonedCart extends Contactlab_Hub_Model_Even
 		$store = Mage::getSingleton('core/store')->load($this->getStoreId());
 		$quote = Mage::getModel('sales/quote')->setStore($store)->load($eventData->quote_id);
 		
-		$this->_eventForHub->properties->orderId = strval($quote->getEntityId());		
-		$this->_eventForHub->properties->storeCode = "".$quote->getStoreId();		
-		//$this->_eventForHub->properties->abandonedCartUrl = Mage::getUrl('', array('_store' => $quote->getStoreId())).'checkout/cart/';		
-		$this->_eventForHub->properties->amount->total = (float)$quote->getGrandTotal();
-		//$this->_eventForHub->properties->amount->revenue = (float)($quote->getGrandTotal() - $quote->getShippingAmount() - $quote->getShippingTaxAmount());
-		//$this->_eventForHub->properties->amount->shipping = (float)($quote->getShippingAmount() + $quote->getShippingTaxAmount());
-		$this->_eventForHub->properties->amount->tax = (float)$quote->getTaxAmount();
-		//$this->_eventForHub->properties->amount->discount = (float)$quote->getDiscountAmount();
-		$this->_eventForHub->properties->amount->local->currency = $quote->getQuoteCurrencyCode();
-		$this->_eventForHub->properties->amount->local->exchangeRate = (float)$quote->getStoreToQuoteRate();
+		$properties = new stdClass();
+		$properties->orderId = strval($quote->getEntityId());		
+		$properties->storeCode = "".$quote->getStoreId();		
+		//$properties->abandonedCartUrl = Mage::getUrl('', array('_store' => $quote->getStoreId())).'checkout/cart/';
+		$amount = new stdClass();
+		$amount->total = (float)$quote->getGrandTotal();
+		//$amount->revenue = (float)($quote->getGrandTotal() - $quote->getShippingAmount() - $quote->getShippingTaxAmount());
+		//$amount->shipping = (float)($quote->getShippingAmount() + $quote->getShippingTaxAmount());
+		$amount->tax = (float)$quote->getTaxAmount();
+		//$amount->discount = (float)$quote->getDiscountAmount();
+		$local = new stdClass();
+		$local->currency = $quote->getQuoteCurrencyCode();
+		$local->exchangeRate = (float)$quote->getStoreToQuoteRate();
+		$amount->local = $local;
+		$properties->amount = $amount;
 		$arrayProducts = array();
 		foreach($quote->getAllItems() as $item)
 		{
@@ -58,9 +63,9 @@ class Contactlab_Hub_Model_Event_AbandonedCart extends Contactlab_Hub_Model_Even
 				}
 				$arrayProducts[] = $objProduct;
 			}
-		}
-		$this->_eventForHub->properties->products = $arrayProducts;
-		
+		}		
+		$properties->products = $arrayProducts;
+		$this->_eventForHub->properties = $properties;
 		return parent::_composeHubEvent();
 	}
 }

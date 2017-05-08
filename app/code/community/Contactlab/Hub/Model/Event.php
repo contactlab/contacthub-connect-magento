@@ -60,6 +60,8 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	{    		    		    	    		
 	    	if($customer || $this->_helper()->sendAnonymousEvent())
 	    	{    
+	    		//var_dump($this->getData());
+	    		//die();
 	    		$this->save();		    	
 	    	}
 	    	else
@@ -101,10 +103,13 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     
     protected function _getSid()
     {
-    	$cookie = json_decode(Mage::getModel('core/cookie')->get('_ch'));
-    	if($cookie->sid)
+    	if(Mage::getModel('core/cookie')->get('_ch'))
     	{
-    		$this->setSessionId($cookie->sid);
+	    	$cookie = json_decode(Mage::getModel('core/cookie')->get('_ch'));
+	    	if($cookie->sid)
+	    	{
+	    		$this->setSessionId($cookie->sid);
+	    	}
     	}
     	else
     	{
@@ -181,20 +186,26 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	$this->_eventForHub->type = $this->getName();
     	$this->_eventForHub->date = date(DATE_ISO8601, strtotime($this->getCreatedAt()));    	
     	$this->_eventForHub->context = "ECOMMERCE";    	    	       	
-    	$store = Mage::getModel('core/store')->load($this->getStoreId());       
-    	$this->_eventForHub->contextInfo->store->id = "".$this->getStoreId();
-    	$this->_eventForHub->contextInfo->store->name = $store->getName();
-    	$this->_eventForHub->contextInfo->store->country = "".Mage::getStoreConfig('general/country/default', $this->getStoreId());
-    	$this->_eventForHub->contextInfo->store->website = Mage::getUrl('', array('_store' => $this->getStoreId()));
-    	$this->_eventForHub->contextInfo->store->type = "ECOMMERCE";    	    
+    	$store = Mage::getModel('core/store')->load($this->getStoreId());
+    	$contextInfo = new stdClass();
+    	$objStore = new stdClass();
+    	$objStore->id = "".$this->getStoreId();
+    	$objStore->name = $store->getName();
+    	$objStore->country = "".Mage::getStoreConfig('general/country/default', $this->getStoreId());
+    	$objStore->website = Mage::getUrl('', array('_store' => $this->getStoreId()));
+    	$objStore->type = "ECOMMERCE"; 
+    	$contextInfo->store = $objStore;
+    	$client = new stdClass();
     	if($this->getEnvUserAgent())
-    	{
-    		$this->_eventForHub->contextInfo->client->userAgent = "".$this->getEnvUserAgent();
+    	{    		
+    		$client->userAgent = "".$this->getEnvUserAgent();
     	}
     	if($this->getEnvRemoteIp())
     	{
-    		$this->_eventForHub->contextInfo->client->ip = "".$this->getEnvRemoteIp();
+    		$client->ip = "".$this->getEnvRemoteIp();
     	}
+    	$contextInfo->client = $client;
+    	$this->_eventForHub->contextInfo = $contextInfo;
     	Mage::log('customer id -------> '.$this->_remoteCustomerHubId, null, 'fra.log');
     	if($this->_remoteCustomerHubId)
     	{
@@ -202,9 +213,11 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	}
     	else
     	{
-    		$this->_eventForHub->bringBackProperties->type = "SESSION_ID";
-    		$this->_eventForHub->bringBackProperties->value = $this->getSessionId();
-    		$this->_eventForHub->bringBackProperties->nodeId = $this->_helper()->getConfigData('settings/apinodeid', $this->getStoreId());
+    		$bringBackProperties = new stdClass();
+    		$bringBackProperties->type = "SESSION_ID";
+    		$bringBackProperties->value = $this->getSessionId();
+    		$bringBackProperties->nodeId = $this->_helper()->getConfigData('settings/apinodeid', $this->getStoreId());
+    		$this->_eventForHub->bringBackProperties = $bringBackProperties;
     	}
     	
     	return $this->_eventForHub;
@@ -266,14 +279,17 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     
     protected function _getCustomerDataForHub()
    	{
-   
+   		$customerData = new stdClass();
    		$customerData->nodeId = $this->_helper()->getConfigData('settings/apinodeid', $this->getStoreId());
-   		$customerData->base->contacts->email = $this->getIdentityEmail();   		
+   		$base = new stdClass();
+   		$contacts = new stdClass();
+   		$contacts->email = $this->getIdentityEmail();   	
+   		$base->contacts = $contacts;
    		$locale = Mage::getStoreConfig('general/locale/code', $this->getStoreId());
    		//$customerData->extra->locale = !empty($tmpval) ? $tmpval : '';
    		if (!empty($locale)) 
    		{
-   			$customerData->base->locale = $locale;
+   			$base->locale = $locale;
    		}
    		$websiteId = Mage::getModel('core/store')->load($this->getStoreId())->getWebsiteId();
    		$customer = Mage::getModel("customer/customer")->setWebsiteId($websiteId)->loadByEmail($this->getIdentityEmail());
@@ -281,52 +297,54 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
    		{   			
    			if ($customer->getPrefix()) 
    			{
-   				$customerData->base->title = $customer->getPrefix();
+   				$base->title = $customer->getPrefix();
    			}
    			if ($customer->getFirstname()) 
    			{
-   				$customerData->base->firstName = $customer->getFirstname();
+   				$base->firstName = $customer->getFirstname();
    			}
    			if ($customer->getLastname()) 
    			{
-   				$customerData->base->lastName = $customer->getLastname();
+   				$base->lastName = $customer->getLastname();
    			}
    			if ($customer->getGender())
    			{
-   				$customerData->base->gender = $customer->getGender() == 1 ? 'Male' : 'Female';
+   				$base->gender = $customer->getGender() == 1 ? 'Male' : 'Female';
    			}   			
    			if ($customer->getDob()) 
    			{   				
-   				$customerData->base->dob = date('Y-m-d', strtotime($customer->getDob()));
+   				$base->dob = date('Y-m-d', strtotime($customer->getDob()));
    			}
    			$customerAddressId = $customer->getDefaultBilling();
    			
    			if (intval($customerAddressId)) 
-   			{   				
+   			{   		
+   				$objAddress = new stdClass();
    				$address = Mage::getModel('customer/address')->load($customerAddressId);
    				if ($address->getCity()) 
    				{
-   					$customerData->base->address->city = $address->getCity();
+   					$objAddress->city = $address->getCity();
    				}
    				$street = $address->getStreet();
    				if (!empty($tmpval))
    				{
    					$tmpval = is_array($street) ? $street[0] : $street;
-   					$customerData->base->address->street = $street ?: '';
+   					$objAddress->street = $street ?: '';
    				}
    				if ($address->getRegion())
    				{
-   					$customerData->base->address->province = $address->getRegion();
+   					$objAddress->province = $address->getRegion();
    				}
    				if ($address->getPostcode()) 
    				{
-   					$customerData->base->address->zip = $address->getPostcode();
+   					$objAddress->zip = $address->getPostcode();
    				}   				
    				if ($address->getCountry()) 
    				{
    					$country = Mage::getModel('directory/country')->load($address->getCountry())->getName();
-   					$customerData->base->address->country = $country ?: '';
+   					$objAddress->country = $country ?: '';
    				}
+   				$base->address = $objAddress;
    			}   			   			
    		}
    		$subscriber = Mage::getModel('newsletter/subscriber')->loadByEmail($this->getIdentityEmail());
@@ -351,8 +369,9 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
    				$subcriberObj->endDate = date('Y-m-d', strtotime($this->getCreatedAt()));
    			}   			
    			$subscriptions[] = $subcriberObj;
-   			$customerData->base->subscriptions = $subscriptions;   			
+   			$base->subscriptions = $subscriptions;   			
    		}   	
+   		$customerData->base = $base;
    		return $customerData;
    	}   	
    

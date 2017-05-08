@@ -56,10 +56,10 @@ class Contactlab_Hub_Model_Event_Subscription extends Contactlab_Hub_Model_Event
 		{
 			$this->_eventForHub = new stdClass();
 		}
-
-		$this->_eventForHub->properties->listId = $this->_helper()->getConfigData('events/campaignName');
-		$this->_eventForHub->properties->channel = "EMAIL";		
-	
+		$properties = new stdClass();
+		$properties->listId = $this->_helper()->getConfigData('events/campaignName');
+		$properties->channel = "EMAIL";		
+		$this->_eventForHub->properties = $properties;
 		return parent::_composeHubEvent();
 	}
 	

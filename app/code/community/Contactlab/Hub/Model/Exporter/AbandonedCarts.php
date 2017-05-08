@@ -64,8 +64,7 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 	}
 	
 	
-	public function export(Contactlab_Hubcommons_Model_Task_Interface $task)
-	//public function export()
+	public function export()
 	{
 		$allStores = Mage::app()->getStores();
 		foreach ($allStores as $storeId => $val)
