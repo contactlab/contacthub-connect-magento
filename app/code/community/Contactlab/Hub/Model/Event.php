@@ -60,8 +60,6 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	{    		    		    	    		
 	    	if($customer || $this->_helper()->sendAnonymousEvent())
 	    	{    
-	    		//var_dump($this->getData());
-	    		//die();
 	    		$this->save();		    	
 	    	}
 	    	else
@@ -156,9 +154,11 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     
     protected function _createUpdateCustomer()
     {
+    	$this->_helper()->log(__METHOD__);
+    	
     	$this->_remoteCustomerHubId = null;
     	if($this->getNeedUpdateIdentity())
-    	{
+    	{    		
     		$customerData = $this->_getCustomerDataForHub();
     		$remoteCustomerHubId = $this->_getRemoteCustomerHub($customerData);
     		if($remoteCustomerHubId)
@@ -171,8 +171,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     				$this->_setRemoteCustomerHubSession($customerData);
     			}    			
     		}
-    	}       	
-    	$this->_helper()->log(__METHOD__);
+    	}       	    	
     	return $this;
     }
     
@@ -206,7 +205,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	}
     	$contextInfo->client = $client;
     	$this->_eventForHub->contextInfo = $contextInfo;
-    	Mage::log('customer id -------> '.$this->_remoteCustomerHubId, null, 'fra.log');
+    	
     	if($this->_remoteCustomerHubId)
     	{
     		$this->_eventForHub->customerId = $this->_remoteCustomerHubId;
@@ -260,14 +259,12 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	$remoteCustomerHub = null;    
     	if($this->getIdentityEmail())
     	{
-	    	$remoteCustomerHub = $this->_getHub()->getRemoteCustomerHub($customerData);
+    		$remoteCustomerHub = $this->_getHub()->getRemoteCustomerHub($customerData);
 	    	if ($remoteCustomerHub->id) 
-	    	{
-	    		Mage::log($remoteCustomerHub, null, 'fra.log');
+	    	{	    		
 	    		return $remoteCustomerHub->id;
 	    	}
-    	}
-    	Mage::log($remoteCustomerHub, null, 'fra.log');
+    	}    	
     	return $remoteCustomerHub;
     }
     

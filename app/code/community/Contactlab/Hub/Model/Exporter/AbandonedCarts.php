@@ -102,8 +102,7 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 					->addFieldToFilter('main_table.items_count', array('gt' => 0))
 					->addFieldToFilter('main_table.store_id', array('eq' => $this->getStoreId()));
 		if($minMinutes)
-		{
-			//$collection->addFieldToFilter('main_table.updated_at', array('gt' => $minMinutesFromLastUpdate->get('YYYY-MM-dd HH:mm:ss')));			
+		{					
 			$collection->getSelect()->where("(main_table.updated_at + INTERVAL ".$minMinutes." MINUTE) < ? ", date('Y-m-d H:i:s'));
 		}
 		

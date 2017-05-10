@@ -1,37 +1,35 @@
 <?php 
 class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract 
 {
-	protected $_helper = null;
-	protected $_apiUrl = null;
-	protected $_apiVersion = 'hub/v1/workspaces/';
-	protected $_apiWorkspace = null;
-	protected $_apiNodeId = null;
-	protected $_apiContext = null;
-	protected $_apiToken = null;
-	protected $_apiProxy = null;
+	const API_VERSION = 'hub/v1/workspaces/';
 	
-	private function _helper()
+	
+	protected $_helper = null;		
+	
+	
+	protected function _getApiToken()
 	{
-		if ($this->_helper == null) {
-			$this->_helper = Mage::helper('contactlab_hub');
-		}
-		return $this->_helper;
+		return $this->_helper()->getConfigData('settings/apitoken', $this->getStoreId());
 	}
-		
-	public function __construct()
-	{		
-		$this->_apiUrl = $this->_helper()->getConfigData('settings/apiurl', $this->getStoreId());		
-		$this->_apiToken = $this->_helper()->getConfigData('settings/apitoken', $this->getStoreId());
-		$this->_apiWorkspace = $this->_helper()->getConfigData('settings/apiworkspaceid', $this->getStoreId());
-		$this->_apiNodeId = $this->_helper()->getConfigData('settings/apinodeid', $this->getStoreId());
-		$this->_apiContext = $this->_helper()->getConfigData('settings/apicontext', $this->getStoreId());
-		$this->_apiProxy = $this->_helper()->getConfigData('settings/useproxy', $this->getStoreId()) ? $this->_helper()->getConfigData('settings/apiproxy', $this->getStoreId()) : false;		
-			
-		if (substr($this->_apiUrl, -1) != '/') 
-		{
-			$this->_apiUrl .= '/';
-		}		
+	
+	
+	protected function _getApiWorkspace()
+	{
+		return $this->_helper()->getConfigData('settings/apiworkspaceid', $this->getStoreId());
 	}
+	
+	
+	protected function _getNodeId()
+	{
+		$this->_helper()->getConfigData('settings/apinodeid', $this->getStoreId());
+	}
+	
+	
+	protected function _getApiProxy()
+	{
+		return $this->_helper()->getConfigData('settings/useproxy', $this->getStoreId()) ? $this->_helper()->getConfigData('settings/apiproxy', $this->getStoreId()) : false;
+	}
+	
 	
 	public function getRemoteCustomerHub($data)
 	{
@@ -55,6 +53,7 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 			throw $e;
 		}
 	}
+	
 	
 	public function setRemoteCustomerHubSession($data)
 	{
@@ -83,6 +82,7 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 		}
 	}
 	
+	
 	public function deleteCustomer($id) 
 	{
 		$this->_helper()->log(__METHOD__);
@@ -93,6 +93,7 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 			throw $e;
 		}
 	}
+	
 	
 	public function createEvent($data) 
 	{
@@ -106,20 +107,20 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 		}
 	}
 	
-	public function getAllCustomers($outputAssoc = false) 
+		
+	public function getAllCustomers($outputAssoc = false)
 	{
 		$result = null;
 		try {
-			$response = $this->curlGet($this->_getApiUrl('customers'), ['nodeId' => $this->_apiNodeId, 'size' => 20]);
+			$response = $this->curlGet($this->_getApiUrl('customers'), ['nodeId' => $this->_getNodeId(), 'size' => 20]);
 			$response = json_decode($response, true);
 			//return $response;
 			if (!$response) {
-				throw new \Exception('empty response', 664);
+			 	throw new \Exception('empty response', 664);
 			}
 			if (!isset($response['_embedded']['customers']) || !is_array($response['_embedded']['customers'])) {
-				throw new \Exception('not valid response', 663);
-			}
-	
+			 	throw new \Exception('not valid response', 663);
+		 	}		
 			$result = $response['_embedded']['customers'];
 		} catch (\Exception $e) {
 			throw $e;
@@ -129,25 +130,29 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 		//}
 		//return null;
 	}
+	 
 	
-	private function renewToken() 
+	private function _helper()
 	{
-		if (!$this->_apiToken) {
-			return $this->getToken();
+		if ($this->_helper == null) {
+			$this->_helper = Mage::helper('contactlab_hub');
 		}
-		return true;
-	}
+		return $this->_helper;
+	}	
 	
-	private function getToken() 
-	{
-	
-		return true;
-	}
 	
 	private function _getApiUrl($actionUrl) 
-	{
-		return $this->_apiUrl.$this->_apiVersion.$this->_apiWorkspace.'/'.$actionUrl;
+	{		
+		$apiUrl = $this->_helper()->getConfigData('settings/apiurl', $this->getStoreId());
+		if (substr($apiUrl, -1) != '/')
+		{
+			$apiUrl .= '/';
+		}
+		
+		//return $this->_apiUrl.$this->_apiVersion.$this->_apiWorkspace.'/'.$actionUrl;
+		return $apiUrl.self::API_VERSION.$this->_getApiWorkspace().'/'.$actionUrl;
 	}
+	
 	
 	private function curlPost($url, $data = null, $authNeeded = true, $customHeader = null, $customRequest = null) 
 	{
@@ -160,15 +165,15 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 		$this->_helper()->log($url);
 	
 		curl_setopt($curl, CURLOPT_URL, $url);
-		if (!empty($this->getApiProxy())) {
-			curl_setopt($curl, CURLOPT_PROXY, $this->getApiProxy());
+		if (!empty($this->_getApiProxy())) {
+			curl_setopt($curl, CURLOPT_PROXY, $this->_getApiProxy());
 		}
 		$header = array(
 				'X-Forwarded-Ssl:on',
 				'Content-Type:application/json'
 		);
 		if ($authNeeded) {		
-			$header[] = 'Authorization: Bearer ' . $this->_apiToken;
+			$header[] = 'Authorization: Bearer ' . $this->_getApiToken();
 		}
 		if (is_array($customHeader)) {
 			$header = array_merge($header, $customHeader);
@@ -244,14 +249,14 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 		}
 		$this->_helper()->log($url);
 		curl_setopt($curl, CURLOPT_URL, $url);
-		if (!empty($this->getApiProxy())) {
-			curl_setopt($curl, CURLOPT_PROXY, $this->getApiProxy());
+		if (!empty($this->_getApiProxy())) {
+			curl_setopt($curl, CURLOPT_PROXY, $this->_getApiProxy());
 		}
 		
-		if ($this->_apiToken) {
+		if ($this->_getApiToken()) {
 			curl_setopt($curl, CURLOPT_HTTPHEADER, array(
 					'X-Forwarded-Ssl:on',
-					 'Authorization: Bearer '.$this->_apiToken,
+					 'Authorization: Bearer '.$this->_getApiToken(),
 					'Content-Type:application/json'
 			));
 		}
