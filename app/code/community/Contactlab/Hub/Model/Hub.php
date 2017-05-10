@@ -165,7 +165,7 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 		$this->_helper()->log($url);
 	
 		curl_setopt($curl, CURLOPT_URL, $url);
-		if (!empty($this->_getApiProxy())) {
+		if ($this->_getApiProxy()) {
 			curl_setopt($curl, CURLOPT_PROXY, $this->_getApiProxy());
 		}
 		$header = array(
@@ -178,7 +178,7 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 		if (is_array($customHeader)) {
 			$header = array_merge($header, $customHeader);
 		}
-		if (!empty($header)) {
+		if ($header) {
 			//$this->_helper()->log(print_r($header, true));			
 			curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
 		}
@@ -249,7 +249,7 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 		}
 		$this->_helper()->log($url);
 		curl_setopt($curl, CURLOPT_URL, $url);
-		if (!empty($this->_getApiProxy())) {
+		if ($this->_getApiProxy()) {
 			curl_setopt($curl, CURLOPT_PROXY, $this->_getApiProxy());
 		}
 		
