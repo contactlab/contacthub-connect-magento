@@ -48,7 +48,8 @@ class Contactlab_Hub_Model_Event_Shipment extends Contactlab_Hub_Model_Event
 			}
 		}
 				
-		$properties->trackingUrl = '';		
+		//$properties->trackingUrl = '';
+		
 		if($shipment->getPackages())
 		{
 			$properties->packages = $shipment->getPackages();

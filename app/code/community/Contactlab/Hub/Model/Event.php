@@ -101,13 +101,10 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     
     protected function _getSid()
     {
-    	if(Mage::getModel('core/cookie')->get('_ch'))
+    	$cookie = json_decode(Mage::getModel('core/cookie')->get('_ch'));
+    	if($cookie->sid)
     	{
-	    	$cookie = json_decode(Mage::getModel('core/cookie')->get('_ch'));
-	    	if($cookie->sid)
-	    	{
-	    		$this->setSessionId($cookie->sid);
-	    	}
+    		$this->setSessionId($cookie->sid);
     	}
     	else
     	{
