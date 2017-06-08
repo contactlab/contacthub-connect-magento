@@ -8,11 +8,13 @@ class Contactlab_Hub_Model_Event_Checkout extends Contactlab_Hub_Model_Event
 			return;
 		}		
 		$order = $this->getEvent()->getOrder();		
+		
 		$eventData = array(
 						'increment_id' => $order->getIncrementId(),						
 					);
 		$this->setName('completedOrder')
 			->setModel('checkout')
+			->setStoreId($order->getStoreId())
 			->setIdentityEmail($order->getCustomerEmail())
 			->setNeedUpdateIdentity(true)
 			->setEventData(json_encode($eventData));

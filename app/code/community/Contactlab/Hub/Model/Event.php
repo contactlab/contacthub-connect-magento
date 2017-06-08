@@ -89,12 +89,14 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     		$this->setStatus(self::CONTACTLAB_HUB_STATUS_EXPORTED);    	    		
     		$this->save();    		    	
     	}    	
+
     	catch (exception $e)
     	{    		
     		$this->setStatus(self::CONTACTLAB_HUB_STATUS_FAILED);
     		$this->save();    		    		
     		$this->_helper()->log($e->getMessage());
-    	}  
+    	}     	
+
     	$this->_helper()->log('fine export event');
     	return $this;
     }
@@ -243,7 +245,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
 		    $objProduct->sku = $product->getSku();
 		    $objProduct->name = $product->getName();
 		    $objProduct->price = (float)Mage::getModel('directory/currency')->formatTxt($product->getPrice(), array( 'display' => Zend_Currency::NO_SYMBOL ));
-		    $objProduct->imageUrl = Mage::getModel('catalog/product_media_config')->getMediaUrl($product->getImage());
+		    $objProduct->imageUrl = ''.Mage::helper('catalog/image')->init($product, 'image');
 		    $objProduct->linkUrl = Mage::getUrl($product->getUrlPath());;
 		    $objProduct->shortDescription = $product->getShortDescription();
 		    $objProduct->category = $this->_getCategoryNamesFromIds($product->getCategoryIds());
@@ -341,30 +343,33 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
    				$base->address = $objAddress;
    			}   			   			
    		}
-   		$subscriber = Mage::getModel('newsletter/subscriber')->loadByEmail($this->getIdentityEmail());
-   		if ($subscriber->getId()) 
+   		if(in_array($this->getName(), array('campaignSubscribed', 'campaignUnsubscribed')))
    		{
-   			$subcriberObj = new stdClass();
-   			$subcriberObj->id = $this->_helper()->getConfigData('events/campaignName', $this->getStoreId());
-   			$subcriberObj->kind = "DIGITAL_MESSAGE";
-   			$tmpval = $subscriber->getData('subscriber_status') == Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED;
-   			$subcriberObj->subscribed = $tmpval ? true : false;
-   			$subcriberObj->subscriberId = $subscriber->getSubscriberId();
-   			
-			$subcriberObj->updatedAt = date(DATE_ISO8601, strtotime($this->getCreatedAt()));
-			$subcriberObj->registeredAt = date(DATE_ISO8601, strtotime($subscriber->getCreatedAt()));
-			$subcriberObj->startDate = date(DATE_ISO8601, strtotime($subscriber->getLastSubscribedAt()));    			 
-   			if($subcriberObj->subscribed)
-   			{   		   				
-   				$subcriberObj->endDate = null;
-   			}
-   			else
-   			{      				
-   				$subcriberObj->endDate = date('Y-m-d', strtotime($this->getCreatedAt()));
-   			}   			
-   			$subscriptions[] = $subcriberObj;
-   			$base->subscriptions = $subscriptions;   			
-   		}   	
+	   		$subscriber = Mage::getModel('newsletter/subscriber')->loadByEmail($this->getIdentityEmail());
+	   		if ($subscriber->getId()) 
+	   		{
+	   			$subcriberObj = new stdClass();
+	   			$subcriberObj->id = $this->_helper()->getConfigData('events/campaignName', $this->getStoreId());
+	   			$subcriberObj->kind = "DIGITAL_MESSAGE";
+	   			$tmpval = $subscriber->getData('subscriber_status') == Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED;
+	   			$subcriberObj->subscribed = $tmpval ? true : false;
+	   			$subcriberObj->subscriberId = $subscriber->getSubscriberId();
+	   			
+				$subcriberObj->updatedAt = date(DATE_ISO8601, strtotime($this->getCreatedAt()));
+				$subcriberObj->registeredAt = date(DATE_ISO8601, strtotime($subscriber->getCreatedAt()));
+				$subcriberObj->startDate = date(DATE_ISO8601, strtotime($subscriber->getLastSubscribedAt()));    			 
+	   			if($subcriberObj->subscribed)
+	   			{   		   				
+	   				$subcriberObj->endDate = null;
+	   			}
+	   			else
+	   			{      				
+	   				$subcriberObj->endDate = date(DATE_ISO8601, strtotime($this->getCreatedAt()));
+	   			}   			
+	   			$subscriptions[] = $subcriberObj;
+	   			$base->subscriptions = $subscriptions;   			
+	   		}   	
+   		}
    		$customerData->base = $base;
    		return $customerData;
    	}   	

@@ -243,5 +243,29 @@ class Contactlab_Hub_Model_Observer
 		return $observer;
 	}
 	
+	public function traceCancelOrderEvent($observer)
+	{
+		$order = $observer->getEvent()->getOrder();
+				
+		if (!$order->getId()) {
+			//order not saved in the database
+			return $this;
+		}
+		
+		$OldStatus = $order->getOrigData('status');
+		$NewStatus = $order->getStatus();
+		
+		
+		if (
+			($NewStatus == Mage_Sales_Model_Order::STATE_CANCELED)
+			&& ($OldStatus != $NewStatus)
+		)
+		{
+			$event = Mage::getModel('contactlab_hub/event_cancelOrder');
+			$event->setEvent($observer->getEvent());
+			$event->trace();
+		}
+		return $observer;
+	}
 }
 ?>

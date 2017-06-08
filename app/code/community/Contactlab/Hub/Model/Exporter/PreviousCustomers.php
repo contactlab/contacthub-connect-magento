@@ -21,6 +21,8 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 	protected $_websiteTable;
 	protected $_previouscustomersTable;
 	
+	protected $_canExportOrders;
+	
 	protected function _construct()
     {
 		$this->_customerTable = Mage::getSingleton('core/resource')->getTableName('customer/entity');
@@ -30,6 +32,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		$this->_websiteTable = Mage::getSingleton('core/resource')->getTableName('core/website');
 		$this->_previouscustomersTable = Mage::getSingleton('core/resource')->getTableName('contactlab_hub/previouscustomers');
 		$this->_quoteTable = Mage::getSingleton('core/resource')->getTableName('sales/quote');
+		$this->_canExportOrders = true;
 	}
 	
 	private function _helper() {
@@ -124,14 +127,14 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 			Mage::helper('contactlab_hub')->setConfigData('contactlab_hub/cron_previous_customers/enabled', 1, 'stores', $this->getStoreId());
 			Mage::helper('contactlab_hub')->setConfigData('contactlab_hub/cron_previous_customers/previous_date', date('Y-m-d H:i:s'), 'stores', $this->getStoreId());
 			$this->_setUnexported();
+			$this->_canExportOrders = false;
 		}		
 		return $this;
 	}
 	
 	public function export(Contactlab_Hubcommons_Model_Task_Interface $task)
 	//public function export()
-	{	
-		
+	{			
 		$allStores = Mage::app()->getStores();
 		foreach ($allStores as $storeId => $val)
 		{
@@ -140,40 +143,16 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 			{
 				Mage::helper("contactlab_hubcommons")->logWarn("Module export is disabled");
 				return "Module export is disabled";
-			}
-			
+			}			
 			$this->_init();
-			$this->_fillPreviousCustomerTable();
-			/*
-			$this->_writeTranche();
-		
-			if ($this->_useLocalServer()) 
-			{
-				Mage::helper("contactlab_hubcommons")->logNotice("Exporting locally to $filename");
-				rename($this->getFileName(), str_replace('.tmp', '', $this->getFileName()));
-			}
-			if ($this->_useRemoteServer()) 
-			{
-				$filename = str_replace('.tmp', '', $this->getFileName());
-				rename($this->getFileName(), $filename);
-				$this->_putFile(realpath($filename), basename($filename));
-				sleep(2);
-				unlink(realpath($filename));
-			}
-			$this->afterFileCopy();
-			*/
+			$this->_insertCustomers();			
 			$this->_createEvents();
 			
 			$this->_setExportedTranche();
 		}
 		return "Export done";
 	}
-	
-	protected function _fillPreviousCustomerTable()
-	{
-		//$this->_insertSubscribers();
-		$this->_insertCustomers();					
-	}
+
 	
 	protected function _getPreviousCustomers()
 	{		
@@ -187,65 +166,16 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		return $results;
 	}
 	
-	protected function _insertSubscribers()
-	{			
-		$query = "	SELECT ns.subscriber_id
-					,1 as is_subscribed
-					,ns.subscriber_email as email
-					,cs.store_id
-					,cs.name as store_name
-					,cs.website_id
-					,cw.name as website_name
-					,cs.group_id
-					,csg.name as group_name						
-					FROM ".$this->_subscriberTable." as ns 
-					INNER JOIN ".$this->_storeTabel." as cs ON ns.store_id = cs.store_id
-					INNER JOIN ".$this->_storeGroupTable." as csg ON cs.group_id = csg.group_id
-					INNER JOIN ".$this->_websiteTable." as cw ON cs.website_id = cw.website_id
-					LEFT OUTER JOIN ".$this->_previouscustomersTable." as chp ON ns.subscriber_email = chp.email
-					WHERE ns.customer_id = 0 
-					AND cs.store_id = ".$this->getStoreId()."
-					AND chp.id IS NULL	";
-		if($this->_mode == self::PARTIAL_EXPORT)
-		{
-			$exportable = $this->_trancheLimit - count($this->_getPreviousCustomers());
-			if($exportable > 0)
-			{
-				$query .=" LIMIT 0, ". $exportable;
-			}
-		}
-		//echo $query."\n";
-		//Mage::log($query, null, 'fra.log');
-		$results = $this->_getReadConnection()->fetchAll($query);			
-		foreach ($results as $row)
-		{
-			$row['language'] = $this->_getStoreLocale($row['store_id']);				
-			$query = "	INSERT INTO ".$this->_previouscustomersTable." SET ".$this->_buildInsertQuery($row);			  									 	
-			$this->_getWriteConnection()->query($query, $row);
-		}
-		return $this;
-	}
-	
 	protected function _insertCustomers()
 	{			
-		$query = "	SELECT ce.entity_id as customer_id
-					,1 as is_customer
-					,ns.subscriber_id
-					,IF(ns.subscriber_id IS NULL, 0,1) as is_subscribed 
-					,cs.store_id
-					,cs.name as store_name
-					,cs.website_id
-					,cw.name as website_name
-					,cs.group_id
-					,csg.name as group_name
-					FROM ".$this->_customerTable." as ce
-					LEFT OUTER JOIN ".$this->_subscriberTable." as ns ON ce.email = ns.subscriber_email
-					INNER JOIN ".$this->_storeTable." as cs ON ce.store_id = cs.store_id
-					INNER JOIN ".$this->_storeGroupTable." as csg ON cs.group_id = csg.group_id
-					INNER JOIN ".$this->_websiteTable." as cw ON cs.website_id = cw.website_id
+		$query = "	SELECT ce.entity_id as customer_id										
+					,ce.store_id
+					,ce.created_at
+					,ce.email
+					FROM ".$this->_customerTable." as ce					
 					LEFT OUTER JOIN ".$this->_previouscustomersTable." as chp ON ce.email = chp.email
 					WHERE ce.created_at < '".$this->_getPreviousDate()."'
-					AND cs.store_id = ".$this->getStoreId()."
+					AND ce.store_id = ".$this->getStoreId()."
 					AND chp.id IS NULL	";	
 		if($this->_mode == self::PARTIAL_EXPORT)
 		{
@@ -261,73 +191,10 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		foreach ($results as $row)
 		{				
 			/* CUSTOMER INFORMATIONS */
-			$customer = Mage::getModel('customer/customer')->load($row['customer_id']);
-			if($customer)
-			{
-				//var_dump($customer->getData());
-				$row['prefix'] = $customer->getPrefix();
-				$row['firstname'] = $customer->getFirstname();
-				$row['middlename'] = $customer->getMiddlename();
-				$row['lastname'] = $customer->getLastname();
-				$row['suffix'] = $customer->getSuffix();
-				$row['dob'] = $customer->getDob() ? date('Y-m-d', strtotime($customer->getDob())) : null;				
-				$row['gender'] = $customer->getGender();
-				$row['email'] = $customer->getEmail();
-				$row['taxvat'] = $customer->getTaxvat();
-				$row['created_at'] = date('Y-m-d H:i:s', strtotime($customer->getCreatedAt()));
-				$row['remote_ip'] = $this->_getRemoteIp($customer->getEntityId());
-				/* BILLING INFORMATIONS */
-				$billing = $customer->getDefaultBillingAddress();
-				if($billing)
-				{
-					//var_dump($billing->getData());
-					$row['billing_prefix'] = $billing->getPrefix();
-					$row['billing_firstname'] = $billing->getFirstname();
-					$row['billing_middlename'] = $billing->getMiddlename();
-					$row['billing_lastname'] = $billing->getLastname();
-					$row['billing_suffix'] = $billing->getSuffix();
-					$row['billing_country_id'] = $billing->getCountryId();
-					$row['billing_region_id'] = $billing->getRegionId();
-					$row['billing_region'] = $billing->getRegion();
-					$row['billing_postcode'] = $billing->getPostcode();
-					$row['billing_city'] = $billing->getCity();
-					$row['billing_street'] = implode(" ", $billing->getStreet());
-					$row['billing_telephone'] = $billing->getTelephone();
-					$row['billing_fax'] = $billing->getFax();
-					$row['billing_company'] = $billing->getCompany();					
-				}
-				/* SHIPPING INFORMATIONS */
-				$shipping = $customer->getDefaultShippingAddress();
-				if($shipping)
-				{
-					//var_dump($shipping->getData());					
-					$row['shipping_prefix'] = $shipping->getPrefix();
-					$row['shipping_firstname'] = $shipping->getFirstname();
-					$row['shipping_middlename'] = $shipping->getMiddlename();
-					$row['shipping_lastname'] = $shipping->getLastname();
-					$row['shipping_suffix'] = $shipping->getSuffix();					
-					$row['shipping_country_id'] = $shipping->getCountryId();				
-					$row['shipping_region_id'] = $shipping->getRegionId();
-					$row['shipping_region'] = $shipping->getRegion();
-					$row['shipping_postcode'] = $shipping->getPostcode();
-					$row['shipping_city'] = $shipping->getCity();
-					$row['shipping_street'] = implode(" ", $shipping->getStreet());
-					$row['shipping_telephone'] = $shipping->getTelephone();				
-					$row['shipping_fax'] = $shipping->getFax();
-					$row['shipping_company'] = $shipping->getCompany();		
-				}
-				/* EXTRA INFORMATIONS */
-				$row['language'] = $this->_getStoreLocale($row['store_id']);
-				$row['extra_properties'] = json_encode($this->_getExtraProperties($customer));
-				//var_dump($row);				
-				$query = "	INSERT INTO ".$this->_previouscustomersTable." SET ".$this->_buildInsertQuery($row);						 						
-				//echo var_dump($row);				
-				$this->_getWriteConnection()->query($query, $row);	
-			}
-			else
-			{
-				throw new Zend_Exception(sprintf('There\'s been a problem exporting customer %s', $row['customer_id']));
-			}
+			$row['remote_ip'] = $this->_getRemoteIp($row['customer_id']);
+			$query = "	INSERT INTO ".$this->_previouscustomersTable." SET ".$this->_buildInsertQuery($row);
+			//echo var_dump($row);
+			$this->_getWriteConnection()->query($query, $row);			
 		}		
 	
 		return $this;
@@ -372,76 +239,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		return $remoteIp;
 	}
 		
-	protected function _getExtraProperties($customer)
-	{
-		$extraProperties = array();
-		$configExrtraProperties = explode(',', $this->_getConfig('cron_previous_customers/extra_properties'));		
-		foreach ($configExrtraProperties as $attributeCode)
-		{
-			$attribute = Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('attribute_code', array('in' => $attributeCode) )->getFirstItem();
 	
-			if($attribute->getEntityTypeId() == 1)
-			{
-				if($attribute->getBackendType() == 'int')
-				{
-					$value = Mage::getResourceSingleton('customer/customer')
-							->getAttribute($attributeCode)
-							->getSource()
-							->getOptionText($customer->getData($attributeCode));
-					$extraProperties[$attributeCode] = $value;
-				}
-				else
-				{
-					$extraProperties[$attributeCode] = $customer->getData($attributeCode);
-				}
-			
-			}
-			else 
-			{
-				/* BILLING INFORMATIONS */
-				$billing = $customer->getDefaultBillingAddress();
-				if($billing)
-				{
-					if($billing->getData($attributeCode))
-					{
-						if($attribute->getBackendType() == 'int')
-						{
-							$value = Mage::getResourceSingleton('customer/address')
-								->getAttribute($attributeCode)
-								->getSource()
-								->getOptionText($billing->getData($attributeCode));
-							$extraProperties['billing_'.$attributeCode] = $value;
-						}
-						else
-						{
-							$extraProperties['billing_'.$attributeCode] = $billing->getData($attributeCode);
-						}
-					}
-				}
-				/* SHIPPING INFORMATIONS */
-				$shipping = $customer->getDefaultShippingAddress();
-				if($shipping)
-				{					
-					if($shipping->getData($attributeCode))
-					{	
-						if($attribute->getBackendType() == 'int')
-						{
-							$value = Mage::getResourceSingleton('customer/address')
-								->getAttribute($attributeCode)
-								->getSource()
-								->getOptionText($shipping->getData($attributeCode));
-							$extraProperties['shipping_'.$attributeCode] = $value;
-						}
-						else
-						{
-							$extraProperties['shipping_'.$attributeCode] = $shipping->getData($attributeCode);
-						}
-					}
-				}
-			}
-		}
-		return $extraProperties;
-	}
 		
 	protected function _createEvents()
 	{
@@ -460,8 +258,50 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 						->setEnvRemoteIp($previousCustomer['remote_ip'])
 						->setNeedUpdateIdentity(true)
 				;
-				$event->save();			
-								
+				$event->save();
+				
+				//if(!$previousCustomer['orders_exported'])
+				{
+					$orders = $this->_getCustomerOrders($previousCustomer['customer_id']);
+					if(count($orders) > 0)
+					{
+						foreach($orders as $order)
+						{
+							$eventData = array(
+									'increment_id' => $order->getIncrementId(),
+							);
+							$model = 'checkout';
+							$order->getStatus();
+							/*
+							if ($order->getStatus() == Mage_Sales_Model_Order::STATE_CANCELED)
+							{
+								$model = 'cancelOrder';
+							}
+							*/
+							$event = Mage::getModel('contactlab_hub/event');
+							$event->setName('completedOrder')
+								->setModel($model)
+								->setCreatedAt($order->getCreatedAt())
+								->setStoreId($order->getStoreId())
+								->setIdentityEmail($order->getCustomerEmail())
+								->setNeedUpdateIdentity(true)
+								->setEnvRemoteIp($order->getRemoteIp())
+								->setEventData(json_encode($eventData));
+							$event->save();
+							/*
+							$query = "UPDATE ".$this->_previouscustomersTable." SET orders_exported = 1 WHERE id = ".$previousCustomer['id'];
+							$this->_getWriteConnection()->query($query);
+							*/
+						}
+					}
+					/*
+					else 
+					{
+						$query = "UPDATE ".$this->_previouscustomersTable." SET orders_exported = 1 WHERE id = ".$previousCustomer['id'];
+						$this->_getWriteConnection()->query($query);
+					}
+					*/
+				}								
 			}			
 		}
 		else
@@ -472,6 +312,18 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		return $this;
 	}
 
+	protected function _getCustomerOrders( $customerId )
+	{
+		$orderCollection = Mage::getResourceModel('sales/order_collection')
+			->addFieldToSelect('*')
+			->addFieldToFilter('customer_id', array('eq' => $customerId))	
+			->addFieldToFilter('created_at', array('lt' => $this->_getPreviousDate()))
+			->addFieldToFilter('status', array('neq' => Mage_Sales_Model_Order::STATE_CANCELED))
+			->setOrder('created_at', 'desc');
+		return $orderCollection;
+	}
+	
+	
 	protected function _setUnexported()
 	{			
 		$query = "UPDATE ".$this->_previouscustomersTable." SET is_exported = 0 WHERE store_id = ".$this->getStoreId();

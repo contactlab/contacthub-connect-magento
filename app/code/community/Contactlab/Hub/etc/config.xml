@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Contactlab_Hub>
-            <version>0.9.2</version>
+            <version>1.0.0</version>
         </Contactlab_Hub>
     </modules>
     <global>
@@ -172,6 +172,16 @@
                     </contactlab_hub>
                 </observers>
             </sales_quote_remove_item>
+            
+            <sales_order_save_after>
+               <observers>
+                    <contactlab_hub>
+                    	<type>singleton</type>
+						<class>contactlab_hub/observer</class>
+						<method>traceCancelOrderEvent</method>
+					</contactlab_hub>
+                </observers>
+            </sales_order_save_after> 
             
             <sales_order_shipment_save_after>
             	<observers>

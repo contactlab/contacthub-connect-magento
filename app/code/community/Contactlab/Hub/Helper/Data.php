@@ -156,8 +156,8 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 			$properties->id = $product->getEntityId();
 			$properties->sku = $product->getSku();
 			$properties->name = $this->clearStrings($product->getName());
-			$properties->price = round($product->getFinalPrice(),2);
-			$properties->imageUrl = $product->getEntityId();
+			$properties->price = round($product->getFinalPrice(),2);			
+			$properties->imageUrl = ''.Mage::helper('catalog/image')->init($product, 'image');
 			$properties->linkUrl = $product->getProductUrl();
 			$properties->shortDescription = $this->clearStrings($product->getShortDescription());
 			$properties->category = $categories;

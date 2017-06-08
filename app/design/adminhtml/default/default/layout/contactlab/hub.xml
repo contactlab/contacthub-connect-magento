@@ -27,7 +27,7 @@
                         <url>adminhtml/contactlab_hub_export/reset</url>
                     </action>
                     <action method="setConfirm" translate="confirm">
-                        <confirm>Are you sure you want to do this?</confirm>
+                        <confirm>Warning! If you reset the export, you must be sure that nodes are empty to not duplicate the order data. Are you sure?</confirm>
                     </action>
                 </block>
             </block>
