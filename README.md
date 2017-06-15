@@ -1,7 +1,7 @@
-![Version 0.0.1 beta](https://img.shields.io/badge/version-0.0.1%20beta-0072bc.svg)
+![Version 1.0.0 beta](https://img.shields.io/badge/version-1.0.0%20beta-0072bc.svg)
 
 # Contacthub Connect for Magento  
-### Version 0.0.1 beta  
+### Version 1.0.0
 # Installation and Configuration Guide  
 
 ----------
