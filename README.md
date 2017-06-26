@@ -13,11 +13,13 @@
 - [Configuring the Magento plug-in](#ConfiguringPlugIn)
 
 <a name="Introduction"/>
+
 ## Introduction  
 
 The Contacthub Magento plug-in enables you to automatically send all of the activities that your customers undertake on the e-commerce platform to Contacthub, without the need to write any code. Installing the plug-in is very simple, while configuring it requires just a few minutes.  
 
 <a name="InstallingPlugIn"/>
+
 ## Installing the Magento plug-in
 
 To install the plug-in, do the following:  
