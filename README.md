@@ -59,6 +59,7 @@ If you install several extensions from Amasty, they will contain some files that
 - Log out of **Magento Admin** and then log back in again, to allow Magento to refresh permissions.  
 
 <a name="ConfiguringPlugIn"/>
+
 ## Configuring the Magento plug-in
 
 To configure the plug-in, do the following:  
