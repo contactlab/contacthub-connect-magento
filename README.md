@@ -1,7 +1,7 @@
-![Version 0.0.1 beta](https://img.shields.io/badge/version-0.0.1%20beta-0072bc.svg)
+![Version 1.0.0 beta](https://img.shields.io/badge/version-1.0.0%20beta-0072bc.svg)
 
 # Contacthub Connect for Magento  
-### Version 0.0.1 beta  
+### Version 1.0.0
 # Installation and Configuration Guide  
 
 ----------
@@ -13,11 +13,13 @@
 - [Configuring the Magento plug-in](#ConfiguringPlugIn)
 
 <a name="Introduction"/>
+
 ## Introduction  
 
 The Contacthub Magento plug-in enables you to automatically send all of the activities that your customers undertake on the e-commerce platform to Contacthub, without the need to write any code. Installing the plug-in is very simple, while configuring it requires just a few minutes.  
 
 <a name="InstallingPlugIn"/>
+
 ## Installing the Magento plug-in
 
 To install the plug-in, do the following:  
@@ -57,6 +59,7 @@ If you install several extensions from Amasty, they will contain some files that
 - Log out of **Magento Admin** and then log back in again, to allow Magento to refresh permissions.  
 
 <a name="ConfiguringPlugIn"/>
+
 ## Configuring the Magento plug-in
 
 To configure the plug-in, do the following:  
