@@ -39,14 +39,21 @@ class Contactlab_Hub_Model_Event_Checkout extends Contactlab_Hub_Model_Event
 		$properties->paymentMethod = 'cash';			
 		*/
 		$amount = new stdClass();
-		$amount->total = (float)$order->getGrandTotal();
-		$amount->revenue = (float)($order->getGrandTotal() - $order->getShippingAmount() - $order->getShippingTaxAmount());
-		$amount->shipping = (float)($order->getShippingAmount() + $order->getShippingTaxAmount());
-		$amount->tax = (float)$order->getTaxAmount();
-		$amount->discount = (float)$order->getDiscountAmount();
+		$exchangeRate = (float)$order->getStoreToOrderRate();
+		$this->_helper()->log($exchangeRate);
+		if($exchangeRate == 1)
+		{
+			$exchangeRate = $this->_helper()->getExchangeRate($order->getStoreId());	
+		}
+		$this->_helper()->log($exchangeRate);
+		$amount->total = $this->_helper()->convertToBaseRate($order->getGrandTotal(), $exchangeRate);
+		$amount->revenue = $this->_helper()->convertToBaseRate(($order->getGrandTotal() - $order->getShippingAmount() - $order->getShippingTaxAmount()), $exchangeRate);
+		$amount->shipping = $this->_helper()->convertToBaseRate(($order->getShippingAmount() + $order->getShippingTaxAmount()), $exchangeRate);
+		$amount->tax = $this->_helper()->convertToBaseRate($order->getTaxAmount(), $exchangeRate);
+		$amount->discount = $this->_helper()->convertToBaseRate($order->getDiscountAmount(), $exchangeRate);
 		$local = new stdClass();
-		$local->currency = $order->getOrderCurrencyCode();
-		$local->exchangeRate = (float)$order->getStoreToOrderRate();
+		$local->currency = $order->getOrderCurrencyCode();				
+		$local->exchangeRate = $exchangeRate;
 		$amount->local = $local;
 		$properties->amount = $amount;
 		$arrayProducts = array();
@@ -56,11 +63,11 @@ class Contactlab_Hub_Model_Event_Checkout extends Contactlab_Hub_Model_Event
 			{
 				$objProduct = $this->_getObjProduct($item->getProductId());			
 				$objProduct->type = 'sale';
-				$objProduct->price = (float)$item->getPrice();
-				$objProduct->subtotal = (float)$item->getRowTotal();
+				$objProduct->price = $this->_helper()->convertToBaseRate($item->getPrice(), $exchangeRate);
+				$objProduct->subtotal = $this->_helper()->convertToBaseRate($item->getRowTotal(), $exchangeRate);
 				$objProduct->quantity = (int)$item->getQtyOrdered();
-				$objProduct->discount = (float)$item->getDiscountAmount();
-				$objProduct->tax = (float)$item->getTaxAmount();
+				$objProduct->discount = $this->_helper()->convertToBaseRate($item->getDiscountAmount(), $exchangeRate);
+				$objProduct->tax = $this->_helper()->convertToBaseRate($item->getTaxAmount(), $exchangeRate);
 				if($order->getCouponCode())
 				{
 					$objProduct->coupon = $order->getCouponCode();
@@ -71,5 +78,10 @@ class Contactlab_Hub_Model_Event_Checkout extends Contactlab_Hub_Model_Event
 		$properties->products = $arrayProducts;
 		$this->_eventForHub->properties = $properties;
 		return parent::_composeHubEvent();
+	}
+	
+	protected function _helper()
+	{
+		return Mage::helper('contactlab_hub');
 	}
 }

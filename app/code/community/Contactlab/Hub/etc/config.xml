@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Contactlab_Hub>
-            <version>1.0.0</version>
+            <version>1.1.1</version>
         </Contactlab_Hub>
     </modules>
     <global>
@@ -145,7 +145,7 @@
                 </observers>
             </wishlist_item_delete_before>
 			<!-- SLASES EVENTS -->
-            <checkout_submit_all_after>
+            <sales_order_place_after>
                 <observers>
                     <contactlab_hub>
                         <type>singleton</type>
@@ -153,7 +153,18 @@
                         <method>traceCheckoutEvent</method>
                     </contactlab_hub>
                 </observers>
-            </checkout_submit_all_after>
+            </sales_order_place_after>
+           
+            <checkout_type_onepage_save_order_after>
+				<observers>
+                    <contactlab_hub>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
+                        <method>traceCheckoutEvent</method>
+                    </contactlab_hub>
+                </observers>
+            </checkout_type_onepage_save_order_after>
+            
             <checkout_cart_product_add_after>
                 <observers>
                     <contactlab_hub>
@@ -163,6 +174,7 @@
                     </contactlab_hub>
                 </observers>
             </checkout_cart_product_add_after>
+            
             <sales_quote_remove_item>
             	<observers>
                     <contactlab_hub>
@@ -302,7 +314,10 @@
                 <removedCompare>1</removedCompare>
                 <viewedProduct>1</viewedProduct>
                 <viewedProductCategory>1</viewedProductCategory>
-                <orderShipped>1</orderShipped>                
+                <orderShipped>1</orderShipped> 
+                <base_currency>EUR</base_currency>
+	            <website_currency>EUR</website_currency>
+	            <exchange_rate>1</exchange_rate>	                        
             </events>      
             <cron_events>
             	<limit>30</limit>

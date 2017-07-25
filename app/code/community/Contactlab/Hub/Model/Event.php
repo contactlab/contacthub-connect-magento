@@ -19,6 +19,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         $this->_init('contactlab_hub/event');
     }
 
+    
     protected function _helper()
     {
         if (!$this->_helper) 
@@ -27,6 +28,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         }
         return $this->_helper;
     }
+    
     
     public function getUnexportedEvents($pageSize = null)
     {
@@ -101,6 +103,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	return $this;
     }
     
+    
     protected function _getSid()
     {
     	$cookie = json_decode(Mage::getModel('core/cookie')->get('_ch'));
@@ -114,6 +117,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	}
     	return $this->getSessionId();
     }
+    
     
     protected function _assignData()
     {    	    	    	
@@ -216,10 +220,10 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     		$bringBackProperties->value = $this->getSessionId();
     		$bringBackProperties->nodeId = $this->_helper()->getConfigData('settings/apinodeid', $this->getStoreId());
     		$this->_eventForHub->bringBackProperties = $bringBackProperties;
-    	}
-    	
+    	}    	
     	return $this->_eventForHub;
     }
+    
     
     protected function _getCategoryNamesFromIds($catIds)
     {
@@ -234,6 +238,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	}
     	return $result;
     }
+    
     
     protected function _getObjProduct($product_id)
     {
@@ -253,6 +258,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
 	    return $objProduct;
     }
     
+    
     protected function _getRemoteCustomerHub($customerData)
     {
     	$remoteCustomerHub = null;    
@@ -266,6 +272,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     	}    	
     	return $remoteCustomerHub;
     }
+    
     
     protected function _setRemoteCustomerHubSession($customerData)
     {

@@ -135,7 +135,7 @@
                     </fields>
                 </settings>
                 <events translate="label" module="contactlab_hub">
-                    <label>Event track</label>
+                    <label>Event Settings</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>20</sort_order>
                     <show_in_default>1</show_in_default>
@@ -143,234 +143,284 @@
                     <show_in_store>1</show_in_store>
                     <fields>                                     
                         <heading_events translate="label">
-                            <label>Event settings</label>
+                            <label>General Events</label>
                             <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
-                            <sort_order>7</sort_order>
+                            <sort_order>0</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </heading_events>
-						<!--  NON C'è EVENTO?-->  				
-						<evtregister translate="label">
-                            <label>Registered: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </evtregister>
-                        <loggedIn translate="label">
-                            <label>LoggedIn: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </loggedIn>
-                        <loggedOut translate="label">
-                            <label>LoggedOut: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </loggedOut>
-                        <campaignName translate="label">
-                            <label>Newsletter Campaign: </label>
-                            <comment>Campaign Name e.g. (Magento_Campaign)</comment>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>35</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>                            
-                        </campaignName>
-                       <campaignSubscribed translate="label">
-                            <label>Newsletter subscribed: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </campaignSubscribed>
-                        <campaignUnsubscribed translate="label">
-                            <label>Newsletter unsubscribed: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>50</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </campaignUnsubscribed>
-                        <changedSetting translate="label">
-                            <label>Locale changed: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>60</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </changedSetting>
-                       <completedOrder translate="label">
-                            <label>Checkout: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>70</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </completedOrder>
-                        <searched translate="label">
-                            <label>Search: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>75</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </searched>
-                        <addedProduct translate="label">
-                            <label>Product added to cart: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>80</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </addedProduct>
-                        <removedProduct translate="label">
-                            <label>Product removed from cart: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>85</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </removedProduct>
-                        <abandonedCart translate="label">
-                            <label>Abandoned Cart: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>90</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </abandonedCart >
-                        <send_to_not_subscribed translate="label">
-                            <label>Send Abandoned Cart event from non-subscribed customers</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>91</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>                            
-                        </send_to_not_subscribed>
-                        <min_minutes_from_last_update translate="label">
-                            <label>Minimum number of minutes before sending an Abandoned Cart event</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>92</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <validate>validate-not-negative-number validate-digits validate-is-min-of-range</validate>                            
-                        </min_minutes_from_last_update>
-                        <max_minutes_from_last_update translate="label">
-                            <label>Maximum number of minutes before sending an Abandoned Cart event</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>93</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <validate>validate-not-negative-number validate-digits validate-is-max-of-range</validate>                            
-                        </max_minutes_from_last_update>
-                                   
-                        <addedWishlist translate="label">
-                            <label>Product added to wishlist: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
+                        
+	                        <!--  NON C'è EVENTO?-->  				
+							<evtregister translate="label">
+	                            <label>Registered: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>1</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </evtregister>
+	                        <loggedIn translate="label">
+	                            <label>LoggedIn: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>2</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </loggedIn>
+	                        <loggedOut translate="label">
+	                            <label>LoggedOut: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>3</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </loggedOut>
+	                        <changedSetting translate="label">
+	                            <label>Locale changed: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>4</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </changedSetting>
+	                        <viewedProductCategory>
+	                        	<label>Category viewed: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>5</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </viewedProductCategory>
+	                        <viewedProduct translate="label">
+	                            <label>Product viewed: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>6</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </viewedProduct>
+	                        <addedWishlist translate="label">
+	                            <label>Product added to wishlist: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>7</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </addedWishlist>
+	                        <removedWishlist translate="label">
+	                            <label>Product removed from wishlist: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>8</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </removedWishlist>
+	                        <addedCompare translate="label">
+	                            <label>Product added to compare: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>9</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </addedCompare>
+	                        <removedCompare translate="label">
+	                            <label>Product removed from compare: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>10</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </removedCompare>
+                        	<searched translate="label">
+	                            <label>Search: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>11</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </searched>
+                        
+                        <subscriber_events translate="label">
+                            <label>Subscriber Events</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
                             <sort_order>100</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </addedWishlist>
-                        <removedWishlist translate="label">
-                            <label>Product removed from wishlist: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>110</sort_order>
+                        </subscriber_events>
+                        	
+                        	<campaignName translate="label">
+	                            <label>Newsletter Campaign: </label>
+	                            <comment>Campaign Name e.g. (Magento_Campaign)</comment>
+	                            <frontend_type>text</frontend_type>
+	                            <sort_order>101</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>                            
+	                        </campaignName>
+	                       <campaignSubscribed translate="label">
+	                            <label>Newsletter subscribed: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>102</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </campaignSubscribed>
+	                        <campaignUnsubscribed translate="label">
+	                            <label>Newsletter unsubscribed: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>103</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </campaignUnsubscribed>
+	                        
+                        <sales_events translate="label">
+                            <label>Sales Events</label>
+                            <frontend_model>adminhtml/system_config_form_field_heading</frontend_model>
+                            <sort_order>200</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </removedWishlist>
-                        <addedCompare translate="label">
-                            <label>Product added to compare: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>120</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </addedCompare>
-                        <removedCompare translate="label">
-                            <label>Product removed from compare: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>130</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </removedCompare>
-                        <viewedProduct translate="label">
-                            <label>Product viewed: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>140</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </viewedProduct>
-                        <viewedProductCategory>
-                        	<label>Category viewed: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>150</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </viewedProductCategory>
-                        <orderShipped>
-                        	<label>Order Shipped: </label>
-                            <comment></comment>
-                            <frontend_type>radios</frontend_type>
-                            <sort_order>160</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
-                        </orderShipped>
-                        
+                        </sales_events>                        	
+                        	<addedProduct translate="label">
+	                            <label>Product added to cart: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>201</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </addedProduct>
+	                        <removedProduct translate="label">
+	                            <label>Product removed from cart: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>202</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </removedProduct>
+                        	<completedOrder translate="label">
+	                            <label>Checkout: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>203</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </completedOrder>
+                        	<abandonedCart translate="label">
+	                            <label>Abandoned Cart: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>204</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </abandonedCart >
+	                        <send_to_not_subscribed translate="label">
+	                            <label>Send Abandoned Cart event from non-subscribed customers</label>
+	                            <frontend_type>select</frontend_type>
+	                            <source_model>adminhtml/system_config_source_yesno</source_model>
+	                            <sort_order>205</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>                            
+	                        </send_to_not_subscribed>
+	                        <min_minutes_from_last_update translate="label">
+	                            <label>Minimum number of minutes before sending an Abandoned Cart event</label>
+	                            <frontend_type>text</frontend_type>
+	                            <sort_order>206</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <validate>validate-not-negative-number validate-digits validate-is-min-of-range</validate>                            
+	                        </min_minutes_from_last_update>
+	                        <max_minutes_from_last_update translate="label">
+	                            <label>Maximum number of minutes before sending an Abandoned Cart event</label>
+	                            <frontend_type>text</frontend_type>
+	                            <sort_order>207</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <validate>validate-not-negative-number validate-digits validate-is-max-of-range</validate>                            
+	                        </max_minutes_from_last_update>
+	                        <orderShipped>
+	                        	<label>Order Shipped: </label>
+	                            <comment></comment>
+	                            <frontend_type>radios</frontend_type>
+	                            <sort_order>208</sort_order>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>1</show_in_store>
+	                            <source_model>adminhtml/system_config_source_enabledisable</source_model>
+	                        </orderShipped>
+	                        
+	                        <base_currency translate="label comment">
+	                            <label>Base Currency</label>
+	                            <frontend_type>select</frontend_type>
+	                            <frontend_model>directory/adminhtml_frontend_currency_base</frontend_model>
+	                            <source_model>adminhtml/system_config_source_currency</source_model>	                            
+	                            <sort_order>209</sort_order>
+	                            <comment><![CDATA[Base currency is used for all online payment transactions. Scope is defined by the catalog price scope ("Catalog" > "Price" > "Catalog Price Scope").]]></comment>
+	                            <show_in_default>1</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>0</show_in_store>
+	                        </base_currency>
+	                        <website_currency translate="label">
+	                            <label>Website Currency</label>
+	                            <frontend_type>select</frontend_type>
+	                            <source_model>adminhtml/system_config_source_currency</source_model>
+	                            <sort_order>210</sort_order>
+	                            <show_in_default>0</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>0</show_in_store>
+	                        </website_currency>
+	                        <exchange_rate translate="label">
+	                            <label>Exchange Rate</label>
+	                            <frontend_type>text</frontend_type>
+	                            <sort_order>211</sort_order>
+	                            <show_in_default>0</show_in_default>
+	                            <show_in_website>1</show_in_website>
+	                            <show_in_store>0</show_in_store>
+	                            <validate>validate-not-negative-number</validate>                            
+	                        </exchange_rate>	                       
                     </fields>
-                </events>                       
+                </events>    
+               
+                                   
                 <cron_events translate="label">
                     <label>Cron Export Events Settings</label>
                     <frontend_type>text</frontend_type>

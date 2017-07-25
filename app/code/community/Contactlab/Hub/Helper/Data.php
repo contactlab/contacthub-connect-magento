@@ -217,4 +217,25 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 	{
 		return (bool)$this->getConfigData('settings/send_anonymous');
 	}
+	
+	public function getExchangeRate($storeId=null)
+	{
+		$exchangeRate = 1;
+		$baseCurrency = $this->getConfigStoredData('events/base_currency', $storeId);
+		$websiteCurrency = $this->getConfigStoredData('events/website_currency', $storeId);		
+		if($baseCurrency != $websiteCurrency)
+		{
+			$exchangeRate = (float)$this->getConfigStoredData('events/exchange_rate', $storeId);
+			if(!$exchangeRate)
+			{
+				$exchangeRate = 1;
+			}
+		}		
+		return $exchangeRate;
+	}
+	
+	public function convertToBaseRate($price, $exchangeRate)
+	{
+		return round(((float)$price / $exchangeRate) ,2);
+	}
 }

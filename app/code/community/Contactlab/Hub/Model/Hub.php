@@ -43,7 +43,7 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 				$data->id = $response->data->customer->id;
 				//unset($data->subscriptions);
 				$response = $this->curlPost($response->data->customer->href, json_encode($data), true, null, "PATCH");
-				return $response;
+				return json_decode($response);				
 			}			
 			else 
 			{				
@@ -57,15 +57,13 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
 	
 	public function setRemoteCustomerHubSession($data)
 	{
-		$this->_helper()->log(__METHOD__);
-					
+		$this->_helper()->log(__METHOD__);					
 			$url = $this->_getApiUrl('customers').'/'.$data->id.'/sessions';
 			$session = $data->session;
 			$data = new stdClass();
 			$data->value = $session;
 			$response = $this->curlPost($url, json_encode($data), true);			
-			return json_decode($response);
-		
+			return json_decode($response);		
 	}
 	
 		
