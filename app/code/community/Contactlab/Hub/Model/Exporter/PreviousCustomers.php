@@ -175,7 +175,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 					FROM ".$this->_customerTable." as ce					
 					LEFT OUTER JOIN ".$this->_previouscustomersTable." as chp ON ce.email = chp.email
 					WHERE ce.created_at < '".$this->_getPreviousDate()."'
-					AND ce.store_id = ".$this->getStoreId()."
+					AND ce.store_id IN (0, ".$this->getStoreId().")
 					AND chp.id IS NULL	";	
 		if($this->_mode == self::PARTIAL_EXPORT)
 		{
