@@ -56,7 +56,6 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
             return json_decode($response);
     }
     
-        
     public function deleteCustomerByExternalId($externalId)
     {
         $this->_helper()->log(__METHOD__);
@@ -193,7 +192,7 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
         $this->_helper()->log(curl_getinfo($curl, CURLINFO_HTTP_CODE));
         $this->_helper()->log("FINE CURL HTTP CODE:");
         
-        $response = json_decode($response);
+        $response = json_decode($response) ?: new \stdClass(); 
         $response->curl_http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $response = json_encode($response);
         
