@@ -89,13 +89,10 @@ class Contactlab_Hub_Model_Observer
     
     public function traceCustomerLogin($observer)
     {
-        if (isset($_COOKIE['_ch'])) {
-            $cookie = json_decode(Mage::getModel('core/cookie')->get('_ch'), true);
-            if ($cookie && $cookie['customerId']) {
-                unset($_COOKIE['_ch']);
-                setcookie('_ch', null, -1, '/');
-                Mage::getModel('core/cookie')->delete('_ch');
-            }
+        $cookieModel = Mage::getSingleton('core/cookie');
+        $cookie = json_decode($cookieModel->get('_ch'), true);
+        if ($cookie && $cookie['customerId']) {
+            $cookieModel->set('_ch', '', -1, '/', '');
         }
         
         $event = Mage::getModel('contactlab_hub/event_login');
