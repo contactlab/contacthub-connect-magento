@@ -292,6 +292,10 @@
                 <log>0</log>
                 <logfilename>contactlabhub.log</logfilename>
             </settings>
+            <js_tracking>
+                <disclaimer_enabled>DISCLAIMER: JS tracking is enabled</disclaimer_enabled>
+                <disclaimer_disabled>DISCLAIMER: JS tracking is disabled</disclaimer_disabled>
+            </js_tracking>
             <events>              
 				<evtregister>1</evtregister>
                 <loggedIn>1</loggedIn>
