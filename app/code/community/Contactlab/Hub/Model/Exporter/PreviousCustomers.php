@@ -145,22 +145,22 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 				return "Module export is disabled";
 			}			
 			$this->_init();
-			$this->_insertCustomers();			
-			$this->_createEvents();
-			
-			$this->_setExportedTranche();
+			$this->_insertCustomers();								
 		}
+		
+		$this->_createEvents();
+		
 		return "Export done";
 	}
 
 	
 	protected function _getPreviousCustomers()
 	{		
-		$query = "	SELECT * FROM ".$this->_previouscustomersTable." WHERE  store_id = ".$this->getStoreId();
+		$query = "	SELECT * FROM ".$this->_previouscustomersTable." WHERE  store_id IN (0, ".$this->getStoreId()."); AND is_exported = 0 ";
 		
 		if($this->_mode == self::PARTIAL_EXPORT)
 		{
-			$query .=" AND is_exported = 0 LIMIT 0,".$this->_trancheLimit;
+			$query .=" LIMIT 0,".$this->_trancheLimit;
 		}					
 		$results = $this->_getReadConnection()->fetchAll($query);
 		return $results;
@@ -260,6 +260,8 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 				;
 				$event->save();
 				
+				$this->_setExportedPrevious($previousCustomer['id']);
+				
 				//if(!$previousCustomer['orders_exported'])
 				{
 					$orders = $this->_getCustomerOrders($previousCustomer['customer_id']);
@@ -301,7 +303,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 						$this->_getWriteConnection()->query($query);
 					}
 					*/
-				}								
+				}	
 			}			
 		}
 		else
@@ -326,23 +328,16 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 	
 	protected function _setUnexported()
 	{			
-		$query = "UPDATE ".$this->_previouscustomersTable." SET is_exported = 0 WHERE store_id = ".$this->getStoreId();
+		$query = "UPDATE ".$this->_previouscustomersTable." SET is_exported = 0 WHERE store_id IN (0, ".$this->getStoreId().");";
 		$this->_getWriteConnection()->query($query);
 		Mage::helper("contactlab_hubcommons")->logNotice("Previous customer export reset succesfull");
 		return $this;
 	}
 	
-	protected function _setExportedTranche()
+	protected function _setExportedPrevious($previousCustomerId)
 	{
-		if($this->_tranche)
-		{
-			foreach($this->_tranche as $previousCustomer)
-			{
-				$query = "UPDATE ".$this->_previouscustomersTable." SET is_exported = 1 WHERE id = ".$previousCustomer['id'];
-				$this->_getWriteConnection()->query($query);
-			}
-			Mage::helper("contactlab_hubcommons")->logNotice(count($this->_tranche)." previous customers exported");
-		}
+		$query = "UPDATE ".$this->_previouscustomersTable." SET is_exported = 1 WHERE id = ".$previousCustomerId;
+		$this->_getWriteConnection()->query($query);
 		return $this;
 	}
 	

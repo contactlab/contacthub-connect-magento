@@ -47,10 +47,11 @@ class Contactlab_Hub_Model_Exporter_Events extends Contactlab_Hubcommons_Model_E
 	}
 	
 	
-	//public function export(Contactlab_Hubcommons_Model_Task_Interface $task)
-	public function export()
+	public function export(Contactlab_Hubcommons_Model_Task_Interface $task)
+	//public function export()
 	{	
-		$events = Mage::getModel('contactlab_hub/event')->getUnexportedEvents();
+		$pageSize = 30;
+		$events = Mage::getModel('contactlab_hub/event')->getUnexportedEvents($pageSize);
 		foreach($events as $event)
 		{
 			$event->export();			
