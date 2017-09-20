@@ -4,6 +4,8 @@
 */
 class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 {
+    const JS_TRACKING_ENABLED_CONFIG_PATH = 'contactlab_hub/js_tracking/enabled';
+
     protected $_saveLog = false;
     protected $_logFilename = false;
 
@@ -58,6 +60,13 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
             return false;
         }
         Mage::log($message, $level, $this->_logFilename);
+    }
+
+    /*
+    * @return bool
+    */
+    public function isJsTrackingEnabled() {
+        return Mage::getStoreConfigFlag(self::JS_TRACKING_ENABLED_CONFIG_PATH);
     }
     
     public function getJsConfigData()

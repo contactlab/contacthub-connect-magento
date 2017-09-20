@@ -44,6 +44,9 @@ class Contactlab_Hub_Model_Observer
     
     public function placeHubTracking(Varien_Event_Observer $observer)
     {
+        if (!$this->_helper()->isJsTrackingEnabled()) {
+            return;
+        }
         $controller = $observer->getAction();
         $routeName = $controller->getRequest()->getRouteName();
         $controllerName = $controller->getRequest()->getControllerName();
