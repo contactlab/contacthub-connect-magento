@@ -48,7 +48,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
    
     public function trace()
     {
-        $this->_helper()->log(__METHOD__);
+        //$this->_helper()->log(__METHOD__);
         $this->_assignData();
         $websiteId = Mage::getModel('core/store')->load($this->getStoreId())->getWebsiteId();
         $customer = Mage::getModel("customer/customer")->setWebsiteId($websiteId)->loadByEmail($this->getIdentityEmail());
@@ -58,8 +58,6 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
             } else {
                 $this->_helper()->log('events/send anonymous events OFF');
             }
-        } else {
-            $this->_helper()->log($this->getEntityId().' disbled');
         }
         return $this;
     }
@@ -290,6 +288,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
                 }
                 $base->address = $objAddress;
             }
+            $extraProperties = $this->_helper()->getExtraProperties($customer);
         }
         if (in_array($this->getName(), array('campaignSubscribed', 'campaignUnsubscribed'))) {
             $subscriber = Mage::getModel('newsletter/subscriber')->loadByEmail($this->getIdentityEmail());
@@ -314,6 +313,12 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
             }
         }
         $customerData->base = $base;
+
+        if (count($extraProperties) > 0) { 
+            $extended = (object) $extraProperties; 
+            $customerData->extended = $extended;          
+        }
+
         return $customerData;
     }
 }
