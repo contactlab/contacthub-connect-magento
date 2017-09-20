@@ -293,6 +293,9 @@
                 <logfilename>contactlabhub.log</logfilename>
             </settings>
             <js_tracking>
+                <enabled>1</enabled>
+
+                <!-- The disclaimers are actually non editable settings, as Magento does not support simple read-only fields -->
                 <disclaimer_enabled>DISCLAIMER: JS tracking is enabled</disclaimer_enabled>
                 <disclaimer_disabled>DISCLAIMER: JS tracking is disabled</disclaimer_disabled>
             </js_tracking>

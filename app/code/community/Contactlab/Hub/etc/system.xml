@@ -152,8 +152,9 @@
                             <show_in_store>1</show_in_store>
                         </enabled>
 
-						<untrusted_token translate="label">
+						<untrusted_token translate="label comment">
 							<label>Untrusted token</label>
+							<comment>API token for Javascript</comment>
 							<frontend_type>text</frontend_type>
 	                        <sort_order>0</sort_order>
                             <show_in_default>1</show_in_default>
@@ -162,8 +163,7 @@
 							<depends><enabled>1</enabled></depends>
 						</untrusted_token>
 
-						<disclaimer_enabled translate="label">
-							<label>Disclaimer</label>
+						<disclaimer_enabled>
 							<frontend_model>contactlab_hub/adminhtml_system_config_field_readonly</frontend_model>
 	                        <sort_order>0</sort_order>
                             <show_in_default>1</show_in_default>
@@ -172,9 +172,7 @@
 							<depends><enabled>1</enabled></depends>
 						</disclaimer_enabled>
 
-						<disclaimer_disabled translate="label">
-							<label>Disclaimer</label>
-							<value>disabled comment</value>
+						<disclaimer_disabled>
 							<frontend_model>contactlab_hub/adminhtml_system_config_field_readonly</frontend_model>
 	                        <sort_order>0</sort_order>
                             <show_in_default>1</show_in_default>

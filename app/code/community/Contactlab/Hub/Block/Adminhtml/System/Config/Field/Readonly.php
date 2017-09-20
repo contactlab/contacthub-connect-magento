@@ -4,10 +4,9 @@ extends Mage_Adminhtml_Block_System_Config_Form_Field
 {
     protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element)
     {
-  //    die(var_dump($element));
-        $html = '<textarea id="'.$element->getHtmlId().'" readonly name="'.$element->getName().'" '.$element->serialize($element->getHtmlAttributes()).' >';
-        $html .= $element->getEscapedValue();
-        $html .= "</textarea>";
+        // The core <depends> tag functionality only works for fields containing proper input elements
+        $html = '<input id="'.$element->getHtmlId().'" hidden="hidden" />';
+        $html .= $element->getValue();
         $html .= $element->getAfterElementHtml();
         return $html;
     }
