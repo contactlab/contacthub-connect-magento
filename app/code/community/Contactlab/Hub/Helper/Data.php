@@ -5,6 +5,7 @@
 class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const JS_TRACKING_ENABLED_CONFIG_PATH = 'contactlab_hub/js_tracking/enabled';
+    const JS_UNTRUSTED_TOKEN_CONFIG_PATH = 'contactlab_hub/js_tracking/untrusted_token';
 
     protected $_saveLog = false;
     protected $_logFilename = false;
@@ -68,13 +69,20 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
     public function isJsTrackingEnabled() {
         return Mage::getStoreConfigFlag(self::JS_TRACKING_ENABLED_CONFIG_PATH);
     }
+
+    /*
+    * @return bool
+    */
+    public function getApiTokenForJavascript() {
+        return Mage::getStoreConfig(self::JS_UNTRUSTED_TOKEN_CONFIG_PATH) ?: $this->getConfigData('settings/apitoken');
+    }
     
     public function getJsConfigData()
     {
         $config = new stdClass();
         $config->workspaceId = $this->getConfigData('settings/apiworkspaceid');
         $config->nodeId = $this->getConfigData('settings/apinodeid');
-        $config->token = $this->getConfigData('settings/apitoken');
+        $config->token = $this->getApiTokenForJavascript();
         $config->context = 'ECOMMERCE';
         $contextInfo = new stdClass();
         $store = new stdClass();
