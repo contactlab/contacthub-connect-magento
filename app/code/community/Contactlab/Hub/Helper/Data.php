@@ -76,6 +76,11 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
     public function getApiTokenForJavascript() {
         return Mage::getStoreConfig(self::JS_UNTRUSTED_TOKEN_CONFIG_PATH) ?: $this->getConfigData('settings/apitoken');
     }
+
+    public function deleteTrackingCookie() {
+        Mage::getSingleton('core/cookie')->set('_ch', '', -1, '/', '');
+        unset($_COOKIE['_ch']);
+    }
     
     public function getJsConfigData()
     {

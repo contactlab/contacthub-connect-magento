@@ -90,12 +90,22 @@ class Contactlab_Hub_Model_Observer
 			*/
     }
     
+    public function traceProductView($observer)
+    {
+        if ($this->_helper()->isJsTrackingEnabled()) {
+            return;
+        }
+        $event = Mage::getModel('contactlab_hub/event_viewedProduct');
+        $event->setEvent($observer->getEvent());
+        $event->trace();
+        return $observer;
+    }
+
     public function traceCustomerLogin($observer)
     {
-        $cookieModel = Mage::getSingleton('core/cookie');
-        $cookie = json_decode($cookieModel->get('_ch'), true);
+        $cookie = json_decode(Mage::getSingleton('core/cookie')->get('_ch'), true);
         if ($cookie && $cookie['customerId']) {
-            $cookieModel->set('_ch', '', -1, '/', '');
+            $this->_helper()->deleteTrackingCookie();
         }
         
         $event = Mage::getModel('contactlab_hub/event_login');
@@ -109,6 +119,11 @@ class Contactlab_Hub_Model_Observer
         $event = Mage::getModel('contactlab_hub/event_logout');
         $event->setEvent($observer->getEvent());
         $event->trace();
+
+        // Customer logged out, create a new session id
+        if (!$this->_helper()->isJsTrackingEnabled()) {
+            $this->_helper()->deleteTrackingCookie();
+        }
         return $observer;
     }
     

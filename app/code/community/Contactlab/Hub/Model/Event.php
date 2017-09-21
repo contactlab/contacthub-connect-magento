@@ -86,14 +86,22 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     }
     
     protected function _getSid()
-    {
-        $cookie = json_decode(Mage::getModel('core/cookie')->get('_ch'), true);
+    {   
+        $cookieModel = Mage::getModel('core/cookie');
+        $cookie = json_decode($cookieModel->get('_ch'), true);
 
         if ($cookie && $cookie['sid']) {
             $this->setSessionId($cookie['sid']);
-        } else {
+        } else if (!$this->_helper()->isJsTrackingEnabled()) {
+            $sid = uniqid();
+            $cookieModel->set('_ch', json_encode(array('sid' => $sid)), 31536000, '/', '');
+            $this->setSessionId($sid);
+        }
+        
+        if (!$this->getSessionId()) {
             $this->_helper()->log('Cookie disabled');
         }
+
         return $this->getSessionId();
     }
     
@@ -125,7 +133,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         return $this->_hub;
     }
 
-    protected function _createUpdateCustomer()
+    public function _createUpdateCustomer()
     {
         $this->_helper()->log(__METHOD__);
         
