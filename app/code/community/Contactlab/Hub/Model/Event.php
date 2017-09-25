@@ -93,9 +93,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         if ($cookie && $cookie['sid']) {
             $this->setSessionId($cookie['sid']);
         } else if (!$this->_helper()->isJsTrackingEnabled()) {
-            $sid = uniqid();
-            $cookieModel->set('_ch', json_encode(array('sid' => $sid)), 31536000, '/', '');
-            $this->setSessionId($sid);
+            $this->setSessionId($this->_helper()->createTrackingCookie());
         }
         
         if (!$this->getSessionId()) {

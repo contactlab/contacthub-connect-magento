@@ -63,23 +63,42 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
         Mage::log($message, $level, $this->_logFilename);
     }
 
-    /*
+    /**
     * @return bool
     */
-    public function isJsTrackingEnabled() {
+    public function isJsTrackingEnabled()
+    {
         return Mage::getStoreConfigFlag(self::JS_TRACKING_ENABLED_CONFIG_PATH);
     }
 
-    /*
+    /**
     * @return bool
     */
-    public function getApiTokenForJavascript() {
+    public function getApiTokenForJavascript()
+    {
         return Mage::getStoreConfig(self::JS_UNTRUSTED_TOKEN_CONFIG_PATH) ?: $this->getConfigData('settings/apitoken');
     }
 
-    public function deleteTrackingCookie() {
+    public function deleteTrackingCookie()
+    {
         Mage::getSingleton('core/cookie')->set('_ch', '', -1, '/', '');
         unset($_COOKIE['_ch']);
+    }
+
+    /**
+    * Creates a tracking cookie, used when JS tracking is disabled.
+    * @return string
+    */
+    public function createTrackingCookie()
+    {
+        $cookieData = array('sid' => uniqid());
+        $customer = $this->getCustomer();
+        if ($customer != null) {
+            $cookieData['customerId'] = $customer->getId();
+        }
+        Mage::getModel('core/cookie')->set('_ch', json_encode($cookieData), 31536000, '/', '');
+        
+        return $cookieData['sid'];
     }
     
     public function getJsConfigData()
