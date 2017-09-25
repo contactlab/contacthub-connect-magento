@@ -101,6 +101,17 @@ class Contactlab_Hub_Model_Observer
         return $observer;
     }
 
+    public function traceProductCategoryView($observer)
+    {
+        if ($this->_helper()->isJsTrackingEnabled()) {
+            return;
+        }
+        $event = Mage::getModel('contactlab_hub/event_viewedProductCategory');
+        $event->setEvent($observer->getEvent());
+        $event->trace();
+        return $observer;
+    }
+
     public function traceCustomerLogin($observer)
     {
         $cookie = json_decode(Mage::getSingleton('core/cookie')->get('_ch'), true);

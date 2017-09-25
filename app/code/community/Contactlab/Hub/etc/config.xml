@@ -71,6 +71,15 @@
                     </contactlab_hub>
                 </observers>
             </controller_action_postdispatch_catalog_product_view>
+            <controller_action_postdispatch_catalog_category_view>
+             <observers>
+                    <contactlab_hub>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
+                        <method>traceProductCategoryView</method>
+                    </contactlab_hub>
+                </observers>
+            </controller_action_postdispatch_catalog_category_view>
             <customer_logout>
                 <observers>
                     <contactlab_hub>
