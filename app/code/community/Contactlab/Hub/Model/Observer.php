@@ -41,7 +41,7 @@ class Contactlab_Hub_Model_Observer
     {
         return Mage::getModel('contactlab_hub/event');
     }
-    
+
     public function placeHubTracking(Varien_Event_Observer $observer)
     {
         if (!$this->_helper()->isJsTrackingEnabled()) {
@@ -107,6 +107,17 @@ class Contactlab_Hub_Model_Observer
             return;
         }
         $event = Mage::getModel('contactlab_hub/event_viewedProductCategory');
+        $event->setEvent($observer->getEvent());
+        $event->trace();
+        return $observer;
+    }
+
+    public function traceSearch(Varien_Event_Observer $observer)
+    {
+        if ($this->_helper()->isJsTrackingEnabled()) {
+            return;
+        }
+        $event = Mage::getModel('contactlab_hub/event_searched');
         $event->setEvent($observer->getEvent());
         $event->trace();
         return $observer;

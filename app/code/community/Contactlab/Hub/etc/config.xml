@@ -80,6 +80,15 @@
                     </contactlab_hub>
                 </observers>
             </controller_action_postdispatch_catalog_category_view>
+            <controller_action_postdispatch_catalogsearch_result_index>
+             <observers>
+                    <contactlab_hub>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
+                        <method>traceSearch</method>
+                    </contactlab_hub>
+                </observers>
+            </controller_action_postdispatch_catalogsearch_result_index>
             <customer_logout>
                 <observers>
                     <contactlab_hub>
