@@ -7,11 +7,9 @@ class Contactlab_Hub_Model_Event_ViewedProduct extends Contactlab_Hub_Model_Even
             return;
         }
         $product = Mage::registry('current_product');
-        $eventData = array('product_id' => $product->getId());
         $this->setName('viewedProduct')
             ->setModel('ViewedProduct')
-            ->setEventData(json_encode($eventData));
-        
+            ->setEventData(json_encode($this->_getObjProduct($product->getId())));
 
         return parent::_assignData();
     }
@@ -21,8 +19,7 @@ class Contactlab_Hub_Model_Event_ViewedProduct extends Contactlab_Hub_Model_Even
         if (!$this->_eventForHub) {
             $this->_eventForHub = new stdClass();
         }
-        $eventData = json_decode($this->getEventData());
-        $this->_eventForHub->properties = $this->_getObjProduct($eventData->product_id);
+        $this->_eventForHub->properties = json_decode($this->getEventData());
         return parent::_composeHubEvent();
     }
 }

@@ -205,18 +205,23 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
     protected function _getObjProduct($product_id)
     {
         $product = Mage::getModel('catalog/product')->load($product_id);
+        return $this->_toHubProduct($product);
+    }
+
+    protected function _toHubProduct(Mage_Catalog_Model_Product $product) {
         $objProduct = new stdClass();
-        if ($product) {
-            $objProduct->id = $product->getEntityId();
-            $objProduct->sku = $product->getSku();
-            $objProduct->name = $product->getName();
-            $objProduct->price = (float)Mage::getModel('directory/currency')->formatTxt($product->getPrice(), array( 'display' => Zend_Currency::NO_SYMBOL ));
-            $objProduct->imageUrl = ''.Mage::helper('catalog/image')->init($product, 'image');
-            $objProduct->linkUrl = Mage::getUrl($product->getUrlPath());
-            ;
-            $objProduct->shortDescription = $product->getShortDescription();
-            $objProduct->category = $this->_getCategoryNamesFromIds($product->getCategoryIds());
+        if ($product == null) {
+            return $objProduct;
         }
+        $objProduct->id = $product->getEntityId();
+        $objProduct->sku = $product->getSku();
+        $objProduct->name = $product->getName();
+        $objProduct->price = (float)Mage::getModel('directory/currency')->formatTxt($product->getPrice(), array( 'display' => Zend_Currency::NO_SYMBOL ));
+        $objProduct->imageUrl = ''.Mage::helper('catalog/image')->init($product, 'image');
+        $objProduct->linkUrl = Mage::getUrl($product->getUrlPath());
+        $objProduct->shortDescription = $product->getShortDescription();
+        $objProduct->category = $this->_getCategoryNamesFromIds($product->getCategoryIds());
+
         return $objProduct;
     }
     
