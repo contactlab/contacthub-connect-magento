@@ -11,7 +11,6 @@
 - [Introduction](#Introduction)  
 - [Installing the Magento plug-in](#InstallingPlugIn)  
 - [Configuring the Magento plug-in](#ConfiguringPlugIn)
-- [Appendix B](https://explore.contactlab.com/vuoi-ricordare-ai-tuoi-utenti-che-hanno-un-carrello-abbandonato/)
 
 <a name="Introduction"/>
 
