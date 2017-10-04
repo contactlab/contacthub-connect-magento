@@ -11,6 +11,7 @@
 - [Introduction](#Introduction)  
 - [Installing the Magento plug-in](#InstallingPlugIn)  
 - [Configuring the Magento plug-in](#ConfiguringPlugIn)
+- [Appendix A: Which customer data and activities does the Magento plug-in save in Contacthub?](#AppendixA) 
 
 <a name="Introduction"/>
 
@@ -132,5 +133,96 @@ To configure the plug-in, do the following:
     - The export **Frequency**  
 
     - The number of **Repeats**  
+    
+ <a name="AppendixA"/> 
+ 
+ # Appendix A: Which customer data and activities does the Magento plug-in save in Contacthub?
+ 
+ ## 1. Customer Profile Data 
+ 
+| Contacthub        | Magento           | Note  |
+| :------------- |:-------------| :-----|
+| title      | getModel("customer/customer")->getPrefix() |
+| firstName      | getModel("customer/customer")->getFirstname()|   
+| lastName |getModel("customer/customer")->getLastname() |   
+| gender | getModel("customer/customer")->getGender() == 1 ? 'Male' : 'Female'
+| dob | date('Y-m-d', strtotime(getModel("customer/customer")->$customer->getDob()))
+| locale | getStoreConfig('general/locale/code', $this->getStoreId())
+| contacts.email | getIdentityEmail()
+| address.street | getModel('customer/address')->getStreet()| adress data loaded from getDefaultBilling() |
+| address.city | getModel('customer/address')->getRegion()| adress data loaded from getDefaultBilling() |
+| address.country | getModel('directory/country')->load(getModel('customer/address')->getCountry())->getName()| adress data loaded from getDefaultBilling() |
+| address.province | getModel('customer/address')->getRegion()| adress data loaded from getDefaultBilling() |
+| address.zip | getModel('customer/address')->getPostcode()| adress data loaded from getDefaultBilling() |
+
+
+## 2. Activities 
+
+
+| Contacthub                        | Magento           | 
+| :------------------------------- |:-----------------------|
+| Viewed product                  | When the customer views a product|
+| Viewed product category         | When the customer views a product listing belonging to a specific category|
+| Added product                   | When the customer adds a product to their shopping cart|
+| Removed product                 | When the customer removes a product from their shopping cart|
+| Added product to wishlist       | When the customer adds a product to their wishlist|
+| Removed product from wishlist   | When the customer removes a product from their wishlist|
+| [Order completed](#OrderCompleted)                 | [When the customer completes an order](#OrderCompleted)
+| Logged in                       | When the customer logs in to their account|
+| Logged out                      | When the customer logs out of their account|
+| Subscribed to newsletter        | When the customer subscribes to your newsletter|
+| Unsubscribed from newsletter    | When the customer unsubscribes from your newsletter|
+| Order shipped                   | When your company ships the products in the order|
+| Abandoned cart                  | When the customer added a product to their cart, but did not complete the order/transaction| 
+
+
+<a name="OrderCompleted"/>
+
+- **Order Completed**
+
+To identify the order data: $order = Mage::getModel('sales/order')->loadByIncrementId($eventData->increment_id)<br />
+To export each single product (item) included in the order: $order->getAllItems() as $item<br />
+To export all the details of each single product (item): $product = Mage::getModel('catalog/product')->load($product_id)
+
+| Contacthub        | Magento           | Note  |
+| :------------- |:-------------| :-----|
+| Contacthub      |$order->getIncrementId()|
+| type      | sale|   
+| storeCode |$order->getStoreId()| 
+| paymentMethod | Not available  | 
+| amount.local.exchangeRate | $order->getStoreToOrderRate()| This is the exchange rate used when the data are loaded|
+| amount.local.currency | $order->getOrderCurrencyCode()
+| amount.total | $order->getGrandTotal()
+| amount.revenue | $order->getGrandTotal() - $order->getShippingAmount() - $order->getShippingTaxAmount()
+| amount.shipping | $order->getShippingAmount() + $order->getShippingTaxAmount()
+| amount.tax | $order->getTaxAmount()
+| amount.discount | $order->getDiscountAmount()
+| products.type | sale
+| products.id | $product->getEntityId()
+| products.sku | $product->getSku()
+| product.name | $product->getName()
+| products.linkUrl | Mage::getUrl($product->getUrlPath())
+| products.imageUrl | Mage::helper('catalog/image')->init($product, 'image')
+| products.shortDescription | $product->getShortDescription()
+| products.category | $this->getCategoryNamesFromIds($product->getCategoryIds())
+| products.price | $item->getPrice()
+| products.subtotal | $item->getRowTotal()
+| products.quantity | $item->getQtyOrdered()
+| products.discount | $item->getDiscountAmount()
+| products.tax | $item->getTaxAmount()
+| product.coupon | $order->getCouponCode()
+| context.store.id | Mage::app()->getStore()->getStoreId()
+| context.store.name | Mage::app()->getStore()->getName()
+| context.store.country | Mage::getStoreConfig('general/country/default')
+| context.store.website | Mage::getUrl('', array('store' => Mage::app()->getStore()->getStoreId()))
+| context.store.type | ECOMMERCE 
+
+
+
+
+
+<br />**IMPORTANT:** *Any customizations in the Magento track will not be exported and available in Contacthub and these could compromise the plug-in operation.*
+
+
 
 ----------
