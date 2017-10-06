@@ -9,12 +9,9 @@ class Contactlab_Hub_Model_Event_RemoveToWishlist extends Contactlab_Hub_Model_E
 		}
 		$item = $this->getEvent()->getData('data_object');
     	$product = $item->getProduct();				
-		$eventData = array(
-						'product_id' => $product->getId()
-					);
 		$this->setName('removedWishlist')
 			->setModel('removeToWishlist')
-			->setEventData(json_encode($eventData));
+			->setEventData(json_encode($this->_toHubProduct($product)));
 		
 		return Contactlab_Hub_Model_Event::_assignData();
 	}
