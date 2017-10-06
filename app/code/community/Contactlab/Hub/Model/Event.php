@@ -71,12 +71,12 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
             $this->_createUpdateCustomer();
             $hubEvent = $this->_composeHubEvent();
             $this->_getHub()->createEvent($hubEvent);
-            $this->setHubEvent(json_encode($hubEvent));
             $this->setExportedDate(date('Y-m-d H:i:s'));
             $this->setStatus(self::CONTACTLAB_HUB_STATUS_EXPORTED);
             $this->save();
         } catch (exception $e) {
             $this->setStatus(self::CONTACTLAB_HUB_STATUS_FAILED);
+            $this->setHubEvent(json_encode($hubEvent));
             $this->save();
             $this->_helper()->log($e->getMessage());
         }
