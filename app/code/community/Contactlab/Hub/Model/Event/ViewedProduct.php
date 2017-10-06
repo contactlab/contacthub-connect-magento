@@ -9,7 +9,7 @@ class Contactlab_Hub_Model_Event_ViewedProduct extends Contactlab_Hub_Model_Even
         $product = Mage::registry('current_product');
         $this->setName('viewedProduct')
             ->setModel('ViewedProduct')
-            ->setEventData(json_encode($this->_getObjProduct($product->getId())));
+            ->setEventData(json_encode($this->_toHubProduct($product)));
 
         return parent::_assignData();
     }
