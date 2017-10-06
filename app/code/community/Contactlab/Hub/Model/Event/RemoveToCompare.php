@@ -1,5 +1,5 @@
 <?php
-class Contactlab_Hub_Model_Event_RemoveToCompare extends Contactlab_Hub_Model_Event_AddToCompare
+class Contactlab_Hub_Model_Event_RemoveToCompare extends Contactlab_Hub_Model_Event
 {
     protected function _assignData()
     {
@@ -16,6 +16,15 @@ class Contactlab_Hub_Model_Event_RemoveToCompare extends Contactlab_Hub_Model_Ev
             ->setModel('removeToCompare')
             ->setEventData(json_encode($eventData));
         
-        return Contactlab_Hub_Model_Event::_assignData();
+        return parent::_assignData();
+    }
+
+    protected function _composeHubEvent()
+    {
+        if (!$this->_eventForHub) {
+            $this->_eventForHub = new stdClass();
+        }
+        $this->_eventForHub->properties = json_decode($this->getEventData());
+        return parent::_composeHubEvent();
     }
 }
