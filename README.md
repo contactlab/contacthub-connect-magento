@@ -12,6 +12,7 @@
 - [Installing the Magento plug-in](#InstallingPlugIn)  
 - [Configuring the Magento plug-in](#ConfiguringPlugIn)
 - [Appendix A: Which customer data and activities does the Magento plug-in save in Contacthub?](#AppendixA)
+- [Appendix B: How to set up automated emails for abandoned shopping cart](https://explore.contactlab.com/do-you-want-to-remind-your-customers-that-they-have-an-abandoned-cart/?lang=en) 
 
 <a name="Introduction"/>
 
