@@ -1,5 +1,5 @@
 <?php
-class Contactlab_Hub_Model_Event_RemoveToCompare extends Contactlab_Hub_Model_Event
+class Contactlab_Hub_Model_Event_ViewedProductCategory extends Contactlab_Hub_Model_Event
 {
     protected function _assignData()
     {
@@ -7,24 +7,25 @@ class Contactlab_Hub_Model_Event_RemoveToCompare extends Contactlab_Hub_Model_Ev
             return;
         }
 
-        // This is actually a Mage_Catalog_Model_Product_Compare_Item object
-        $product = $this->getEvent()->getProduct();
+        $category = Mage::registry('current_category');
         $eventData = array(
-                        'product_id' => $product->getProductId()
-                    );
-        $this->setName('removedCompare')
-            ->setModel('removeToCompare')
+            'category' => $this->_helper()->clearStrings($category->getName())
+        );
+
+        $this->setName('viewedProductCategory')
+            ->setModel('ViewedProductCategory')
             ->setEventData(json_encode($eventData));
-        
+
         return parent::_assignData();
     }
-
+    
     protected function _composeHubEvent()
     {
         if (!$this->_eventForHub) {
             $this->_eventForHub = new stdClass();
         }
         $this->_eventForHub->properties = json_decode($this->getEventData());
-        return parent::_composeHubEvent();
+        $event =  parent::_composeHubEvent();
+        return $event;
     }
 }

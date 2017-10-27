@@ -2,28 +2,28 @@
 <config>
     <modules>
         <Contactlab_Hub>
-            <version>1.1.1</version>
+            <version>1.2.0</version>
         </Contactlab_Hub>
     </modules>
     <global>
-    	<models>
+        <models>
             <contactlab_hub>
                 <class>Contactlab_Hub_Model</class>
                 <resourceModel>contactlab_hub_resource</resourceModel>
             </contactlab_hub>
             <contactlab_hub_resource>
-            	<class>Contactlab_Hub_Model_Resource</class>
+                <class>Contactlab_Hub_Model_Resource</class>
                 <deprecatedNode>contactlab_hub_mysql4</deprecatedNode>
                 <entities>
                     <event>
                         <table>contactlab_hub_event</table>
                     </event>
                     <previouscustomers>
-                    	<table>contactlab_hub_previouscustomers</table>
-                    </previouscustomers> 
+                        <table>contactlab_hub_previouscustomers</table>
+                    </previouscustomers>
                     <abandoned_carts>
-                    	<table>contactlab_hub_abandoned_carts</table>
-                    </abandoned_carts>                    
+                        <table>contactlab_hub_abandoned_carts</table>
+                    </abandoned_carts>
                 </entities>
             </contactlab_hub_resource>
             <contactlab_hub_eventhub>
@@ -39,19 +39,19 @@
                     <module>Contactlab_Hub</module>
                     <class>Mage_Customer_Model_Entity_Setup</class>
                 </setup>
-  			</contactlab_hub_setup>
+            </contactlab_hub_setup>
         </resources>
-	    <helpers>
-	    	<contactlab_hub>
-	    		<class>Contactlab_Hub_Helper</class>
-	    	</contactlab_hub>
-	    </helpers>
+        <helpers>
+            <contactlab_hub>
+                <class>Contactlab_Hub_Helper</class>
+            </contactlab_hub>
+        </helpers>
         <blocks>
             <contactlab_hub>
                 <class>Contactlab_Hub_Block</class>
             </contactlab_hub>
-        </blocks> 	
-     	<events>
+        </blocks>
+        <events>
             <!-- CUSTOMER EVENTS -->
             <customer_login>
                 <observers>
@@ -62,6 +62,33 @@
                     </contactlab_hub>
                 </observers>
             </customer_login>
+            <controller_action_postdispatch_catalog_product_view>
+                <observers>
+                    <contactlab_hub>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
+                        <method>traceProductView</method>
+                    </contactlab_hub>
+                </observers>
+            </controller_action_postdispatch_catalog_product_view>
+            <controller_action_postdispatch_catalog_category_view>
+                <observers>
+                    <contactlab_hub>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
+                        <method>traceProductCategoryView</method>
+                    </contactlab_hub>
+                </observers>
+            </controller_action_postdispatch_catalog_category_view>
+            <controller_action_postdispatch_catalogsearch_result_index>
+                <observers>
+                    <contactlab_hub>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
+                        <method>traceSearch</method>
+                    </contactlab_hub>
+                </observers>
+            </controller_action_postdispatch_catalogsearch_result_index>
             <customer_logout>
                 <observers>
                     <contactlab_hub>
@@ -88,31 +115,31 @@
                         <method>traceSubscriptionSave</method>
                     </contactlab_hub>
                 </observers>
-            </newsletter_subscriber_save_before>            		
-			<controller_action_predispatch_newsletter_manage_index>
-				<observers>
-	                <contactlab_hub_check_subscription>
-	                    <type>singleton</type>
-	                    <class>contactlab_hub/observer</class>
-	                    <method>checkSubscription</method>
-	                </contactlab_hub_check_subscription>
-	            </observers>
-			</controller_action_predispatch_newsletter_manage_index>
+            </newsletter_subscriber_save_before>
+            <controller_action_predispatch_newsletter_manage_index>
+                <observers>
+                    <contactlab_hub_check_subscription>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
+                        <method>checkSubscription</method>
+                    </contactlab_hub_check_subscription>
+                </observers>
+            </controller_action_predispatch_newsletter_manage_index>
             <!-- PRODUCT EVENTS -->
-			<catalog_product_compare_add_product>
-            	<observers>
+            <catalog_product_compare_add_product>
+                <observers>
                     <contactlab_hub>
-     					<type>singleton</type>
-     					<class>contactlab_hub/observer</class>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
                         <method>traceCompareAddEvent</method>
                     </contactlab_hub>
                 </observers>
             </catalog_product_compare_add_product>
             <catalog_product_compare_remove_product>
-            	<observers>
+                <observers>
                     <contactlab_hub>
-     					<type>singleton</type>
-     					<class>contactlab_hub/observer</class>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
                         <method>traceCompareRemoveEvent</method>
                     </contactlab_hub>
                 </observers>
@@ -129,22 +156,22 @@
             <wishlist_add_product>
                 <observers>
                     <contactlab_hub>
-     					<type>singleton</type>
-     					<class>contactlab_hub/observer</class>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
                         <method>traceWishlistAddEvent</method>
                     </contactlab_hub>
                 </observers>
             </wishlist_add_product>
-			<wishlist_item_delete_before>
-            	<observers>
+            <wishlist_item_delete_before>
+                <observers>
                     <contactlab_hub>
-     					<type>singleton</type>
-     					<class>contactlab_hub/observer</class>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
                         <method>traceWishlistRemoveEvent</method>
                     </contactlab_hub>
                 </observers>
             </wishlist_item_delete_before>
-			<!-- SLASES EVENTS -->
+            <!-- SLASES EVENTS -->
             <sales_order_place_after>
                 <observers>
                     <contactlab_hub>
@@ -154,9 +181,8 @@
                     </contactlab_hub>
                 </observers>
             </sales_order_place_after>
-           
             <checkout_type_onepage_save_order_after>
-				<observers>
+                <observers>
                     <contactlab_hub>
                         <type>singleton</type>
                         <class>contactlab_hub/observer</class>
@@ -164,69 +190,64 @@
                     </contactlab_hub>
                 </observers>
             </checkout_type_onepage_save_order_after>
-            
             <checkout_cart_product_add_after>
                 <observers>
                     <contactlab_hub>
-     					<type>singleton</type>
-     					<class>contactlab_hub/observer</class>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
                         <method>traceCartAddEvent</method>
                     </contactlab_hub>
                 </observers>
             </checkout_cart_product_add_after>
-            
             <sales_quote_remove_item>
-            	<observers>
+                <observers>
                     <contactlab_hub>
-     					<type>singleton</type>
-     					<class>contactlab_hub/observer</class>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
                         <method>traceQuoteRemoveEvent</method>
                     </contactlab_hub>
                 </observers>
             </sales_quote_remove_item>
-            
             <sales_order_save_after>
-               <observers>
+                <observers>
                     <contactlab_hub>
-                    	<type>singleton</type>
-						<class>contactlab_hub/observer</class>
-						<method>traceCancelOrderEvent</method>
-					</contactlab_hub>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
+                        <method>traceCancelOrderEvent</method>
+                    </contactlab_hub>
                 </observers>
-            </sales_order_save_after> 
-            
+            </sales_order_save_after>
             <sales_order_shipment_save_after>
-            	<observers>
+                <observers>
                     <contactlab_hub>
-     					<type>singleton</type>
-     					<class>contactlab_hub/observer</class>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
                         <method>traceShipmentEvent</method>
                     </contactlab_hub>
                 </observers>
             </sales_order_shipment_save_after>
-     	</events>     
+        </events>
     </global>
-    
-    <frontend>    	
-    	<events>    	
-	        <controller_action_predispatch>
-	            <observers>
-	                <contactlab_hub>
-	                    <type>singleton</type>
-	                    <class>contactlab_hub/observer</class>
-	                    <method>traceChangeStoreEvent</method>
-	                </contactlab_hub>
-	            </observers>
-	        </controller_action_predispatch>
-	        <controller_action_layout_generate_blocks_after>
-	            <observers>
-	                <contactlab_hub_place_tracking>
-	                    <type>singleton</type>
-	                    <class>contactlab_hub/observer</class>
-	                    <method>placeHubTracking</method>
-	                </contactlab_hub_place_tracking>
-	            </observers>
-	        </controller_action_layout_generate_blocks_after>	       
+    <frontend>
+        <events>
+            <controller_action_predispatch>
+                <observers>
+                    <contactlab_hub>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
+                        <method>traceChangeStoreEvent</method>
+                    </contactlab_hub>
+                </observers>
+            </controller_action_predispatch>
+            <controller_action_layout_generate_blocks_after>
+                <observers>
+                    <contactlab_hub_place_tracking>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
+                        <method>placeHubTracking</method>
+                    </contactlab_hub_place_tracking>
+                </observers>
+            </controller_action_layout_generate_blocks_after>
         </events>
         <layout>
             <updates>
@@ -235,8 +256,8 @@
                 </contactlab_layout>
             </updates>
         </layout>
-	</frontend>
-	<admin>
+    </frontend>
+    <admin>
         <routers>
             <adminhtml>
                 <args>
@@ -247,8 +268,8 @@
             </adminhtml>
         </routers>
     </admin>
-	<adminhtml>
-		<layout>
+    <adminhtml>
+        <layout>
             <updates>
                 <contactlab_subscribers>
                     <file>contactlab/hub.xml</file>
@@ -264,18 +285,18 @@
                 </contactlab_subscribers>
             </modules>
         </translate>
-		<events>			
-			<admin_system_config_changed_section_contactlab_hub>
-			    <observers>
-			        <contactlab_hub>
-			            <type>singleton</type>
-			            <class>contactlab_hub/observer</class>
-	                    <method>handleConfigChanges</method>
-			        </contactlab_hub>
-			    </observers>
-			</admin_system_config_changed_section_contactlab_hub>			
-		</events>
-	</adminhtml>
+        <events>
+            <admin_system_config_changed_section_contactlab_hub>
+                <observers>
+                    <contactlab_hub>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
+                        <method>handleConfigChanges</method>
+                    </contactlab_hub>
+                </observers>
+            </admin_system_config_changed_section_contactlab_hub>
+        </events>
+    </adminhtml>
     <default>
         <contactlab_hub>
             <settings>
@@ -292,91 +313,89 @@
                 <log>0</log>
                 <logfilename>contactlabhub.log</logfilename>
             </settings>
-            <events>              
-				<evtregister>1</evtregister>
+            <js_tracking>
+                <enabled>1</enabled>
+                <!-- The disclaimers are actually non editable settings, as Magento does not support simple read-only fields -->
+                <disclaimer_enabled>DISCLAIMER: JS tracking is enabled</disclaimer_enabled>
+                <disclaimer_disabled>DISCLAIMER: JS tracking is disabled</disclaimer_disabled>
+            </js_tracking>
+            <events>
+                <evtregister>1</evtregister>
                 <loggedIn>1</loggedIn>
                 <loggedOut>1</loggedOut>
                 <campaignName>Magento_Campaign</campaignName>
-               	<campaignSubscribed>1</campaignSubscribed>
+                <campaignSubscribed>1</campaignSubscribed>
                 <campaignUnsubscribed>1</campaignUnsubscribed>
                 <changedSetting>1</changedSetting>
-               	<completedOrder>1</completedOrder>
+                <completedOrder>1</completedOrder>
                 <searched>1</searched>
                 <addedProduct>1</addedProduct>
                 <removedProduct>1</removedProduct>
-                <abandonedCart>1</abandonedCart >
+                <abandonedCart>1</abandonedCart>
                 <send_to_not_subscribed>0</send_to_not_subscribed>
                 <min_minutes_from_last_update>120</min_minutes_from_last_update>
-                <max_minutes_from_last_update>1440</max_minutes_from_last_update>                           
+                <max_minutes_from_last_update>1440</max_minutes_from_last_update>
                 <addedWishlist>1</addedWishlist>
                 <removedWishlist>1</removedWishlist>
                 <addedCompare>1</addedCompare>
                 <removedCompare>1</removedCompare>
                 <viewedProduct>1</viewedProduct>
                 <viewedProductCategory>1</viewedProductCategory>
-                <orderShipped>1</orderShipped> 
+                <orderShipped>1</orderShipped>
                 <base_currency>EUR</base_currency>
-	            <website_currency>EUR</website_currency>
-	            <exchange_rate>1</exchange_rate>	                        
-            </events>      
+                <website_currency>EUR</website_currency>
+                <exchange_rate>1</exchange_rate>
+            </events>
             <cron_events>
-            	<limit>30</limit>
-            	<frequency>I</frequency>
-            	<repeat_minutes>1</repeat_minutes>
+                <limit>30</limit>
+                <frequency>I</frequency>
+                <repeat_minutes>1</repeat_minutes>
             </cron_events>
             <cron_previous_customers>
-            	<limit>50</limit>
-            	<frequency>I</frequency>
-            	<repeat_minutes>5</repeat_minutes>
+                <limit>50</limit>
+                <frequency>I</frequency>
+                <repeat_minutes>5</repeat_minutes>
             </cron_previous_customers>
         </contactlab_hub>
     </default>
-
     <crontab>
         <jobs>
-        	<contactlab_hub_export_events>
+            <contactlab_hub_export_events>
                 <description>Export Events To Hub</description>
                 <!-- Consume the queue every minute 
-                <schedule>                    
-                    <cron_expr>* * * * *</cron_expr>
-                </schedule>
+                <schedule><cron_expr>* * * * *</cron_expr></schedule>
                 -->
                 <run>
                     <model>contactlab_hub/cron::exportEvents</model>
                 </run>
             </contactlab_hub_export_events>
-       		<contactlab_hub_export_previous_customers>
+            <contactlab_hub_export_previous_customers>
                 <description>Export Previous Customers</description>
                 <!--
-                <schedule>                    
-                    <cron_expr>* * * * *</cron_expr>
-                </schedule>
+                <schedule><cron_expr>* * * * *</cron_expr></schedule>
                 -->
                 <run>
                     <model>contactlab_hub/cron::exportPreviousCustomers</model>
                 </run>
             </contactlab_hub_export_previous_customers>
             <contactlab_hub_abandoned_carts>
-                <description>Export Events To Hub</description>                
-                <schedule>                    
+                <description>Export Events To Hub</description>
+                <schedule>
                     <cron_expr>* * * * *</cron_expr>
-                </schedule>                
+                </schedule>
                 <run>
                     <model>contactlab_hub/cron::getAbandonedCarts</model>
                 </run>
             </contactlab_hub_abandoned_carts>
-            
             <contactlab_hub_import_subscribers>
                 <description>Import Subscribers</description>
                 <!--
-                <schedule>                    
-                    <cron_expr>* * * * *</cron_expr>
-                </schedule>
+                <schedule><cron_expr>* * * * *</cron_expr></schedule>
                 -->
                 <run>
                     <model>contactlab_hub/cron::importSubscribers</model>
                 </run>
-            </contactlab_hub_import_subscribers>                       
+            </contactlab_hub_import_subscribers>
         </jobs>
     </crontab>
 </config>

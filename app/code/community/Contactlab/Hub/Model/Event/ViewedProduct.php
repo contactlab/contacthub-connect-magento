@@ -1,16 +1,16 @@
 <?php
-class Contactlab_Hub_Model_Event_AddToWishlist extends Contactlab_Hub_Model_Event
+class Contactlab_Hub_Model_Event_ViewedProduct extends Contactlab_Hub_Model_Event
 {
     protected function _assignData()
     {
         if (!$this->_getSid()) {
             return;
         }
-        $product = $this->getEvent()->getItem()->getProduct();
-        $this->setName('addedWishlist')
-            ->setModel('addToWishlist')
+        $product = Mage::registry('current_product');
+        $this->setName('viewedProduct')
+            ->setModel('ViewedProduct')
             ->setEventData(json_encode($this->_toHubProduct($product)));
-        
+
         return parent::_assignData();
     }
     
@@ -19,7 +19,6 @@ class Contactlab_Hub_Model_Event_AddToWishlist extends Contactlab_Hub_Model_Even
         if (!$this->_eventForHub) {
             $this->_eventForHub = new stdClass();
         }
-        $eventData = json_decode($this->getEventData());
         $this->_eventForHub->properties = json_decode($this->getEventData());
         return parent::_composeHubEvent();
     }
