@@ -142,13 +142,13 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 			if ((!$this->isEnabled()) || (!$this->_getPreviousDate())) 
 			{
 				Mage::helper("contactlab_hubcommons")->logWarn("Module export is disabled");
-				return "Module export is disabled";
+				Mage::helper('contactlab_hub')->log("Module export is disabled");
+				continue;
 			}			
 			$this->_init();
-			$this->_insertCustomers();								
+			$this->_insertCustomers();
+			$this->_createEvents();
 		}
-		
-		$this->_createEvents();
 		
 		return "Export done";
 	}
@@ -156,7 +156,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 	
 	protected function _getPreviousCustomers()
 	{		
-		$query = "	SELECT * FROM ".$this->_previouscustomersTable." WHERE  store_id IN (0, ".$this->getStoreId()."); AND is_exported = 0 ";
+		$query = "	SELECT * FROM ".$this->_previouscustomersTable." WHERE  store_id IN (0, ".$this->getStoreId().") AND is_exported = 0 ";
 		
 		if($this->_mode == self::PARTIAL_EXPORT)
 		{

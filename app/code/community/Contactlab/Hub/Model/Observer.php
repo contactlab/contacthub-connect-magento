@@ -201,14 +201,6 @@ class Contactlab_Hub_Model_Observer
         return $observer;
     }
     
-    public function traceCheckoutEvent($observer)
-    {
-        $event = Mage::getModel('contactlab_hub/event_checkout');
-        $event->setEvent($observer->getEvent());
-        $event->trace();
-        return $observer;
-    }
-    
     public function traceCompareAddEvent($observer)
     {
         $event = Mage::getModel('contactlab_hub/event_addToCompare');
@@ -249,27 +241,35 @@ class Contactlab_Hub_Model_Observer
         return $observer;
     }
     
-    public function traceCancelOrderEvent($observer)
-    {
-        $order = $observer->getEvent()->getOrder();
-                
-        if (!$order->getId()) {
-            //order not saved in the database
-            return $this;
-        }
-        
-        $OldStatus = $order->getOrigData('status');
-        $NewStatus = $order->getStatus();
-        
-        
-        if (($NewStatus == Mage_Sales_Model_Order::STATE_CANCELED)
-            && ($OldStatus != $NewStatus)
-        ) {
-            $event = Mage::getModel('contactlab_hub/event_cancelOrder');
-            $event->setEvent($observer->getEvent());
-            $event->trace();
-        }
-
-        return $observer;
-    }
+	public function traceOrderEvents($observer)
+	{	
+		$order = $observer->getEvent()->getOrder();	
+		if (!$order->getId()) {
+			//order not saved in the database
+			return $this;
+		}			
+		if (
+				(in_array($order->getStatus(), $this->_helper()->getOrderStatusToBeSent($order->getStoreId())))
+				&& (!$order->getContactlabHubExported())
+				)
+		{
+			$event = Mage::getModel('contactlab_hub/event_checkout');
+			$event->setEvent($observer->getEvent());
+			$event->trace();
+			$order->setContactlabHubExported(1);
+			$order->save();
+		}		
+		$OldStatus = $order->getOrigData('status');
+		$NewStatus = $order->getStatus();
+		if (
+				($NewStatus == Mage_Sales_Model_Order::STATE_CANCELED)
+				&& ($OldStatus != $NewStatus)
+				)
+		{
+			$event = Mage::getModel('contactlab_hub/event_cancelOrder');
+			$event->setEvent($observer->getEvent());
+			$event->trace();
+		}		
+		return $observer;
+	}
 }

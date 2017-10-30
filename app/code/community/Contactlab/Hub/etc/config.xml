@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Contactlab_Hub>
-            <version>1.2.0</version>
+            <version>1.2.1</version>
         </Contactlab_Hub>
     </modules>
     <global>
@@ -171,25 +171,7 @@
                     </contactlab_hub>
                 </observers>
             </wishlist_item_delete_before>
-            <!-- SLASES EVENTS -->
-            <sales_order_place_after>
-                <observers>
-                    <contactlab_hub>
-                        <type>singleton</type>
-                        <class>contactlab_hub/observer</class>
-                        <method>traceCheckoutEvent</method>
-                    </contactlab_hub>
-                </observers>
-            </sales_order_place_after>
-            <checkout_type_onepage_save_order_after>
-                <observers>
-                    <contactlab_hub>
-                        <type>singleton</type>
-                        <class>contactlab_hub/observer</class>
-                        <method>traceCheckoutEvent</method>
-                    </contactlab_hub>
-                </observers>
-            </checkout_type_onepage_save_order_after>
+            <!-- SLASES EVENTS -->                        
             <checkout_cart_product_add_after>
                 <observers>
                     <contactlab_hub>
@@ -209,14 +191,14 @@
                 </observers>
             </sales_quote_remove_item>
             <sales_order_save_after>
-                <observers>
+               <observers>
                     <contactlab_hub>
-                        <type>singleton</type>
-                        <class>contactlab_hub/observer</class>
-                        <method>traceCancelOrderEvent</method>
-                    </contactlab_hub>
+                    	<type>singleton</type>
+						<class>contactlab_hub/observer</class>
+						<method>traceOrderEvents</method>
+					</contactlab_hub>
                 </observers>
-            </sales_order_save_after>
+            </sales_order_save_after> 
             <sales_order_shipment_save_after>
                 <observers>
                     <contactlab_hub>
@@ -328,6 +310,7 @@
                 <campaignUnsubscribed>1</campaignUnsubscribed>
                 <changedSetting>1</changedSetting>
                 <completedOrder>1</completedOrder>
+                <order_status>processing</order_status>
                 <searched>1</searched>
                 <addedProduct>1</addedProduct>
                 <removedProduct>1</removedProduct>

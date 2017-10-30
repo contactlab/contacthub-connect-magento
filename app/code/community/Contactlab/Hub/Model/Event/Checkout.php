@@ -3,10 +3,6 @@ class Contactlab_Hub_Model_Event_Checkout extends Contactlab_Hub_Model_Event
 {
 	protected function _assignData()
 	{				
-		if(!$this->_getSid())
-		{
-			return;
-		}		
 		$order = $this->getEvent()->getOrder();		
 		
 		$eventData = array(

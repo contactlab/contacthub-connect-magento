@@ -282,11 +282,16 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
                 if ($address->getCity()) {
                     $objAddress->city = $address->getCity();
                 }
-                $street = $address->getStreet();
-                if (!empty($tmpval)) {
-                    $tmpval = is_array($street) ? $street[0] : $street;
-                    $objAddress->street = $street ?: '';
-                }
+           		$street = '';
+   				if(is_array($address->getStreet())){
+   					foreach ($address->getStreet() as $str){
+   						$street.= $str.' ';
+   					}
+   					$street = trim($street);
+   				}else{ 
+   					$street = $street.$address->getStreet();
+   				}   
+   				$objAddress->street = $street;
                 if ($address->getRegion()) {
                     $objAddress->province = $address->getRegion();
                 }

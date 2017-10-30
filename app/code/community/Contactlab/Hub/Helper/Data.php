@@ -264,6 +264,11 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
         return round(((float)$price / $exchangeRate), 2);
     }
     
+    public function getOrderStatusToBeSent($storeId)
+    {
+    	return explode(',', $this->getConfigStoredData('events/order_status', $storeId));
+    }
+    
     public function getExtraProperties($customer)
     {
         $extraPropreties = array();
