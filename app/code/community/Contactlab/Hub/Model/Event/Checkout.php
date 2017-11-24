@@ -57,7 +57,7 @@ class Contactlab_Hub_Model_Event_Checkout extends Contactlab_Hub_Model_Event
 		{
 			if(!$item->getParentItemId())
 			{
-				$objProduct = $this->_getObjProduct($item->getProductId());			
+			    $objProduct = $this->_getObjProduct($item->getProductId(), $order->getStoreId());			
 				$objProduct->type = 'sale';
 				$objProduct->price = $this->_helper()->convertToBaseRate($item->getPrice(), $exchangeRate);
 				$objProduct->subtotal = $this->_helper()->convertToBaseRate($item->getRowTotal(), $exchangeRate);

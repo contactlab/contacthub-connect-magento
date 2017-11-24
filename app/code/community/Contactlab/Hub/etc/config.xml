@@ -379,6 +379,15 @@
                     <model>contactlab_hub/cron::importSubscribers</model>
                 </run>
             </contactlab_hub_import_subscribers>
+            <contactlab_hub_clean_events>
+                <description>Export Events To Hub</description>                
+               	<schedule>
+                			<cron_expr>0 1 * * *</cron_expr>
+                	</schedule>             
+                <run>
+                    <model>contactlab_hub/cron::cleanEvents</model>
+                </run>
+            </contactlab_hub_clean_events>            
         </jobs>
     </crontab>
 </config>

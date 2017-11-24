@@ -132,8 +132,8 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		return $this;
 	}
 	
-	public function export(Contactlab_Hubcommons_Model_Task_Interface $task)
-	//public function export()
+	//public function export(Contactlab_Hubcommons_Model_Task_Interface $task)
+	public function export()
 	{			
 		$allStores = Mage::app()->getStores();
 		foreach ($allStores as $storeId => $val)
@@ -147,6 +147,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 			}			
 			$this->_init();
 			$this->_insertCustomers();
+			$this->_insertSubscribers();
 			$this->_createEvents();
 		}
 		
@@ -200,6 +201,28 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		return $this;
 	}
 	
+	protected function _insertSubscribers()
+	{	
+	    $query = "  SELECT ne.customer_id
+                    ,ne.store_id
+                    ,ne.subscriber_email as email
+                    FROM ".$this->_subscriberTable." as ne
+                    LEFT OUTER JOIN ".$this->_previouscustomersTable." as chp ON ne.subscriber_email = chp.email
+                    WHERE ne.store_id IN (0, ".$this->getStoreId().")
+                    AND ne.subscriber_status = ".Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED."
+                    AND chp.id IS NULL   ";
+	    if($this->_mode == self::PARTIAL_EXPORT)
+	    {
+	        $exportable = $this->_trancheLimit - count($this->_getPreviousCustomers());
+	        if($exportable > 0)
+	        {
+	            $query .=" LIMIT 0, ". $exportable;
+	        }
+	    }	    
+	    
+	    return $this;
+	}
+	
 	private function _buildInsertQuery($data)
 	{
 		$query = '';
@@ -248,63 +271,78 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 			$this->_tranche = $this->_getPreviousCustomers();
 			
 			foreach($this->_tranche as $previousCustomer)
-			{			
-				$event = Mage::getModel('contactlab_hub/event');
-				$event->setName('loggedIn')
-						->setModel('login')
-						->setCreatedAt($previousCustomer['created_at'])
-						->setStoreId($previousCustomer['store_id'])
-						->setIdentityEmail($previousCustomer['email'])
-						->setEnvRemoteIp($previousCustomer['remote_ip'])
-						->setNeedUpdateIdentity(true)
-				;
-				$event->save();
-				
-				$this->_setExportedPrevious($previousCustomer['id']);
-				
-				//if(!$previousCustomer['orders_exported'])
-				{
-					$orders = $this->_getCustomerOrders($previousCustomer['customer_id']);
-					if(count($orders) > 0)
-					{
-						foreach($orders as $order)
-						{
-							$eventData = array(
-									'increment_id' => $order->getIncrementId(),
-							);
-							$model = 'checkout';
-							$order->getStatus();
-							/*
-							if ($order->getStatus() == Mage_Sales_Model_Order::STATE_CANCELED)
-							{
-								$model = 'cancelOrder';
-							}
-							*/
-							$event = Mage::getModel('contactlab_hub/event');
-							$event->setName('completedOrder')
-								->setModel($model)
-								->setCreatedAt($order->getCreatedAt())
-								->setStoreId($order->getStoreId())
-								->setIdentityEmail($order->getCustomerEmail())
-								->setNeedUpdateIdentity(true)
-								->setEnvRemoteIp($order->getRemoteIp())
-								->setEventData(json_encode($eventData));
-							$event->save();
-							/*
-							$query = "UPDATE ".$this->_previouscustomersTable." SET orders_exported = 1 WHERE id = ".$previousCustomer['id'];
-							$this->_getWriteConnection()->query($query);
-							*/
-						}
-					}
-					/*
-					else 
-					{
-						$query = "UPDATE ".$this->_previouscustomersTable." SET orders_exported = 1 WHERE id = ".$previousCustomer['id'];
-						$this->_getWriteConnection()->query($query);
-					}
-					*/
-				}	
-			}			
+			{			    
+			    if($previousCustomer['customer_id'])
+			    {
+        				$event = Mage::getModel('contactlab_hub/event');
+        				$event->setName('loggedIn')
+        						->setModel('login')
+        						->setCreatedAt($previousCustomer['created_at'])
+        						->setStoreId($previousCustomer['store_id'])
+        						->setIdentityEmail($previousCustomer['email'])
+        						->setEnvRemoteIp($previousCustomer['remote_ip'])
+        						->setNeedUpdateIdentity(true)
+        				;
+        				$event->save();       			
+        				
+        				//if(!$previousCustomer['orders_exported'])
+        				{
+        					$orders = $this->_getCustomerOrders($previousCustomer['customer_id']);
+        					if(count($orders) > 0)
+        					{
+        						foreach($orders as $order)
+        						{
+        							$eventData = array(
+        									'increment_id' => $order->getIncrementId(),
+        							);
+        							$model = 'checkout';
+        							$order->getStatus();
+        							/*
+        							if ($order->getStatus() == Mage_Sales_Model_Order::STATE_CANCELED)
+        							{
+        								$model = 'cancelOrder';
+        							}
+        							*/
+        							$event = Mage::getModel('contactlab_hub/event');
+        							$event->setName('completedOrder')
+        								->setModel($model)
+        								->setCreatedAt($order->getCreatedAt())
+        								->setStoreId($order->getStoreId())
+        								->setIdentityEmail($order->getCustomerEmail())
+        								->setNeedUpdateIdentity(true)
+        								->setEnvRemoteIp($order->getRemoteIp())
+        								->setEventData(json_encode($eventData));
+        							$event->save();
+        							/*
+        							$query = "UPDATE ".$this->_previouscustomersTable." SET orders_exported = 1 WHERE id = ".$previousCustomer['id'];
+        							$this->_getWriteConnection()->query($query);
+        							*/
+        						}
+        					}
+        					/*
+        					else 
+        					{
+        						$query = "UPDATE ".$this->_previouscustomersTable." SET orders_exported = 1 WHERE id = ".$previousCustomer['id'];
+        						$this->_getWriteConnection()->query($query);
+        					}
+        					*/
+        				}	
+        			}	
+        			else
+        			{
+        			    $event = Mage::getModel('contactlab_hub/event');
+        			    $event->setName('campaignSubscribed')
+        			    ->setModel('subscription')
+        			    ->setCreatedAt(date('Y-m-d H:i:s'))
+        			    ->setStoreId($previousCustomer['store_id'])
+        			    ->setIdentityEmail($previousCustomer['email'])
+        			    ->setEventData(json_encode(array()))
+        			    ->setNeedUpdateIdentity(true)
+        			    ;
+        			    $event->save();
+        			}
+        			$this->_setExportedPrevious($previousCustomer['id']);
+			}							
 		}
 		else
 		{

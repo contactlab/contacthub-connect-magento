@@ -50,7 +50,7 @@ class Contactlab_Hub_Model_Event_AbandonedCart extends Contactlab_Hub_Model_Even
 		{
 			if(!$item->getParentItemId())
 			{
-				$objProduct = $this->_getObjProduct($item->getProductId());			
+			    $objProduct = $this->_getObjProduct($item->getProductId(), $quote->getStoreId());			
 				$objProduct->type = 'sale';
 				$objProduct->price = (float)$item->getPrice();
 				$objProduct->subtotal = (float)$item->getRowTotal();

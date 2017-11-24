@@ -58,7 +58,7 @@ class Contactlab_Hub_Model_Event_Shipment extends Contactlab_Hub_Model_Event
 		$arrayProducts = array();
 		foreach($shipment->getItemsCollection() as $item)
 		{
-			$objProduct = $this->_getObjProduct($item->getProductId());			
+		    $objProduct = $this->_getObjProduct($item->getProductId(), $order->getStoreId());			
 			$objProduct->type = 'shipped';					
 			$objProduct->quantity = (int)$item->getQty();
 			$objProduct->weight = (float)$item->getWeight();			

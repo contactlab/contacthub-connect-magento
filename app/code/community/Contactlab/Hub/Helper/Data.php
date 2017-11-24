@@ -266,7 +266,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
     
     public function getOrderStatusToBeSent($storeId)
     {
-    	return explode(',', $this->getConfigStoredData('events/order_status', $storeId));
+    	   return explode(',', $this->getConfigStoredData('events/order_status', $storeId));
     }
     
     public function getExtraProperties($customer)
@@ -291,7 +291,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
     
     protected function _getCustomerAttributeValue($attributeCode, $customer)
     {
-        $value = null;
+        $value = '';
         
         if ($customer) {
             $attribute = Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('attribute_code', array('in' => $attributeCode) )->getFirstItem();
@@ -304,7 +304,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
                         ->getSource()
                         ->getOptionText($customer->getData($attributeCode));
                     } else {
-                        $value = $customer->getData($attributeCode);
+                        $value.= $customer->getData($attributeCode);
                     }
                 } else {
                     /* BILLING INFORMATIONS */
@@ -317,7 +317,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
                                 ->getSource()
                                 ->getOptionText($billing->getData($attributeCode));
                             } else {
-                                $value = $billing->getData($attributeCode);
+                                $value.= $billing->getData($attributeCode);
                             }
                         }
                     }
@@ -345,5 +345,10 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
             }
         }
         return $value;
+    }
+    
+    public function getMonthsToClean()
+    {
+        return 1;
     }
 }

@@ -202,9 +202,14 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         return $result;
     }
     
-    protected function _getObjProduct($product_id)
+    protected function _getObjProduct($productId, $storeId = null)
     {
-        $product = Mage::getModel('catalog/product')->load($product_id);
+        $product = Mage::getModel('catalog/product');    
+        if($storeId)
+        {
+            $product->setStoreId($storeId);
+        }
+        $product->load($productId);
         return $this->_toHubProduct($product);
     }
 
@@ -218,7 +223,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         $objProduct->name = $product->getName();
         $objProduct->price = (float)Mage::getModel('directory/currency')->formatTxt($product->getPrice(), array( 'display' => Zend_Currency::NO_SYMBOL ));
         $objProduct->imageUrl = ''.Mage::helper('catalog/image')->init($product, 'image');
-        $objProduct->linkUrl = Mage::getUrl($product->getUrlPath());
+        $objProduct->linkUrl = Mage::app()->getStore($product->getStoreId())->getBaseUrl().$product->getUrlPath();
         $objProduct->shortDescription = $product->getShortDescription() ?: "";
         $objProduct->category = $this->_getCategoryNamesFromIds($product->getCategoryIds());
 
@@ -336,5 +341,19 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         }
 
         return $customerData;
+    }
+    
+    public function cleanEvents()
+    {
+        $months = $this->_helper()->getMonthsToClean();
+        $time = strtotime(date("Y-m-d"));
+        $date = date("Y-m-d", strtotime("-".$months." month", $time));
+        $collection = $this->getCollection()       
+                    ->addFieldToFilter('status', array('in' => array(self::CONTACTLAB_HUB_STATUS_EXPORTED, self::CONTACTLAB_HUB_STATUS_FAILED)))
+                    ->addFieldToFilter('created_at', array('lt' => $date));
+        foreach($collection as $event)
+        {
+            $event->delete();
+        }                   
     }
 }

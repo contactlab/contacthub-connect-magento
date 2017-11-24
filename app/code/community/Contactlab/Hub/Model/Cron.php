@@ -89,4 +89,16 @@ class Contactlab_Hub_Model_Cron extends Mage_Core_Model_Abstract
 			->save();
 	}
 	
+	/**
+	 * Clean Old Events
+	 */
+	public function cleanEvents()
+	{
+	    $this->logCronCall("cleanOldEvents");
+	    return Mage::getModel("contactlab_hubcommons/task")
+	    ->setTaskCode("CleanEventsTask")
+	    ->setModelName('contactlab_hub/task_cleanEvents')
+	    ->setDescription('Clean Events')
+	    ->save();
+	}
 }
