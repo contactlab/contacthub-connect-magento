@@ -1,14 +1,4 @@
 <?php
-/**
- * This class wraps the Basic email sending functionality
- * If SMTPPro is enabled it will send emails using the given
- * configuration.
- *
- * @author Ashley Schroder (aschroder.com)
- * @copyright  Copyright (c) 2014 Ashley Schroder
- * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- */
-
 class Contactlab_Hub_Model_Email extends Mage_Core_Model_Email 
 {
 

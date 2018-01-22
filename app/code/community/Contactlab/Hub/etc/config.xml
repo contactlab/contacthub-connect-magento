@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Contactlab_Hub>
-            <version>1.3.1</version>
+            <version>1.3.2</version>
         </Contactlab_Hub>
     </modules>
     <global>
@@ -32,6 +32,11 @@
             <contactlab_hub_eventhub>
                 <class>Contactlab_Hub_Model_Eventhub</class>
             </contactlab_hub_eventhub>
+            <customer>
+            		<rewrite>
+            			<customer>Contactlab_Hub_Model_Customer</customer>
+            		</rewrite>
+            </customer>
         </models>
         <resources>
             <contactlab_hub_setup>
@@ -171,7 +176,7 @@
                     </contactlab_hub>
                 </observers>
             </wishlist_item_delete_before>
-            <!-- SLASES EVENTS -->                        
+            <!-- SALES EVENTS -->                        
             <checkout_cart_product_add_after>
                 <observers>
                     <contactlab_hub>
@@ -302,7 +307,7 @@
                 <disclaimer_disabled>DISCLAIMER: JS tracking is disabled</disclaimer_disabled>
             </js_tracking>
             <events>
-                <evtregister>1</evtregister>
+                <formCompiled>1</formCompiled>
                 <loggedIn>1</loggedIn>
                 <loggedOut>1</loggedOut>
                 <campaignName>Magento_Campaign</campaignName>

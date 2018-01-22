@@ -275,8 +275,8 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 			    if($previousCustomer['customer_id'])
 			    {
         				$event = Mage::getModel('contactlab_hub/event');
-        				$event->setName('loggedIn')
-        						->setModel('login')
+        				$event->setName('formCompiled')
+        						->setModel('register')
         						->setCreatedAt($previousCustomer['created_at'])
         						->setStoreId($previousCustomer['store_id'])
         						->setIdentityEmail($previousCustomer['email'])

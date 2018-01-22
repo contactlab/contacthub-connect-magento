@@ -20,7 +20,7 @@ class Contactlab_Hub_Model_Event_CancelOrder extends Contactlab_Hub_Model_Event_
 		{
 			$objProduct->type = 'return';		
 		}				
-		$this->_eventForHub-> $eventForHub;	
+		$this->_eventForHub = $eventForHub;
 		return $this->_eventForHub;
 	}
 }

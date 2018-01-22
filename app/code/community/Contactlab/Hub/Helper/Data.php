@@ -351,4 +351,16 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return 1;
     }
+    
+    public function isDiabledSendingSubscriptionEmail($storeId = null)
+    {
+        return (bool)$this->getConfigData('settings/disable_sending_subscription_email', $storeId);       
+    }
+    
+    public function isDiabledSendingNewCustomerEmail($storeId = null)
+    {
+        return (bool)$this->getConfigData('settings/disable_sending_new_customer_email', $storeId);
+    }
+    
+    
 }

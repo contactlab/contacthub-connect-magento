@@ -151,12 +151,10 @@ class Contactlab_Hub_Model_Observer
     
     public function traceCustomerRegister($observer)
     {
-        /*
 		$event = Mage::getModel('contactlab_hub/event_register');
 		$event->setEvent($observer->getEvent());
 		$event->trace();
 		return $observer;
-		*/
     }
     
     public function traceSubscriptionSave($observer)
@@ -169,6 +167,10 @@ class Contactlab_Hub_Model_Observer
             $subscriber->setLastSubscribedAt(date('Y-m-d H:i:s'));
         } elseif ($subscriber->getSubscriberStatus() == Mage_Newsletter_Model_Subscriber::STATUS_UNSUBSCRIBED) {
             $subscriber->setLastSubscribedAt();
+        }
+                
+        if($this->_helper()->isDiabledSendingSubscriptionEmail($subscriber->getStoreId())) {
+            $subscriber->setImportMode(true);
         }
         
         $event = Mage::getModel('contactlab_hub/event_subscription');
