@@ -83,7 +83,7 @@ class Contactlab_Hub_Model_Cron extends Mage_Core_Model_Abstract
             return;
         }
 
-        $this->logCronCall("addImportSubscribersQueue", $storeId);
+        $this->logCronCall("addImportSubscribersQueue");
         return Mage::getModel("contactlab_hubcommons/task")
             ->setTaskCode("ImportSubscribersTask")
             ->setModelName('contactlab_hub/task_importSubscribers')
