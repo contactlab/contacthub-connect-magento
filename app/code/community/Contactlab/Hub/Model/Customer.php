@@ -9,7 +9,7 @@ class Contactlab_Hub_Model_Customer extends Mage_Customer_Model_Customer
         if(Mage::helper('contactlab_hub')->isDiabledSendingNewCustomerEmail($storeId)
             && ($type == 'registered' || $type == 'confirmed')
         ) {
-            return parent;
+            return $this;
         }
         
         return parent::sendNewAccountEmail($type, $backUrl, $storeId, $password);
