@@ -10,18 +10,18 @@ class Contactlab_Hub_Model_Customer extends Mage_Customer_Model_Customer
      * @throws Mage_Core_Exception
      * @return Mage_Customer_Model_Customer
      */
-    public function sendNewAccountEmail($type = 'registered', $backUrl = '', $storeId = '0')
+    public function sendNewAccountEmail($type = 'registered', $backUrl = '', $storeId = '0', $password = null)
     {
      
         if(
             (Mage::helper('contactlab_hub')->isDiabledSendingNewCustomerEmail($storeId))
             &&  ($type == 'registered' || $type == 'confirmed')
-            )        
+            )
         {
             return parent;
         }
         
-        return parent::sendNewAccountEmail($type, $backUrl, $storeId);
+        return parent::sendNewAccountEmail($type, $backUrl, $storeId, $password);
         
     }
 }
