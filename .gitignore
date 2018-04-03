@@ -97,3 +97,4 @@ tmptomagento.sh
 pocdemo/service.php
 pocdemo/mockup.php
 deployvm.sh
+.DS_Store
