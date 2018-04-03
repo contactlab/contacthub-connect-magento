@@ -43,10 +43,10 @@ class Contactlab_Hub_Model_Event_Checkout extends Contactlab_Hub_Model_Event
 		}
 		$this->_helper()->log($exchangeRate);
 		$amount->total = $this->_helper()->convertToBaseRate($order->getGrandTotal(), $exchangeRate);
-		$amount->revenue = $this->_helper()->convertToBaseRate(($order->getGrandTotal() - $order->getShippingAmount() - $order->getShippingTaxAmount()), $exchangeRate);
+        $amount->revenue = $this->_helper()->convertToBaseRate($order->getSubtotal(), $exchangeRate);
 		$amount->shipping = $this->_helper()->convertToBaseRate(($order->getShippingAmount() + $order->getShippingTaxAmount()), $exchangeRate);
-		$amount->tax = $this->_helper()->convertToBaseRate($order->getTaxAmount(), $exchangeRate);
-		$amount->discount = $this->_helper()->convertToBaseRate($order->getDiscountAmount(), $exchangeRate);
+		$amount->tax = $this->_helper()->convertToBaseRate(($order->getTaxAmount() -  $order->getShippingTaxAmount()), $exchangeRate);
+		$amount->discount = abs($this->_helper()->convertToBaseRate($order->getDiscountAmount(), $exchangeRate));
 		$local = new stdClass();
 		$local->currency = $order->getOrderCurrencyCode();				
 		$local->exchangeRate = $exchangeRate;
@@ -57,13 +57,20 @@ class Contactlab_Hub_Model_Event_Checkout extends Contactlab_Hub_Model_Event
 		{
 			if(!$item->getParentItemId())
 			{
+			    $price = $this->_helper()->convertToBaseRate($item->getPriceInclTax(), $exchangeRate);
+			    $tax = $this->_helper()->convertToBaseRate($item->getTaxAmount(), $exchangeRate);
+			    $discount = abs($this->_helper()->convertToBaseRate($item->getDiscountAmount(), $exchangeRate));
+			    $qty = (int)$item->getQtyOrdered();
+                $subtotal = $this->_helper()->convertToBaseRate(($item->getRowTotalInclTax() - $item->getDiscountAmount()), $exchangeRate);
+
 			    $objProduct = $this->_getObjProduct($item->getProductId(), $order->getStoreId());			
 				$objProduct->type = 'sale';
-				$objProduct->price = $this->_helper()->convertToBaseRate($item->getPrice(), $exchangeRate);
-				$objProduct->subtotal = $this->_helper()->convertToBaseRate($item->getRowTotal(), $exchangeRate);
-				$objProduct->quantity = (int)$item->getQtyOrdered();
-				$objProduct->discount = $this->_helper()->convertToBaseRate($item->getDiscountAmount(), $exchangeRate);
-				$objProduct->tax = $this->_helper()->convertToBaseRate($item->getTaxAmount(), $exchangeRate);
+				$objProduct->price = $price;
+                $objProduct->tax = $tax;
+                $objProduct->discount = $discount;
+                $objProduct->quantity = $qty;
+				$objProduct->subtotal = $subtotal;
+
 				if($order->getCouponCode())
 				{
 					$objProduct->coupon = $order->getCouponCode();

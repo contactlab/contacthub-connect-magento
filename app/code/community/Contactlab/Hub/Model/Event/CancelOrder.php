@@ -13,9 +13,7 @@ class Contactlab_Hub_Model_Event_CancelOrder extends Contactlab_Hub_Model_Event_
 	protected function _composeHubEvent()
 	{			
 		$eventForHub = parent::_composeHubEvent();
-
 		$eventForHub->properties->type = 'return';
-		$arrayProducts = array();
 		foreach ($eventForHub->properties->products as $objProduct)
 		{
 			$objProduct->type = 'return';		
