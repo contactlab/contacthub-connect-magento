@@ -36,17 +36,23 @@ class Contactlab_Hub_Model_Event_Checkout extends Contactlab_Hub_Model_Event
 		*/
 		$amount = new stdClass();
 		$exchangeRate = (float)$order->getStoreToOrderRate();
-		$this->_helper()->log($exchangeRate);
 		if($exchangeRate == 1)
 		{
 			$exchangeRate = $this->_helper()->getExchangeRate($order->getStoreId());	
 		}
-		$this->_helper()->log($exchangeRate);
-		$amount->total = $this->_helper()->convertToBaseRate($order->getGrandTotal(), $exchangeRate);
-        $amount->revenue = $this->_helper()->convertToBaseRate($order->getSubtotal(), $exchangeRate);
-		$amount->shipping = $this->_helper()->convertToBaseRate(($order->getShippingAmount() + $order->getShippingTaxAmount()), $exchangeRate);
-		$amount->tax = $this->_helper()->convertToBaseRate(($order->getTaxAmount() -  $order->getShippingTaxAmount()), $exchangeRate);
-		$amount->discount = abs($this->_helper()->convertToBaseRate($order->getDiscountAmount(), $exchangeRate));
+
+        $total = $order->getGrandTotal();
+        $shipping = $order->getShippingAmount() + $order->getShippingTaxAmount();
+        $tax = $order->getTaxAmount() -  $order->getShippingTaxAmount();
+        $discount = abs($order->getDiscountAmount());
+        $revenue = $total - $shipping - $discount;
+
+        $amount->total = $this->_helper()->convertToBaseRate($total, $exchangeRate);
+		$amount->shipping = $this->_helper()->convertToBaseRate($shipping, $exchangeRate);
+		$amount->tax = $this->_helper()->convertToBaseRate($tax, $exchangeRate);
+		$amount->discount = $this->_helper()->convertToBaseRate($discount, $exchangeRate);
+        $amount->revenue = $this->_helper()->convertToBaseRate($revenue, $exchangeRate);
+
 		$local = new stdClass();
 		$local->currency = $order->getOrderCurrencyCode();				
 		$local->exchangeRate = $exchangeRate;

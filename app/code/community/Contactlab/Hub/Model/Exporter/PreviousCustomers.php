@@ -284,8 +284,10 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
         						->setNeedUpdateIdentity(true)
         				;
         				$event->save();       			
-        				
+
+
         				//if(!$previousCustomer['orders_exported'])
+                        if(Mage::helper('contactlab_hub')->canExportPreviousOrder($previousCustomer['store_id']))
         				{
         					$orders = $this->_getCustomerOrders($previousCustomer['customer_id']);
         					if(count($orders) > 0)
@@ -348,6 +350,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		{
 			Mage::helper("contactlab_hubcommons")->logNotice("No previous customers to export");
 			Mage::helper('contactlab_hub')->setConfigData('contactlab_hub/cron_previous_customers/enabled', 0, 'stores', $this->getStoreId());
+            Mage::helper('contactlab_hub')->setConfigData('contactlab_hub/cron_previous_customers/export_order', 0, 'stores', $this->getStoreId());
 		}
 		return $this;
 	}

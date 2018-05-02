@@ -32,37 +32,36 @@ class Contactlab_Hub_Model_Event_AbandonedCart extends Contactlab_Hub_Model_Even
 		
 		$properties = new stdClass();
 		$properties->orderId = strval($quote->getEntityId());		
-		$properties->storeCode = "".$quote->getStoreId();		
-		//$properties->abandonedCartUrl = Mage::getUrl('', array('_store' => $quote->getStoreId())).'checkout/cart/';
-		$amount = new stdClass();
-		$amount->total = (float)$quote->getGrandTotal();
-		//$amount->revenue = (float)($quote->getGrandTotal() - $quote->getShippingAmount() - $quote->getShippingTaxAmount());
-		//$amount->shipping = (float)($quote->getShippingAmount() + $quote->getShippingTaxAmount());
-		$amount->tax = (float)$quote->getTaxAmount();
-		//$amount->discount = (float)$quote->getDiscountAmount();
-		$local = new stdClass();
-		$local->currency = $quote->getQuoteCurrencyCode();
-		$local->exchangeRate = (float)$quote->getStoreToQuoteRate();
-		$amount->local = $local;
-		$properties->amount = $amount;
+		$properties->storeCode = "".$quote->getStoreId();
+
+        $exchangeRate = (float)$quote->getStoreToQuoteRate();
+        if($exchangeRate == 1)
+        {
+            $exchangeRate = $this->_helper()->getExchangeRate($quote->getStoreId());
+        }
+
 		$arrayProducts = array();
+        $totTax = 0;
+        $totDiscount = 0;
 		foreach($quote->getAllItems() as $item)
 		{
 			if(!$item->getParentItemId())
             {
                 $price = (float)$item->getPriceInclTax();
                 $tax = (float)$item->getTaxAmount();
+                $totTax+= $tax;
                 $discount = abs((float)$item->getDiscountAmount());
+                $totDiscount+= $discount;
                 $qty = (int)$item->getQty();
                 $subtotal = $item->getRowTotalInclTax() - $item->getDiscountAmount();
 
                 $objProduct = $this->_getObjProduct($item->getProductId(), $quote->getStoreId());
                 $objProduct->type = 'sale';
-                $objProduct->price = $price;
-                $objProduct->tax = $tax;
-                $objProduct->discount = $discount;
+                $objProduct->price = $this->_helper()->convertToBaseRate($price, $exchangeRate);
+                $objProduct->tax = $this->_helper()->convertToBaseRate($tax, $exchangeRate);
+                $objProduct->discount = $this->_helper()->convertToBaseRate($discount, $exchangeRate);
                 $objProduct->quantity = $qty;
-                $objProduct->subtotal = $subtotal;
+                $objProduct->subtotal = $this->_helper()->convertToBaseRate($subtotal, $exchangeRate);
 
                 if($quote->getCouponCode())
                 {
@@ -71,7 +70,24 @@ class Contactlab_Hub_Model_Event_AbandonedCart extends Contactlab_Hub_Model_Even
                 $arrayProducts[] = $objProduct;
             }
 		}		
-		$properties->products = $arrayProducts;
+
+
+        //$properties->abandonedCartUrl = Mage::getUrl('', array('_store' => $quote->getStoreId())).'checkout/cart/';
+        $amount = new stdClass();
+        $total = $quote->getGrandTotal();
+
+        $amount->total = $this->_helper()->convertToBaseRate($total, $exchangeRate);
+        $amount->tax = $this->_helper()->convertToBaseRate($totTax, $exchangeRate);
+        $amount->discount = $this->_helper()->convertToBaseRate($totDiscount, $exchangeRate);
+
+        $local = new stdClass();
+        $local->currency = $quote->getQuoteCurrencyCode();
+        $local->exchangeRate = $exchangeRate;
+        $amount->local = $local;
+        $properties->amount = $amount;
+
+        $properties->products = $arrayProducts;
+
 		$this->_eventForHub->properties = $properties;
 		return parent::_composeHubEvent();
 	}

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Contactlab_Hub>
-            <version>1.4.0</version>
+            <version>1.5.0</version>
         </Contactlab_Hub>
     </modules>
     <global>
@@ -340,6 +340,7 @@
                 <repeat_minutes>1</repeat_minutes>
             </cron_events>
             <cron_previous_customers>
+                <export_order>0</export_order>
                 <limit>50</limit>
                 <frequency>I</frequency>
                 <repeat_minutes>5</repeat_minutes>

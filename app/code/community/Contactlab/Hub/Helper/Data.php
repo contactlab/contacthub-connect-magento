@@ -2,10 +2,12 @@
 /**
 *
 */
+
 class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const JS_TRACKING_ENABLED_CONFIG_PATH = 'contactlab_hub/js_tracking/enabled';
     const JS_UNTRUSTED_TOKEN_CONFIG_PATH = 'contactlab_hub/js_tracking/untrusted_token';
+    const PREVIOUS_CUSTOMER_EXPORT_ORDER = 'contactlab_hub/cron_previous_customers/export_order';
 
     protected $_saveLog = false;
     protected $_logFilename = false;
@@ -97,7 +99,6 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
             $cookieData['customerId'] = $customer->getId();
         }
         Mage::getModel('core/cookie')->set('_ch', json_encode($cookieData), 31536000, '/', '');
-        
         return $cookieData['sid'];
     }
     
@@ -361,6 +362,10 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return (bool)$this->getConfigData('settings/disable_sending_new_customer_email', $storeId);
     }
-    
+
+    public function canExportPreviousOrder($storeId = null)
+    {
+        return (bool)Mage::getStoreConfig(self::PREVIOUS_CUSTOMER_EXPORT_ORDER, $storeId);
+    }
     
 }
