@@ -215,6 +215,9 @@ class Contactlab_Hubcommons_Helper_Data extends Mage_Core_Helper_Abstract {
                 if (((string) $moduleConfig->active) === 'false') {
                     continue;
                 }
+                if ($moduleName == 'Contactlab_Hubcommons') {
+                    continue;
+                }
                 $item = new Varien_Object();
                 $item->setName(preg_replace('/^Contactlab_/', '', $moduleName))
                     ->setVersion((string) $moduleConfig->version)

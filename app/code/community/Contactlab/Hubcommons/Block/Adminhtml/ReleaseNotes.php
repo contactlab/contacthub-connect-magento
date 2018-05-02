@@ -23,10 +23,11 @@ class Contactlab_Hubcommons_Block_Adminhtml_ReleaseNotes extends Mage_Adminhtml_
         $helper = Mage::helper('contactlab_hubcommons');
         foreach ($helper->getModulesVersion() as $module) {
             $notes = $this->_findReleaseNotes($module);
+            /*
             if ($notes === false) {
                 continue;
             }
-
+            */
             $item = new Varien_Object();
             $item->setTitle(sprintf('%s &ndash; (Ver. <code>%s</code>)',
                     $module->getName(), $module->getVersion()));
@@ -34,7 +35,6 @@ class Contactlab_Hubcommons_Block_Adminhtml_ReleaseNotes extends Mage_Adminhtml_
             $item->setText($notes);
             $rv->addItem($item);
         }
-
         return $rv;
      }
 
