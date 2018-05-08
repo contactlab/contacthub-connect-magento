@@ -309,7 +309,8 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
                 }
                 $base->address = $objAddress;
             }
-            $extraProperties = $this->_helper()->getExtraProperties($customer);
+            $extraBaseProperties = $this->_helper()->getExtraProperties($customer, 'base');
+            $base = (object) array_merge( (array)$base, $extraBaseProperties );
         }
         if (in_array($this->getName(), array('campaignSubscribed', 'campaignUnsubscribed'))) {
             $subscriber = Mage::getModel('newsletter/subscriber')->loadByEmail($this->getIdentityEmail());
@@ -333,13 +334,20 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
                 $base->subscriptions = $subscriptions;
             }
         }
-        $customerData->base = $base;
 
-        if (count($extraProperties) > 0) { 
-            $extended = (object) $extraProperties; 
-            $customerData->extended = $extended;          
+        $externalId = $this->_helper()->getExternalId($customer);
+        if($externalId)
+        {
+            $customerData->externalId = $externalId;
         }
 
+        $customerData->base = $base;
+
+        $extraExtendedProperties = $this->_helper()->getExtraProperties($customer, 'extended');
+        if (count($extraExtendedProperties) > 0) {
+            $customerData->extended = (object) $extraExtendedProperties;
+        }
+        var_dump($customerData);
         return $customerData;
     }
     

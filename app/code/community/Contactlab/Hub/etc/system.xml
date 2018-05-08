@@ -501,171 +501,24 @@
 					<show_in_website>0</show_in_website>
 					<show_in_store>0</show_in_store>
 					<fields>
-						<hub_fixed_1>
-							<label>Hub Attribute 1</label>
-							<frontend_type>text</frontend_type>
+						<external_id>
+							<label>External Id</label>
+							<frontend_type>select</frontend_type>
+							<source_model>contactlab_hub/adminhtml_system_config_source_customer_attributes</source_model>
 							<sort_order>10</sort_order>
 							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</hub_fixed_1>
-						<magento_fixed_1>
-							<label>Magento Attribute 1</label>
-							<frontend_type>select</frontend_type>
-							<source_model>contactlab_hub/adminhtml_system_config_source_extraProperties</source_model>
-							<sort_order>11</sort_order>
-							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
-						</magento_fixed_1>
-						<hub_fixed_2>
-							<label>Hub Attribute 2</label>
-							<frontend_type>text</frontend_type>
+						</external_id>
+						<attribute_map translate="label">
+							<label>Customer Attributes</label>
+							<frontend_model>contactlab_hub/adminhtml_system_config_form_map_customer</frontend_model>
+							<backend_model>contactlab_hub/adminhtml_system_config_backend_map_customer</backend_model>
 							<sort_order>20</sort_order>
 							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</hub_fixed_2>
-						<magento_fixed_2>
-							<label>Magento Attribute 2</label>
-							<frontend_type>select</frontend_type>
-							<source_model>contactlab_hub/adminhtml_system_config_source_extraProperties</source_model>
-							<sort_order>21</sort_order>
-							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
-						</magento_fixed_2>
-						<hub_fixed_3>
-							<label>Hub Attribute 3</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>30</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</hub_fixed_3>
-						<magento_fixed_3>
-							<label>Magento Attribute 3</label>
-							<frontend_type>select</frontend_type>
-							<source_model>contactlab_hub/adminhtml_system_config_source_extraProperties</source_model>
-							<sort_order>31</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</magento_fixed_3>
-						<hub_fixed_4>
-							<label>Hub Attribute 4</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>40</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</hub_fixed_4>
-						<magento_fixed_4>
-							<label>Magento Attribute 4</label>
-							<frontend_type>select</frontend_type>
-							<source_model>contactlab_hub/adminhtml_system_config_source_extraProperties</source_model>
-							<sort_order>41</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</magento_fixed_4>
-						<hub_fixed_5>
-							<label>Hub Attribute 5</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>50</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</hub_fixed_5>
-						<magento_fixed_5>
-							<label>Magento Attribute 5</label>
-							<frontend_type>select</frontend_type>
-							<source_model>contactlab_hub/adminhtml_system_config_source_extraProperties</source_model>
-							<sort_order>51</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</magento_fixed_5>
-						<hub_variable_1>
-							<label>Hub Attribute 6</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>60</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</hub_variable_1>
-						<magento_variable_1>
-							<label>Magento Attribute 6</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>61</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</magento_variable_1>
-						<hub_variable_2>
-							<label>Hub Attribute 7</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>70</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</hub_variable_2>
-						<magento_variable_2>
-							<label>Magento Attribute 7</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>71</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</magento_variable_2>
-						<hub_variable_3>
-							<label>Hub Attribute 8</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>80</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</hub_variable_3>
-						<magento_variable_3>
-							<label>Magento Attribute 8</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>81</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</magento_variable_3>
-						<hub_variable_4>
-							<label>Hub Attribute 9</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>90</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</hub_variable_4>
-						<magento_variable_4>
-							<label>Magento Attribute 9</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>91</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</magento_variable_4>
-						<hub_variable_5>
-							<label>Hub Attribute 10</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>100</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</hub_variable_5>
-						<magento_variable_5>
-							<label>Magento Attribute 10</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>101</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</magento_variable_5>
+						</attribute_map>
 					</fields>
 				</extra_properties>
 				<cron_events translate="label">

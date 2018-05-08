@@ -8,6 +8,8 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
     const JS_TRACKING_ENABLED_CONFIG_PATH = 'contactlab_hub/js_tracking/enabled';
     const JS_UNTRUSTED_TOKEN_CONFIG_PATH = 'contactlab_hub/js_tracking/untrusted_token';
     const PREVIOUS_CUSTOMER_EXPORT_ORDER = 'contactlab_hub/cron_previous_customers/export_order';
+    const EXTRA_PROPERTIES_EXTERNAL_ID = 'contactlab_hub/extra_properties/external_id';
+    const EXTRA_PROPERTIES_ATTRIBUTE_MAP = 'contactlab_hub/extra_properties/attribute_map';
 
     protected $_saveLog = false;
     protected $_logFilename = false;
@@ -269,79 +271,86 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
     {
     	   return explode(',', $this->getConfigStoredData('events/order_status', $storeId));
     }
-    
-    public function getExtraProperties($customer)
+
+    public function getExternalId($customer)
     {
-        $extraPropreties = array();
-        for ($i=1; $i<6; $i++) {
-            $hubFixed = $this->getConfigStoredData('extra_properties/hub_fixed_'.$i);
-            $magentoFixed = $this->getConfigStoredData('extra_properties/magento_fixed_'.$i);
-            if ($hubFixed && $magentoFixed) {
-                $valueFixed = $this->_getCustomerAttributeValue($magentoFixed, $customer);
-                $extraPropreties[$hubFixed] = $valueFixed;
+        $externalId = Mage::getStoreConfig(self::EXTRA_PROPERTIES_EXTERNAL_ID,
+            $customer->getStoreId()
+            );
+        return $this->_getCustomerAttributeValue($externalId, $customer);
+    }
+
+    public function getExtraProperties($customer, $type = 'extended')
+    {
+        $extraProperties = array();
+        $attributesMap = unserialize(
+            Mage::getStoreConfig(self::EXTRA_PROPERTIES_ATTRIBUTE_MAP,
+                $customer->getStoreId())
+        );
+        $attributesMap = $attributesMap['customer_mapping'];
+        foreach ($attributesMap as $map)
+        {
+            if($type == $map['hub_type'])
+            {
+                $value = $this->_getCustomerAttributeValue($map['magento_attribute'], $customer);
+                if($value)
+                {
+                    $extraProperties[$map['hub_attribute']] = $value;
+                }
             }
-            $hubVariable = $this->getConfigStoredData('extra_properties/hub_variable_'.$i);
-            $magentoVariable = $this->getConfigStoredData('extra_properties/magento_variable_'.$i);
-            if ($hubVariable && $magentoVariable) {
-                $valueVariable = $this->_getCustomerAttributeValue($magentoVariable, $customer);
-                $extraPropreties[$hubVariable] = $valueVariable;
-            }
+
         }
-        return $extraPropreties;
+        return $extraProperties;
     }
     
     protected function _getCustomerAttributeValue($attributeCode, $customer)
     {
         $value = '';
-        
-        if ($customer) {
-            $attribute = Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('attribute_code', array('in' => $attributeCode) )->getFirstItem();
-                            
-            if ($attribute) {
-                if ($attribute->getEntityTypeId() == 1) {
-                    if ($attribute->getBackendType() == 'int') {
+
+        if ($customer)
+        {
+            if($attributeCode == 'entity_id')
+            {
+                $value = $customer->getEntityId();
+            }
+            else
+            {
+            $attribute = Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('attribute_code', array('in' => $attributeCode))->getFirstItem();
+            if ($attribute)
+            {
+                if ($attribute->getEntityTypeId() == 1)
+                {
+                    if ($attribute->getBackendType() == 'int')
+                    {
                         $value = Mage::getResourceSingleton('customer/customer')
-                        ->getAttribute($attributeCode)
-                        ->getSource()
-                        ->getOptionText($customer->getData($attributeCode));
-                    } else {
-                        $value.= $customer->getData($attributeCode);
+                            ->getAttribute($attributeCode)
+                            ->getSource()
+                            ->getOptionText($customer->getData($attributeCode));
+                    }
+                    else
+                    {
+                        $value .= $customer->getData($attributeCode);
                     }
                 } else {
                     /* BILLING INFORMATIONS */
                     $billing = $customer->getDefaultBillingAddress();
-                    if ($billing) {
-                        if ($billing->getData($attributeCode)) {
-                            if ($attribute->getBackendType() == 'int') {
+                    if ($billing)
+
+                        if ($billing->getData($attributeCode))
+                        {
+                            if ($attribute->getBackendType() == 'int')
+                            {
                                 $value = Mage::getResourceSingleton('customer/address')
-                                ->getAttribute($attributeCode)
-                                ->getSource()
-                                ->getOptionText($billing->getData($attributeCode));
-                            } else {
-                                $value.= $billing->getData($attributeCode);
+                                    ->getAttribute($attributeCode)
+                                    ->getSource()
+                                    ->getOptionText($billing->getData($attributeCode));
+                            }
+                            else
+                            {
+                                $value .= $billing->getData($attributeCode);
                             }
                         }
                     }
-                    /* SHIPPING INFORMATIONS
-					$shipping = $customer->getDefaultShippingAddress();
-					if($shipping)
-					{
-						if($shipping->getData($attributeCode))
-						{
-							if($attribute->getBackendType() == 'int')
-							{
-								$value = Mage::getResourceSingleton('customer/address')
-								->getAttribute($attributeCode)
-								->getSource()
-								->getOptionText($shipping->getData($attributeCode));						
-							}
-							else
-							{
-								$value = $shipping->getData($attributeCode);
-							}
-						}
-					}
-					*/
                 }
             }
         }
