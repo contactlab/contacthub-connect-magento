@@ -264,6 +264,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         $websiteId = Mage::getModel('core/store')->load($this->getStoreId())->getWebsiteId();
         $customer = Mage::getModel("customer/customer")->setWebsiteId($websiteId)->loadByEmail($this->getIdentityEmail());
         if ($customer) {
+            /*
             if ($customer->getPrefix()) {
                 $base->title = $customer->getPrefix();
             }
@@ -279,6 +280,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
             if ($customer->getDob()) {
                 $base->dob = date('Y-m-d', strtotime($customer->getDob()));
             }
+            */
             $customerAddressId = $customer->getDefaultBilling();
             
             if (intval($customerAddressId)) {

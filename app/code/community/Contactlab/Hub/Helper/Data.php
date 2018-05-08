@@ -327,6 +327,10 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
                             ->getSource()
                             ->getOptionText($customer->getData($attributeCode));
                     }
+                    elseif($attribute->getBackendType() == 'datetime')
+                    {
+                        $value .= date('Y-m-d', strtotime($customer->getData($attributeCode)));
+                    }
                     else
                     {
                         $value .= $customer->getData($attributeCode);
@@ -344,6 +348,10 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
                                     ->getAttribute($attributeCode)
                                     ->getSource()
                                     ->getOptionText($billing->getData($attributeCode));
+                            }
+                            elseif($attribute->getBackendType() == 'datetime')
+                            {
+                                $value .= date('Y-m-d', strtotime($billing->getData($attributeCode)));
                             }
                             else
                             {
