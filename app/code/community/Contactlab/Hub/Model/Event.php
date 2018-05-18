@@ -195,7 +195,8 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         $result = array();
         foreach ($catIds as $catId) {
             $_category = Mage::getModel('catalog/category')->load($catId);
-            if ($_category) {
+            if ($_category)
+            {
                 $result[] = $_category->getName();
             }
         }

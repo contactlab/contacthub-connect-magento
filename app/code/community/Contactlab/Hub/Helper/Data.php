@@ -176,12 +176,17 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $tracking = "";
         $evtName = 'events/viewedProduct';
-        if ($this->getConfigData($evtName)) {
+        if ($this->getConfigData($evtName))
+        {
             $product = Mage::registry('current_product');
             $categories = array();
-            foreach ($product->getCategoryIds() as $categoryId) {
+            foreach ($product->getCategoryIds() as $categoryId)
+            {
                 $category = Mage::getModel('catalog/category')->load($categoryId);
-                $categories[] = $category->getName();
+                if ($category)
+                {
+                    $categories[] = $category->getName();
+                }
             }
             $tracking.= "";
             $tracking.= $this->_getJsCoustomerInfo();
@@ -198,7 +203,9 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
             $properties->category = $categories;
             $productJs->properties = $properties;
             $tracking.= "\nch('event',".json_encode($productJs).");";
-        } else {
+        }
+        else
+        {
             $this->log($evtName.' OFF');
         }
         return $tracking;
