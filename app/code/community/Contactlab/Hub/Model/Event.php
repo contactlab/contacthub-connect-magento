@@ -222,12 +222,114 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         $objProduct->id = $product->getEntityId();
         $objProduct->sku = $product->getSku();
         $objProduct->name = $product->getName();
+        // Questo è il price che viene mostrato 
+        // negli eventi relativi al carrello (aggiunta e rimozione)
+        // e aggiunta e rimozione a wishlist
+        // Il prezzo dell'ordine viene ricalcolato nella classe specializzata Event/Checkout.php
         $objProduct->price = (float)Mage::getModel('directory/currency')->formatTxt($product->getPrice(), array( 'display' => Zend_Currency::NO_SYMBOL ));
+        // Fine moficihe prezzo
         $objProduct->imageUrl = ''.Mage::helper('catalog/image')->init($product, 'image');
         $objProduct->linkUrl = Mage::app()->getStore($product->getStoreId())->getBaseUrl().$product->getUrlPath();
         $objProduct->shortDescription = $product->getShortDescription() ?: "";
         $objProduct->category = $this->_getCategoryNamesFromIds($product->getCategoryIds());
-
+  /*
+        INIZIO CUSTOMIZZAZIONE
+        Per portare a casa i valori che mancano occorre customizzare 
+        questa sezione
+        */
+        $objProduct->vendor = "Alberta Ferretti";
+        $objProduct->classifications = array(
+            // Plan as strings
+            array(
+                'key'   => 'saleContext',
+                'value' => 'Vendita magazzino', // Valori possibili: , 'Vendita magazzino', 'Vendita ufficio', 'Vendita rinascente', 'Sposa - vendita magazzino', 'Sposa - vendita ufficio', 'Sposa - vendita rinascente'], 1),
+            ),
+            array(
+                'key'   => 'unique',
+                'value' => 'AF-001',
+            ),
+            array(
+                'key'   => 'codicedx',
+                'value' => 'DX-123',
+            ),
+            array(
+                'key'   => 'collection',
+                'value' => 'AI18',
+            ),
+            array(
+                'key'   => 'saleContract',
+                'value' => '0 - Acquisto', // Uno tra  '0 - Acquisto', '1 - Prova', '4 - Noleggio 4 giorni', '8 - Noleggio 8 giorni'
+            ),
+            array(
+                'key'   => 'event',
+                'value' => 'Cerimonia', // Oppure - ad esempio - 'Cocktail', 'Matrimoni' , 'Serata romantica'
+            ),
+            array(
+                'key'   => 'length',
+                'value' => 'Al ginocchio',
+            ),
+            array(
+                'key'   => 'size',
+                'value' => '42',
+            ),
+            array(
+                'key'   => 'color',
+                'value' => 'Rosso',
+            ),
+            // Plan as dates
+            array(
+                'key'   => 'rentStart',
+                'value' => '2018-05-28',
+            ),
+            array(
+                'key'   => 'rentEnd',
+                'value' => '2018-06-01',
+            ),
+            // Storage only
+            array(
+                'key' => 'membership',
+                'value' => '0 - No membership', // Altri valori possibili  '0 - No membership', '1 - Plus', '2 - Gold', '3 - Unlimited'], 1)
+            ),
+            array(
+                'key' => 'type',
+                'value' => 'simple',
+            ),
+            array(
+                'key' => 'visibility',
+                'value' => '0'
+            ),
+            array(
+                'key' => 'status',
+                'value' => '1'
+            ),
+            array(
+                'key' => 'shape',
+                'value' => 'Pera',
+            ),
+            array(
+                'key' => 'model',
+                'value' => 'Abito a palloncino',
+            ),
+            array(
+                'key' => 'neckline',
+                'value' => 'Monospalla',
+            ),
+            array(
+                'key' => 'material',
+                'value' => 'Cotone',
+            ),
+            array(
+                'key' => 'hiddenRehersal',
+                'value' => 'Si',
+            ),
+            array(
+                'key' => 'additionalSize',
+                'value' => '44',
+            )
+        );
+        /*
+        FINE CUSTOMIZZAZIONE
+        */
         return $objProduct;
     }
     
@@ -347,10 +449,30 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         $customerData->base = $base;
 
         $extraExtendedProperties = $this->_helper()->getExtraProperties($customer, 'extended');
+        /* 
+        INIZIO CUSTOMIZZAZIONE
+
+        In questo blocco vanno configurati tutti i campi che non è possibile mappare da backend magento.
+        Il processo ideale quindi è:
+
+        1) configurare i dati extra necessari per il customer
+        2) mapparli dove possibile nel backend
+        3) quelli rimanenti estenderli come da esempio sotto
+        */
+        $extraExtendedProperties['website_id']        = 1;
+        $extraExtendedProperties['utm_source']        = 'Facebook';
+        $extraExtendedProperties['utm_campaign']      = 'Lead Ads 2018';
+        $extraExtendedProperties['city']              = 'Milano';
+        $extraExtendedProperties['first_order_date']  = '2018-02-25';
+        $extraExtendedProperties['repeater']          = 1;
+        $extraExtendedProperties['date_repeater']     = '2018-04-03';
+        /*
+        FINE CUSTOMIZZAZIONE
+        */
         if (count($extraExtendedProperties) > 0) {
             $customerData->extended = (object) $extraExtendedProperties;
         }
-        var_dump($customerData);
+
         return $customerData;
     }
     
