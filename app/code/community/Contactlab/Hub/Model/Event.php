@@ -363,7 +363,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         if (count($extraConsentsProperties) > 0) {
             $customerData->consents = (object) $extraConsentsProperties;
         }
-        var_dump($customerData);
+
         return $customerData;
     }
     
