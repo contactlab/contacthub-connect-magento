@@ -219,11 +219,19 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         if ($product == null) {
             return $objProduct;
         }
+        if($product->getImage())
+        {
+            $productImage = Mage::getModel('catalog/product_media_config')->getMediaUrl($product->getImage());
+        }
+        else
+        {
+            $productImage = Mage::helper('catalog/image')->init($product, 'image');
+        }
         $objProduct->id = $product->getEntityId();
         $objProduct->sku = $product->getSku();
         $objProduct->name = $product->getName();
         $objProduct->price = (float)Mage::getModel('directory/currency')->formatTxt($product->getPrice(), array( 'display' => Zend_Currency::NO_SYMBOL ));
-        $objProduct->imageUrl = ''.Mage::helper('catalog/image')->init($product, 'image');
+        $objProduct->imageUrl = ''.$productImage;
         $objProduct->linkUrl = Mage::app()->getStore($product->getStoreId())->getBaseUrl().$product->getUrlPath();
         $objProduct->shortDescription = $product->getShortDescription() ?: "";
         $objProduct->category = $this->_getCategoryNamesFromIds($product->getCategoryIds());
@@ -349,6 +357,11 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         $extraExtendedProperties = $this->_helper()->getExtraProperties($customer, 'extended');
         if (count($extraExtendedProperties) > 0) {
             $customerData->extended = (object) $extraExtendedProperties;
+        }
+
+        $extraConsentsProperties = $this->_helper()->getExtraProperties($customer, 'consents');
+        if (count($extraConsentsProperties) > 0) {
+            $customerData->consents = (object) $extraConsentsProperties;
         }
         var_dump($customerData);
         return $customerData;

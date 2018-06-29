@@ -188,6 +188,14 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
                     $categories[] = $category->getName();
                 }
             }
+            if($product->getImage())
+            {
+                $productImage = Mage::getModel('catalog/product_media_config')->getMediaUrl($product->getImage());
+            }
+            else
+            {
+                $productImage = Mage::helper('catalog/image')->init($product, 'image');
+            }
             $tracking.= "";
             $tracking.= $this->_getJsCoustomerInfo();
             $productJs = new stdClass();
@@ -197,7 +205,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
             $properties->sku = $product->getSku();
             $properties->name = $this->clearStrings($product->getName());
             $properties->price = round($product->getFinalPrice(), 2);
-            $properties->imageUrl = ''.Mage::helper('catalog/image')->init($product, 'image');
+            $properties->imageUrl = ''.$productImage;
             $properties->linkUrl = $product->getProductUrl();
             $properties->shortDescription = $this->clearStrings($product->getShortDescription());
             $properties->category = $categories;
@@ -322,31 +330,29 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
             }
             else
             {
-            $attribute = Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('attribute_code', array('in' => $attributeCode))->getFirstItem();
-            if ($attribute)
-            {
-                if ($attribute->getEntityTypeId() == 1)
+                $attribute = Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('attribute_code', array('in' => $attributeCode))->getFirstItem();
+                if ($attribute && $customer->getData($attributeCode))
                 {
-                    if ($attribute->getBackendType() == 'int')
+                    if ($attribute->getEntityTypeId() == 1)
                     {
-                        $value = Mage::getResourceSingleton('customer/customer')
-                            ->getAttribute($attributeCode)
-                            ->getSource()
-                            ->getOptionText($customer->getData($attributeCode));
-                    }
-                    elseif($attribute->getBackendType() == 'datetime')
-                    {
-                        $value .= date('Y-m-d', strtotime($customer->getData($attributeCode)));
-                    }
-                    else
-                    {
-                        $value .= $customer->getData($attributeCode);
-                    }
-                } else {
-                    /* BILLING INFORMATIONS */
-                    $billing = $customer->getDefaultBillingAddress();
-                    if ($billing)
-
+                        if ($attribute->getBackendType() == 'int')
+                        {
+                            $value = Mage::getResourceSingleton('customer/customer')
+                                ->getAttribute($attributeCode)
+                                ->getSource()
+                                ->getOptionText($customer->getData($attributeCode));
+                        }
+                        elseif($attribute->getBackendType() == 'datetime')
+                        {
+                            $value .= date('Y-m-d', strtotime($customer->getData($attributeCode)));
+                        }
+                        else
+                        {
+                            $value .= $customer->getData($attributeCode);
+                        }
+                    } else {
+                        /* BILLING INFORMATIONS */
+                        $billing = $customer->getDefaultBillingAddress();
                         if ($billing->getData($attributeCode))
                         {
                             if ($attribute->getBackendType() == 'int')
