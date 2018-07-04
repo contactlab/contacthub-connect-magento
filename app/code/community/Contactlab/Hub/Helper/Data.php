@@ -331,44 +331,50 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
             else
             {
                 $attribute = Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('attribute_code', array('in' => $attributeCode))->getFirstItem();
-                if ($attribute && $customer->getData($attributeCode))
+                if ($attribute)
                 {
                     if ($attribute->getEntityTypeId() == 1)
                     {
-                        if ($attribute->getBackendType() == 'int')
+                        if($customer->getData($attributeCode))
                         {
-                            $value = Mage::getResourceSingleton('customer/customer')
-                                ->getAttribute($attributeCode)
-                                ->getSource()
-                                ->getOptionText($customer->getData($attributeCode));
-                        }
-                        elseif($attribute->getBackendType() == 'datetime')
-                        {
-                            $value .= date('Y-m-d', strtotime($customer->getData($attributeCode)));
-                        }
-                        else
-                        {
-                            $value .= $customer->getData($attributeCode);
+                            if ($attribute->getBackendType() == 'int')
+                            {
+                                $value = Mage::getResourceSingleton('customer/customer')
+                                    ->getAttribute($attributeCode)
+                                    ->getSource()
+                                    ->getOptionText($customer->getData($attributeCode));
+                            }
+                            elseif($attribute->getBackendType() == 'datetime')
+                            {
+                                $value .= date('Y-m-d', strtotime($customer->getData($attributeCode)));
+                            }
+                            else
+                            {
+                                $value .= $customer->getData($attributeCode);
+                            }
                         }
                     } else {
                         /* BILLING INFORMATIONS */
                         $billing = $customer->getDefaultBillingAddress();
-                        if ($billing->getData($attributeCode))
+                        if($billing)
                         {
-                            if ($attribute->getBackendType() == 'int')
+                            if ($billing->getData($attributeCode))
                             {
-                                $value = Mage::getResourceSingleton('customer/address')
-                                    ->getAttribute($attributeCode)
-                                    ->getSource()
-                                    ->getOptionText($billing->getData($attributeCode));
-                            }
-                            elseif($attribute->getBackendType() == 'datetime')
-                            {
-                                $value .= date('Y-m-d', strtotime($billing->getData($attributeCode)));
-                            }
-                            else
-                            {
-                                $value .= $billing->getData($attributeCode);
+                                if ($attribute->getBackendType() == 'int')
+                                {
+                                    $value = Mage::getResourceSingleton('customer/address')
+                                        ->getAttribute($attributeCode)
+                                        ->getSource()
+                                        ->getOptionText($billing->getData($attributeCode));
+                                }
+                                elseif($attribute->getBackendType() == 'datetime')
+                                {
+                                    $value .= date('Y-m-d', strtotime($billing->getData($attributeCode)));
+                                }
+                                else
+                                {
+                                    $value .= $billing->getData($attributeCode);
+                                }
                             }
                         }
                     }
