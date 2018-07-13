@@ -1,7 +1,7 @@
 <?php
 /**
-*
-*/
+ *
+ */
 
 class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 {
@@ -43,7 +43,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
         Mage::getConfig()
             ->saveConfig($path, $value, $scope, $scopeId)
             ->reinit();
-    
+
         Mage::app()->reinitStores();
     }
 
@@ -51,7 +51,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return Mage::app()->getStore();
     }
-    
+
     /**
      * @param $message
      * @param null $level
@@ -68,16 +68,16 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-    * @return bool
-    */
+     * @return bool
+     */
     public function isJsTrackingEnabled()
     {
         return Mage::getStoreConfigFlag(self::JS_TRACKING_ENABLED_CONFIG_PATH);
     }
 
     /**
-    * @return bool
-    */
+     * @return bool
+     */
     public function getApiTokenForJavascript()
     {
         return Mage::getStoreConfig(self::JS_UNTRUSTED_TOKEN_CONFIG_PATH) ?: $this->getConfigData('settings/apitoken');
@@ -90,9 +90,9 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-    * Creates a tracking cookie, used when JS tracking is disabled.
-    * @return string
-    */
+     * Creates a tracking cookie, used when JS tracking is disabled.
+     * @return string
+     */
     public function createTrackingCookie()
     {
         $cookieData = array('sid' => uniqid());
@@ -103,7 +103,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
         Mage::getModel('core/cookie')->set('_ch', json_encode($cookieData), 31536000, '/', '');
         return $cookieData['sid'];
     }
-    
+
     public function getJsConfigData()
     {
         $config = new stdClass();
@@ -122,7 +122,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
         $config->contextInfo = $contextInfo;
         return "\nch('config', ".json_encode($config).");";
     }
-    
+
     public function getCustomer()
     {
         $customer = null;
@@ -131,7 +131,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return $customer;
     }
-    
+
     protected function _getJsCoustomerInfo()
     {
         if (!$customer = $this->getCustomer()) {
@@ -147,7 +147,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
         $customerInfo->base = $base;
         return "\nch('customer',".json_encode($customerInfo).");";
     }
-    
+
     public function getCategoryPageTracking()
     {
         $category = Mage::registry('current_category');
@@ -171,7 +171,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return $tracking;
     }
-    
+
     public function getProductPageTracking()
     {
         $tracking = "";
@@ -218,7 +218,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return $tracking;
     }
-    
+
     public function getSearchTracking()
     {
         $tracking = "";
@@ -241,28 +241,28 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return $tracking;
     }
-    
+
     public function clearStrings($string)
     {
         return trim(str_replace("''", "", str_replace("\n", " ", strip_tags($string))));
         //return json_encode(str_replace(PHP_EOL, ' ', strip_tags(trim($string))));
     }
-    
+
     public function getUserAgent()
     {
         return isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
     }
-    
+
     public function getRemoteIpAddress()
     {
         return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
     }
-    
+
     public function sendAnonymousEvent()
     {
         return (bool)$this->getConfigData('settings/send_anonymous');
     }
-    
+
     public function getExchangeRate($storeId = null)
     {
         $exchangeRate = 1;
@@ -276,22 +276,22 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return $exchangeRate;
     }
-    
+
     public function convertToBaseRate($price, $exchangeRate)
     {
         return round(((float)$price / $exchangeRate), 2);
     }
-    
+
     public function getOrderStatusToBeSent($storeId)
     {
-    	   return explode(',', $this->getConfigStoredData('events/order_status', $storeId));
+        return explode(',', $this->getConfigStoredData('events/order_status', $storeId));
     }
 
     public function getExternalId($customer)
     {
         $externalId = Mage::getStoreConfig(self::EXTRA_PROPERTIES_EXTERNAL_ID,
             $customer->getStoreId()
-            );
+        );
         return $this->_getCustomerAttributeValue($externalId, $customer);
     }
 
@@ -317,12 +317,12 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return $extraProperties;
     }
-    
+
     protected function _getCustomerAttributeValue($attributeCode, $customer)
     {
         $value = '';
 
-        if ($customer)
+        if ($attributeCode && $customer)
         {
             if($attributeCode == 'entity_id')
             {
@@ -383,17 +383,17 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return $value;
     }
-    
+
     public function getMonthsToClean()
     {
         return 1;
     }
-    
+
     public function isDiabledSendingSubscriptionEmail($storeId = null)
     {
-        return (bool)$this->getConfigData('settings/disable_sending_subscription_email', $storeId);       
+        return (bool)$this->getConfigData('settings/disable_sending_subscription_email', $storeId);
     }
-    
+
     public function isDiabledSendingNewCustomerEmail($storeId = null)
     {
         return (bool)$this->getConfigData('settings/disable_sending_new_customer_email', $storeId);
@@ -403,5 +403,5 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return (bool)Mage::getStoreConfig(self::PREVIOUS_CUSTOMER_EXPORT_ORDER, $storeId);
     }
-    
+
 }

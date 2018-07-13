@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Contactlab_Hub>
-            <version>1.5.8</version>
+            <version>1.5.9</version>
         </Contactlab_Hub>
     </modules>
     <global>
@@ -33,9 +33,9 @@
                 <class>Contactlab_Hub_Model_Eventhub</class>
             </contactlab_hub_eventhub>
             <customer>
-            		<rewrite>
-            			<customer>Contactlab_Hub_Model_Customer</customer>
-            		</rewrite>
+                <rewrite>
+                    <customer>Contactlab_Hub_Model_Customer</customer>
+                </rewrite>
             </customer>
         </models>
         <resources>
@@ -176,7 +176,7 @@
                     </contactlab_hub>
                 </observers>
             </wishlist_item_delete_before>
-            <!-- SALES EVENTS -->                        
+            <!-- SALES EVENTS -->
             <checkout_cart_product_add_after>
                 <observers>
                     <contactlab_hub>
@@ -196,14 +196,14 @@
                 </observers>
             </sales_quote_remove_item>
             <sales_order_save_after>
-               <observers>
+                <observers>
                     <contactlab_hub>
-                    	<type>singleton</type>
-						<class>contactlab_hub/observer</class>
-						<method>traceOrderEvents</method>
-					</contactlab_hub>
+                        <type>singleton</type>
+                        <class>contactlab_hub/observer</class>
+                        <method>traceOrderEvents</method>
+                    </contactlab_hub>
                 </observers>
-            </sales_order_save_after> 
+            </sales_order_save_after>
             <sales_order_shipment_save_after>
                 <observers>
                     <contactlab_hub>
@@ -386,14 +386,14 @@
                 </run>
             </contactlab_hub_import_subscribers>
             <contactlab_hub_clean_events>
-                <description>Export Events To Hub</description>                
-               	<schedule>
-                			<cron_expr>0 1 * * *</cron_expr>
-                	</schedule>             
+                <description>Export Events To Hub</description>
+                <schedule>
+                    <cron_expr>0 1 * * *</cron_expr>
+                </schedule>
                 <run>
                     <model>contactlab_hub/cron::cleanEvents</model>
                 </run>
-            </contactlab_hub_clean_events>            
+            </contactlab_hub_clean_events>
         </jobs>
     </crontab>
 </config>
