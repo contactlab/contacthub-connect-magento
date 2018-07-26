@@ -320,17 +320,22 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
 
     protected function _getCustomerAttributeValue($attributeCode, $customer)
     {
-        $value = '';
+        $value = null;
 
         if ($attributeCode && $customer)
         {
+            $value = '';
             if($attributeCode == 'entity_id')
             {
                 $value = $customer->getEntityId();
             }
             else
             {
-                $attribute = Mage::getModel('eav/entity_attribute')->getCollection()->addFieldToFilter('attribute_code', array('in' => $attributeCode))->getFirstItem();
+                $attribute = Mage::getModel('eav/entity_attribute')
+                    ->getCollection()
+                    ->addFieldToFilter('attribute_code', array('in' => $attributeCode))
+                    ->addFieldToFilter('entity_type_id', array('in' => array(1, 2)))
+                    ->getFirstItem();
                 if ($attribute)
                 {
                     if ($attribute->getEntityTypeId() == 1)
