@@ -9,6 +9,7 @@
 ## Table of contents
 
 - [Introduction](#Introduction)  
+- [Requirements](#Requirements)
 - [Installing the Magento plug-in](#InstallingPlugIn)  
 - [Configuring the Magento plug-in](#ConfiguringPlugIn)
 - [Appendix A: Which customer data and activities does the Magento plug-in save in Contacthub?](#AppendixA)
@@ -26,6 +27,15 @@ The Contacthub Magento plug-in enables you to automatically send all of the acti
 It also ensures potentially valuable information is not lost, by retaining events and actions that are related to customers who have not yet been identified because, for example, they are not logged in, or they have not yet registered. The data is stored by Contacthub, ready to be associated with the customer as soon as they are identified later.
 
 Installing the plug-in is very simple, while configuring it requires just a few minutes.  
+
+
+<a name="Requirements"/>
+
+## Requirements  
+
+The Contacthub Magento plug-in requires Magento CE version 1.9. Further details about Magento 1 system requirements are available on [Magento website](https://devdocs.magento.com/guides/m1x/system-requirements.html).
+
+An alternative version of the Contacthub Magento plug-in for Magento CE version 2.x is available on Github, at the address [https://github.com/contactlab/contacthub-connect-magento2](https://github.com/contactlab/contacthub-connect-magento2).
 
 <a name="InstallingPlugIn"/>
 
