@@ -1,9 +1,0 @@
-app/code/community/Contactlab/Hub                      app/code/community/Contactlab/Hub
-app/code/community/Contactlab/Hubcommons               app/code/community/Contactlab/Hubcommons
-app/design/adminhtml/default/default/layout/contactlab/*                      app/design/adminhtml/default/default/layout/contactlab
-app/design/adminhtml/default/default/template/contactlab/*                      app/design/adminhtml/default/default/template/contactlab
-app/etc/modules/* app/etc/modules/
-image/* image/
-js/* js/
-lib/* lib/
-skin/adminhtml/default/default/images/contactlab skin/adminhtml/default/default/images/contactlab

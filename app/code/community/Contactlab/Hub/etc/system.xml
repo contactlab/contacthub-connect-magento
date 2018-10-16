@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+	<tabs>
+		<contactlab translate="label" module="contactlab_hub">
+			<label>ContactLab</label>
+			<sort_order>1000</sort_order>
+		</contactlab>
+	</tabs>
 	<sections>
 		<contactlab_hub translate="label" module="contactlab_hub">
 			<label>Contacthub</label>
@@ -128,7 +134,7 @@
 							<show_in_website>1</show_in_website>
 							<show_in_store>1</show_in_store>
 							<depends>
-								<log>2</log>
+								<log>1</log>
 							</depends>
 						</logfilename>
 						<disable_sending_subscription_email translate="label">

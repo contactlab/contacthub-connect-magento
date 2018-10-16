@@ -1,9 +1,41 @@
 <?xml version="1.0"?>
 <config>
+    <menu>
+        <contactlab translate="title" module="contactlab_hub">
+            <title>Contactlab</title>
+            <sort_order>89</sort_order>
+            <children>
+                <logs translate="title" module="contactlab_hub">
+                    <title>Logs</title>
+                    <sort_order>30</sort_order>
+                    <action>adminhtml/contactlab_hub_logs</action>
+                </logs>
+                <config translate="title" module="contactlab_hub">
+                    <title>Configuration</title>
+                    <sort_order>40</sort_order>
+                    <action>adminhtml/system_config/edit/section/contactlab_hub/</action>
+                </config>
+            </children>
+        </contactlab>
+    </menu>
     <acl>
         <resources>
             <admin>
                 <children>
+                    <contactlab translate="title" module="contactlab_hub">
+                        <title>ContactLab</title>
+                        <sort_order>1000</sort_order>
+                        <children>
+                            <logs translate="title">
+                                <title>Logs</title>
+                                <sort_order>30</sort_order>
+                            </logs>
+                            <config translate="title">
+                                <title>Logs</title>
+                                <sort_order>40</sort_order>
+                            </config>
+                        </children>
+                    </contactlab>
                     <system>
                         <children>
                             <config>

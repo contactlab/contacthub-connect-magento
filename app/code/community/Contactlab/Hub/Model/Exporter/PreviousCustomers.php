@@ -1,5 +1,5 @@
 <?php
-class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcommons_Model_Exporter_Abstract
+class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Mage_Core_Model_Abstract
 {
 	const PARTIAL_EXPORT	= 'partial';
 	const FULL_EXPORT 		= 'full';
@@ -10,10 +10,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 	protected $_connectionRead;
 	protected $_tranche;
 	protected $_trancheLimit;		
-	protected $_folderName;
-	protected $_filename;
-	protected $_delimiter;
-	
+
 	protected $_customerTable;
 	protected $_subscriberTable;
 	protected $_storeTable;
@@ -64,13 +61,6 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		return $this->_connectionRead;
 	}
 	
-	
-	/** Write xml object. */
-	protected function writeXml()
-	{
-		return $this;
-	}
-	
 	/**
 	 * Is enabled.
 	 * @return bool
@@ -85,30 +75,8 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		return Mage::getModel('core/date')->date('Y-m-d H:i:s', strtotime($this->_getConfig('cron_previous_customers/previous_date')));
 	}
 	
-	/**
-	 * Get file name.
-	 * @return string
-	 */
-	protected function getFileName() {
-		//return $this->getTask()->getConfig("contactlab_subscribers/global/export_filename");
-		return $this->_folderName.DS.$this->_filename;
-	}
-	
-	protected function _manageFolder()
+	protected function _init($resourceModel = null)
 	{
-		if(!file_exists($this->_folderName))
-		{
-			mkdir($this->_folderName, 0777, true);
-		}
-		return $this;
-	}
-	
-	protected function _init()
-	{		
-		$this->_delimiter =';';
-		$this->_folderName = Mage::getBaseDir('var').DS.'contacthub'.DS.'export';
-		$this->_manageFolder();				
-		$this->_filename =  'customers_'.date('YmdHis').'.csv.tmp';
 		$this->_trancheLimit = $this->_getConfig('cron_previous_customers/limit');
 		$this->_mode = self::PARTIAL_EXPORT;		
 		if($this->getMode())
@@ -124,15 +92,14 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		foreach ($allStores as $storeId => $val)
 		{
 			$this->setStoreId($storeId);
-			Mage::helper('contactlab_hub')->setConfigData('contactlab_hub/cron_previous_customers/enabled', 1, 'stores', $this->getStoreId());
-			Mage::helper('contactlab_hub')->setConfigData('contactlab_hub/cron_previous_customers/previous_date', date('Y-m-d H:i:s'), 'stores', $this->getStoreId());
+			$this->_helper()->setConfigData('contactlab_hub/cron_previous_customers/enabled', 1, 'stores', $this->getStoreId());
+            $this->_helper()->setConfigData('contactlab_hub/cron_previous_customers/previous_date', date('Y-m-d H:i:s'), 'stores', $this->getStoreId());
 			$this->_setUnexported();
 			$this->_canExportOrders = false;
 		}		
 		return $this;
 	}
-	
-	//public function export(Contactlab_Hubcommons_Model_Task_Interface $task)
+
 	public function export()
 	{			
 		$allStores = Mage::app()->getStores();
@@ -141,8 +108,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 			$this->setStoreId($storeId);			
 			if ((!$this->isEnabled()) || (!$this->_getPreviousDate())) 
 			{
-				Mage::helper("contactlab_hubcommons")->logWarn("Module export is disabled");
-				Mage::helper('contactlab_hub')->log("Module export is disabled");
+                $this->_helper()->log("Module export is disabled");
 				continue;
 			}			
 			$this->_init();
@@ -186,8 +152,6 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 				$query .=" LIMIT 0, ". $exportable;
 			}
 		}
-		//echo $query."\n";
-		//Mage::log($query, null, 'fra.log');
 		$results = $this->_getReadConnection()->fetchAll($query);
 		foreach ($results as $row)
 		{				
@@ -287,7 +251,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 
 
         				//if(!$previousCustomer['orders_exported'])
-                        if(Mage::helper('contactlab_hub')->canExportPreviousOrder($previousCustomer['store_id']))
+                        if($this->_helper()->canExportPreviousOrder($previousCustomer['store_id']))
         				{
         					$orders = $this->_getCustomerOrders($previousCustomer['customer_id']);
         					if(count($orders) > 0)
@@ -348,9 +312,9 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		}
 		else
 		{
-			Mage::helper("contactlab_hubcommons")->logNotice("No previous customers to export");
-			Mage::helper('contactlab_hub')->setConfigData('contactlab_hub/cron_previous_customers/enabled', 0, 'stores', $this->getStoreId());
-            Mage::helper('contactlab_hub')->setConfigData('contactlab_hub/cron_previous_customers/export_order', 0, 'stores', $this->getStoreId());
+            $this->_helper()->log("No previous customers to export");
+            $this->_helper()->setConfigData('contactlab_hub/cron_previous_customers/enabled', 0, 'stores', $this->getStoreId());
+            $this->_helper()->setConfigData('contactlab_hub/cron_previous_customers/export_order', 0, 'stores', $this->getStoreId());
 		}
 		return $this;
 	}
@@ -371,7 +335,7 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 	{			
 		$query = "UPDATE ".$this->_previouscustomersTable." SET is_exported = 0 WHERE store_id IN (0, ".$this->getStoreId().");";
 		$this->_getWriteConnection()->query($query);
-		Mage::helper("contactlab_hubcommons")->logNotice("Previous customer export reset succesfull");
+		Mage::helper("contactlab_hub")->log("Previous customer export reset succesfull");
 		return $this;
 	}
 	
@@ -380,38 +344,5 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Contactlab_Hubcomm
 		$query = "UPDATE ".$this->_previouscustomersTable." SET is_exported = 1 WHERE id = ".$previousCustomerId;
 		$this->_getWriteConnection()->query($query);
 		return $this;
-	}
-	
-	
-	/** Put file into sftp or localhost. */
-	private function _putFile($filename, $realFilename) {
-		$sftp = new Contactlab_Hubcommons_Model_Ssh_Net_SFTP(
-				$this->getTask()->getConfig("contactlab_hubcommons/connection/remote_server"));
-		if (!$sftp->login(
-				$this->getTask()->getConfig("contactlab_hubcommons/connection/sftp_username"),
-				$this->getTask()->getConfig("contactlab_hubcommons/connection/sftp_password"))) {
-					throw new Zend_Exception('Login Failed');
-				}
-	
-				$sftp->put($realFilename, $filename, NET_SFTP_LOCAL_FILE);
-				$this->_checkUploadedFile($filename, $realFilename, $sftp);
-	
-				$sftp->_disconnect(0);
-	}
-	
-	/** Check uploaded file existence. */
-	private function _checkUploadedFile($localFile, $remoteFile, $sftp) {
-		$localFileSize = filesize($localFile);
-		$remoteStat = $sftp->lstat($remoteFile);
-		if (!$remoteStat) {
-			throw new Zend_Exception(sprintf('There\'s been a problem during file upload: uploaded file %s not found', $remoteFile));
-		}
-		$this->getTask()->addEvent("Remote file info: " . print_r($remoteStat, true));
-		$remoteFileSize = $remoteStat['size'];
-		if ($localFileSize != $remoteFileSize) {
-			throw new Zend_Exception(sprintf(
-					'There\'s been a problem during file upload: original (%s) file\'s lenght is %d while uploaded '
-					. '(%s) file\'s lenght is %d!', $localFile, $localFileSize, $remoteFile, $remoteFileSize));
-		}
 	}
 }	

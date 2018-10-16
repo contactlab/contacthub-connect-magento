@@ -2,21 +2,15 @@
     "name": "contactlab/magento-hub",
     "description": "Contacthub module for Magento",
     "require": {
-        "php": "~5.5.0|~5.6.0|~7.0.0|~7.1.0"
+        "php": "~5.4.0|~5.5.0|~5.6.0"
     },
     "suggest": {
         "magento-hackathon/magento-composer-installer": "*"
     },
     "type": "magento-module",
-    "version": "1.6.0",
+    "version": "2.0.0",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
-    ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/contactlab/contacthub-connect-magento"
-        }
     ]
 }

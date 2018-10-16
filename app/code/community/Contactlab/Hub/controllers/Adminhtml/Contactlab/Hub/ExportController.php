@@ -7,7 +7,7 @@ class Contactlab_Hub_Adminhtml_Contactlab_Hub_ExportController extends Mage_Admi
     public function queueAction() 
     {    	
         Mage::getModel("contactlab_hub/cron")->exportPreviousCustomers();            	
-        return $this->_redirect('adminhtml/contactlab_hubcommons_tasks');
+        return $this->_redirect('adminhtml/contactlab_hub_logs');
     }
 
     /**
@@ -17,7 +17,7 @@ class Contactlab_Hub_Adminhtml_Contactlab_Hub_ExportController extends Mage_Admi
     {    	
     	Mage::getModel("contactlab_hub/exporter_PreviousCustomers")->resetExport();
     	Mage::getModel("contactlab_hub/cron")->exportPreviousCustomers();
-    	return $this->_redirect('adminhtml/contactlab_hubcommons_tasks');
+    	return $this->_redirect('adminhtml/contactlab_hub_logs');
     }
     
     /**
@@ -26,6 +26,6 @@ class Contactlab_Hub_Adminhtml_Contactlab_Hub_ExportController extends Mage_Admi
      */
     protected function _isAllowed()
     {
-        return Mage::getSingleton('admin/session')->isAllowed('newsletter/contactlab/subscribers/actions/queue');
+        return true;
     }
 }
