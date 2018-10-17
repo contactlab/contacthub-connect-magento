@@ -40,4 +40,30 @@ extends Mage_Core_Model_Resource_Db_Collection_Abstract
         return $countSelect;
     }
 
+    /**
+     * Add filter by store
+     *
+     * @param $store
+     * @param bool $withAdmin
+     * @return $this
+     */
+    public function addStoreFilter($store, $withAdmin = true)
+    {
+        if ($store instanceof Mage_Core_Model_Store) {
+            $store = array($store->getId());
+        }
+
+        if (!is_array($store)) {
+            $store = array($store);
+        }
+
+        if ($withAdmin) {
+            $store[] = Mage_Core_Model_App::ADMIN_STORE_ID;
+        }
+
+        $this->addFilter('store_id', array('in' => $store), 'public');
+
+        return $this;
+    }
+
 }

@@ -1,4 +1,4 @@
- <?php
+<?php
 class Contactlab_Hub_Model_Adminhtml_System_Config_Backend_Hub_Cron_Subscribers
 extends Mage_Core_Model_Config_Data
 {

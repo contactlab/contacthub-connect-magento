@@ -1,23 +1,16 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-    <adminhtml_contactlab_hubcommons_tasks_index>
+    <adminhtml_contactlab_hub_logs_index>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/contactlab-hub.css</name>
+            </action>
+        </reference>
         <reference name="content">
-            <block type="adminhtml/template" name="contactlab.hubcommons.hub" before="contactlab.hubcommons.version"
+            <block type="adminhtml/template" name="contactlab.hub.buttons" as="buttons" after="hub_logs"
                    template="contactlab/hub/hub.phtml">
-                <block type="contactlab_hubcommons/adminhtml_widget_button"
-                       name="contactlab.hub.customers.export"
-                       as="contactlab.hub.customers.export">
-                    <action method="setLabel" translate="label">
-                        <label>Queue Customer export job</label>
-                    </action>
-                    <action method="setUrl">
-                        <url>adminhtml/contactlab_hub_export/queue</url>
-                    </action>
-                    <action method="setConfirm" translate="confirm">
-                        <confirm>Are you sure you want to do this?</confirm>
-                    </action>
-                </block>                                
-                <block type="contactlab_hubcommons/adminhtml_widget_button"
+                <block type="contactlab_hub/adminhtml_widget_button"
                        name="contactlab.hub.resetexport"
                        as="contactlab.hub.resetexport">
                     <action method="setLabel" translate="label">
@@ -31,6 +24,7 @@
                     </action>
                 </block>
             </block>
+            <block type="contactlab_hub/adminhtml_version" name="contactlab.hub.version" as="version" after="hub_logs" />
         </reference>
-    </adminhtml_contactlab_hubcommons_tasks_index>
+    </adminhtml_contactlab_hub_logs_index>
 </layout>

@@ -404,4 +404,3 @@ class Contactlab_Hub_Model_Mobiledetect extends ContactlabHub_Mobile_Detect
     }
 
 }
-?>

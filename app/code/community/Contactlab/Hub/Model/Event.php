@@ -80,7 +80,6 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
             $this->save();
             $this->_helper()->log($e->getMessage());
         }
-
         $this->_helper()->log('fine export event');
         return $this;
     }

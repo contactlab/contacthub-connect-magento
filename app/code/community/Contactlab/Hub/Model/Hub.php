@@ -32,6 +32,10 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
             $response = $this->curlPost($this->_getApiUrl('customers'), json_encode($data), true);
             $response = json_decode($response);
             if ($response->curl_http_code == 409) {
+
+                $this->_helper()->log('PATCH Customer');
+                $this->_helper()->log($response);
+
                 unset($data->nodeId);
                 $data->id = $response->data->customer->id;
                 //unset($data->subscriptions);
@@ -96,7 +100,11 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
     {
         $result = null;
         try {
-            $response = $this->curlGet($this->_getApiUrl('customers'), ['nodeId' => $this->_getNodeId(), 'size' => 20]);
+            $response = $this->curlGet(
+                $this->_getApiUrl('customers'),
+                array('nodeId' => $this->_getNodeId(),
+                    'size' => 20)
+            );
             $response = json_decode($response, true);
             //return $response;
             if (!$response) {
@@ -176,8 +184,7 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
         }
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($curl);
-        //        $this->_helper()->log('HTTP CODE:'.curl_getinfo($curl, CURLINFO_HTTP_CODE));
-                
+
         $this->_helper()->log("RESPONSE:");
         $this->_helper()->log(json_decode($response));
         $this->_helper()->log("FINE RESPONSE:");
