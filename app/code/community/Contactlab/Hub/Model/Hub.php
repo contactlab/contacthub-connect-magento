@@ -31,16 +31,23 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
         try {
             $response = $this->curlPost($this->_getApiUrl('customers'), json_encode($data), true);
             $response = json_decode($response);
-            if ($response->curl_http_code == 409) {
+            if ($response->curl_http_code == 409)
+            {
+                if($response->data->customer)
+                {
+                    $this->_helper()->log('PATCH Customer');
+                    $this->_helper()->log($response);
 
-                $this->_helper()->log('PATCH Customer');
-                $this->_helper()->log($response);
-
-                unset($data->nodeId);
-                $data->id = $response->data->customer->id;
-                //unset($data->subscriptions);
-                $response = $this->curlPost($response->data->customer->href, json_encode($data), true, null, "PATCH");
-                return json_decode($response);
+                    unset($data->nodeId);
+                    $data->id = $response->data->customer->id;
+                    //unset($data->subscriptions);
+                    $response = $this->curlPost($response->data->customer->href, json_encode($data), true, null, "PATCH");
+                    return json_decode($response);
+                }
+                else
+                {
+                    $this->_helper()->log('CAN\'T UPDATE CUSTOMER UNTRUSTED SOURCE');
+                }
             } else {
                 return $response->id;
             }
