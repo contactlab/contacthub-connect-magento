@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<package>
+    <name>Contactlab_Modules</name>
+    <version>2.0.0</version>
+    <stability>stable</stability>
+    <license uri="https://opensource.org/licenses/osl-3.0.php">OSL v. 3.0</license>
+    <channel>community</channel>
+    <extends/>
+    <summary>The enabler to engage online shoppers via digital direct marketing campaigns. Community and Enterprise Edition</summary>
+    <description>&lt;h1&gt;&lt;a href="https://contactlab.com/en" target="_blank"&gt;&lt;b&gt;Contactlab&lt;/b&gt;&lt;/a&gt;&lt;/h1&gt;&#xD;
+&lt;p&gt;provides products and services that enable brands to get the most out of their customer engagement strategies.&lt;/p&gt;&#xD;
+&lt;p&gt;Our Marketing Cloud Platform extend our market-leading multi-channel messaging solution with a suite of new proprietary products that enable you to collect and analyse consumers&amp;rsquo; actions (digital and off-line), segment and plan your campaigns, and deliver personalized communication so that you can build a one-to-one relationship with your customers.&lt;/p&gt;&#xD;
+&lt;p&gt;Our experts support you to get the most from technology by building customer engagement programs that make your projects success stories.&lt;/p&gt;&#xD;
+&lt;h2&gt;&lt;a href="https://contactlab.com/en/offer/engagement-marketing-platform/contacthub/" target="_blank"&gt;&lt;b&gt;Contacthub&lt;/b&gt;&lt;/a&gt;&lt;/h2&gt;&#xD;
+&lt;p&gt;is the core of Contactlab Marketing Cloud being the centralized repository of aggregated customer profiles and events collected from any online or offline touch-point such as magento eCommerce and/or physical shops.&lt;/p&gt;&#xD;
+&lt;p&gt;Contacthub lets you collect and update consumer data and events from different sources in enriched single customer profiles in real time, easily accessible from all company systems. Helping you build more personalized relationships with your customers.&lt;/p&gt;&#xD;
+&lt;p&gt;The &lt;b&gt;Contacthub Magento plug-in&lt;/b&gt; enables you to automatically send all &amp;nbsp;of the activities that your customers undertake on the e-commerce &amp;nbsp;platform to Contacthub, without the need to write any code.&amp;nbsp;&lt;/p&gt;&#xD;
+&lt;p&gt;&lt;b&gt;Please note that:&lt;/b&gt;&lt;/p&gt;&#xD;
+&lt;ul&gt;&#xD;
+&lt;li&gt;&lt;b&gt;The extension requires a specific account on the Contactlab Marketing Cloud in order to be properly configured and activated&lt;/b&gt;&lt;/li&gt;&#xD;
+&lt;/ul&gt;&#xD;
+&lt;ul&gt;&#xD;
+&lt;li&gt;&lt;b&gt;Such account can be either already active before starting installation procedure or can be activated after the installation; anyway without such account the extension cannot work correctly&lt;/b&gt;&lt;/li&gt;&#xD;
+&lt;/ul&gt;&#xD;
+&lt;ul&gt;&#xD;
+&lt;li&gt;&lt;b&gt;Account activation is provided through Contactlab Customer Care only as part of the client onboarding process into the Contactlab Marketing Cloud&lt;/b&gt;&lt;/li&gt;&#xD;
+&lt;/ul&gt;&#xD;
+&lt;ul&gt;&#xD;
+&lt;li&gt;&lt;b&gt;Contactlab Marketing Cloud is a SaaS platform that shall be purchased separately from the extension; for pricing information contact Contactlab sales department&lt;/b&gt;&lt;/li&gt;&#xD;
+&lt;/ul&gt;&#xD;
+&lt;p&gt;The &amp;nbsp;extension automatically collects individual customer information such &amp;nbsp;as:&lt;/p&gt;&#xD;
+&lt;ul&gt;&#xD;
+&lt;li&gt;The pages they visit&lt;/li&gt;&#xD;
+&lt;/ul&gt;&#xD;
+&lt;ul&gt;&#xD;
+&lt;li&gt;The products they add to, or remove from, their shopping cart&lt;/li&gt;&#xD;
+&lt;/ul&gt;&#xD;
+&lt;ul&gt;&#xD;
+&lt;li&gt;The orders they complete&lt;/li&gt;&#xD;
+&lt;/ul&gt;&#xD;
+&lt;p&gt;It also ensures potentially valuable information is not lost, by &amp;nbsp;retaining events and actions that are related to customers who have not &amp;nbsp;yet been identified because, for example, they are not logged in, or &amp;nbsp;they have not yet registered.&amp;nbsp;&lt;/p&gt;&#xD;
+&lt;p&gt;The data is stored by Contacthub, ready to &amp;nbsp;be associated with the customer as soon as they are identified later.&lt;/p&gt;&#xD;
+&lt;p&gt;Installing the plug-in is very simple, while configuring it requires just a few minutes. The extensions have no impact on how your site appear to your customer or how fast it responds.&lt;/p&gt;&#xD;
+&lt;h2&gt;Features&lt;/h2&gt;&#xD;
+&lt;p&gt;Following features are provided by the extension:&lt;/p&gt;&#xD;
+&lt;ul&gt;&#xD;
+&lt;li&gt;collect and save to Contacthub information about customer or subscriber profile&lt;/li&gt;&#xD;
+&lt;/ul&gt;&#xD;
+&lt;ul&gt;&#xD;
+&lt;li&gt;keep information about customer or subscriber synced between eCommerce platform and Contacthub&lt;/li&gt;&#xD;
+&lt;/ul&gt;&#xD;
+&lt;ul&gt;&#xD;
+&lt;li&gt;collect and save to Contacthub valuable data about customer or subscriber activities on the eCommerce Platform such as the pages they visit, the products they add to or remove from the shopping cart and the orders they completes&lt;/li&gt;&#xD;
+&lt;/ul&gt;&#xD;
+&lt;ul&gt;&#xD;
+&lt;li&gt;security and privacy by design through token-based authenticated API&lt;/li&gt;&#xD;
+&lt;/ul&gt;&#xD;
+&lt;ul&gt;&#xD;
+&lt;li&gt;no impact on how eCommerce platform appears to customer&lt;/li&gt;&#xD;
+&lt;/ul&gt;&#xD;
+&lt;ul&gt;&#xD;
+&lt;li&gt;no impact on perfomance of the eCommerce platform&lt;/li&gt;&#xD;
+&lt;/ul&gt;&#xD;
+&lt;h2&gt;Account &amp;amp; Pricing&lt;/h2&gt;&#xD;
+&lt;p&gt;The extensions is provided free of charge as open source software to all Contactlab Marketing Cloud clients.&lt;/p&gt;&#xD;
+&lt;p&gt;The extension requires a specific Contactlab Marketing Cloud account to be successfully configured and activated.&lt;/p&gt;</description>
+    <notes>deleted hubcommons&#xD;
+created new log grid </notes>
+    <authors><author><name>ContactLab</name><user>ContactLab</user><email>magento@contactlab.com</email></author></authors>
+    <date>2018-11-16</date>
+    <time>14:14:28</time>
+    <contents><target name="magecommunity"><dir name="Contactlab"><dir name="Hub"><dir name="Block"><dir name="Adminhtml"><dir name="Logs"><dir name="Grid"><dir name="Renderer"><file name="Status.php" hash="10e62db7da849c9ed923fe96fbff05e1"/></dir></dir><file name="Grid.php" hash="a1cda8661387f0da6e4aa42b0321156d"/></dir><file name="Logs.php" hash="0f6254010b380a6200743817d6ab91f3"/><dir name="System"><dir name="Config"><dir name="Field"><file name="Readonly.php" hash="39a9bda8a5fa5ad92d1164b47b1f3a88"/></dir><dir name="Form"><dir name="Map"><file name="Customer.php" hash="05bf18b88a835427578e93a6512ff7ce"/></dir></dir><dir name="Source"><file name="Date.php" hash="182eacaaf305943c37472367d3e5d65a"/></dir></dir></dir><file name="Version.php" hash="1a8e7c4454bfb4a2473da6fc5cd750ea"/><dir name="Widget"><file name="Button.php" hash="9646712e4cd040f1d01a8b3bc8d1a547"/></dir></dir><dir name="System"><dir name="Config"><dir name="Form"><dir name="Field"><file name="Tags.php" hash="1339c1a456545f748fd6a915e4d21190"/></dir></dir></dir></dir></dir><dir name="Helper"><file name="Data.php" hash="35f8e48b1bbe41e5d4bc37fc63496418"/></dir><dir name="Model"><dir name="Adminhtml"><dir name="System"><dir name="Config"><dir name="Backend"><dir name="Hub"><dir name="Cron"><file name="Events.php" hash="91da9c8b0afa59a1c380a9bb49524fbd"/><file name="PreviousCustomers.php" hash="c029889c626bd57cf1e64143b69421cf"/><file name="Subscribers.php" hash="77bd6479428a9e59320b4264690e5927"/></dir></dir><dir name="Map"><file name="Customer.php" hash="26c911b7b5bb7c881650f81c1f5f62d2"/></dir></dir><dir name="Source"><dir name="Cron"><file name="CustomersLimit.php" hash="6d1767fc9dc8e3d440fb7ca5e3da517a"/><file name="EventsLimit.php" hash="c6b55aa6a7f48e5fd26cc26bd001ab09"/><file name="Frequency.php" hash="e751002a645952f5116ea04fa886c8a2"/><file name="Hours.php" hash="03543d594bcd80267a2d3e588d8fb85b"/><file name="Minutes.php" hash="4cc7415413e66e84f87d8c0876a84b19"/></dir><dir name="Customer"><file name="Attributes.php" hash="03eb012fdc57747cbc52b09a4749effb"/><file name="Type.php" hash="e8bac83e971c6173d98734d4debbec80"/></dir><file name="EventStatus.php" hash="bb0fe1d3568f721e1dc35c9205ae2051"/><file name="OrderStatus.php" hash="d31553e46ff557b288891104d6fe8ac0"/></dir></dir></dir></dir><file name="Cron.php" hash="3a46f2aa0baaed88a4bb110218949c92"/><file name="Customer.php" hash="ee10951e04eebe46fe460a6cffbdb5b3"/><file name="Email.php" hash="c07d3dfb01a52a79802907dd6636ccaa"/><dir name="Event"><file name="AbandonedCart.php" hash="0ad68d89252df6d8d6a13b4d290bf06e"/><file name="AddToCart.php" hash="692b193a32ce334404bfdd139c64403e"/><file name="AddToCompare.php" hash="13bfffa8ada416a7d06424585750711b"/><file name="AddToWishlist.php" hash="2e6e47d8d6bf41297730f25c83452329"/><file name="CancelOrder.php" hash="f7ab45148228b1e60e8bec0b49addc97"/><file name="ChangeStore.php" hash="b7b886a3008bba1399777835c41fd741"/><file name="Checkout.php" hash="c28bc99712ee81b593eb08231da37adf"/><file name="Login.php" hash="378764a3b19396f796cac5cf5f266c08"/><file name="Logout.php" hash="0674f9b9260e6b2b233dab71191e98dd"/><file name="Register.php" hash="8559572cc48f10660f10144c083bcf35"/><file name="RemoveToCart.php" hash="e6dc784f5285d68b4374c592ac03f2ea"/><file name="RemoveToCompare.php" hash="8e9965993e78848fd42d322d9a85e6b1"/><file name="RemoveToWishlist.php" hash="0c6c904ac20ff3e866fefea8640ba250"/><file name="Searched.php" hash="f6e3de4d686a5385c75627f34f678058"/><file name="Shipment.php" hash="533b2725e1594e827ca38e43ca857ee4"/><file name="Subscription.php" hash="7a07cfd70ac708ce59ac733721931f4a"/><file name="ViewedProduct.php" hash="e185c5ecb959f74f6c2d15c48eb85beb"/><file name="ViewedProductCategory.php" hash="8e3def7345b7735e58015f5247b9e0e1"/></dir><file name="Event.php" hash="9ea5404dc837d00f51e1b48d0b692a6d"/><dir name="Exporter"><file name="AbandonedCarts.php" hash="e5ae734ca7109b9967cff8abcded9cd9"/><file name="Events.php" hash="6193e7bcc35e1aecda1a1e522f18c8e3"/><file name="PreviousCustomers.php" hash="47f3820368eb2e28b0a50e90b7615fd9"/></dir><file name="Hub.php" hash="59c61e26ead622fcc24a9f017f87a839"/><file name="Mobiledetect.php" hash="ec5124c0fd6c640a6fde238cc358b949"/><dir name="Mysql4"><dir name="Event"><file name="Collection.php" hash="effadf4b29b7df7869ef6553fd7a4be1"/></dir><file name="Event.php" hash="144232d65fc215bad5bd78d82efea42d"/></dir><file name="Observer.php" hash="45f837f3a67339dd5baf58e3628b716c"/><dir name="Resource"><dir name="Event"><file name="Collection.php" hash="06b0a913c2205427d509e19eba7f9e1f"/></dir><file name="Event.php" hash="3f1fff02ea231561680d7d2b1e2e4f5f"/></dir></dir><dir name="controllers"><dir name="Adminhtml"><dir name="Contactlab"><dir name="Hub"><file name="ExportController.php" hash="a9d5335af10761ad1a7e67f79e1bfa6a"/><file name="LogsController.php" hash="cf98563dcb01cd12e0dd6692dcfd3f96"/></dir></dir></dir></dir><dir name="etc"><file name="adminhtml.xml" hash="c5385a6477e10d8c831f93a32322b761"/><file name="config.xml" hash="46418769fa10ed25a7c5ea51f7b81655"/><file name="system.xml" hash="dd75369b892c6894cbeca682977fb54e"/></dir><dir name="sql"><dir name="contactlab_hub_setup"><file name="mysql4-install-0.9.0.php" hash="c3db501b207d88fa8e249de97951362b"/><file name="upgrade-0.9.2-1.0.0.php" hash="ecda020dad17b16f86e41eb6b80f5324"/><file name="upgrade-1.1.1-1.2.0.php" hash="7814724f421d2e6df2411129e4b95d99"/><file name="upgrade-1.2.0-1.2.1.php" hash="c59da424b02af79fd327f949a5e8bcb1"/></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Contactlab_Hub.xml" hash="433f93237827e64837e49b94307ea200"/></dir></target><target name="magedesign"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="layout"><dir name="contactlab"><file name="hub.xml" hash="f6d26d3f373ba38f7569e6f9c4f7c8a9"/></dir></dir><dir name="template"><dir name="contactlab"><dir name="hub"><file name="hub.phtml" hash="d48be740783c5bf17444a838074e191b"/><file name="version.phtml" hash="96b392794b3755df26d079061625afdc"/></dir></dir></dir></dir></dir></dir></target><target name="mage"><dir name="."><file name="composer.json" hash="5ec36815bb656defb9fd502aba75104b"/></dir></target><target name="mageskin"><dir name="adminhtml"><dir name="default"><dir name="default"><dir name="css"><file name="contactlab-hub.css" hash="34de9b50659f98aabd9c0fc608b453ea"/></dir></dir></dir></dir></target></contents>
+    <compatible/>
+    <dependencies><required><php><min>5.4.0</min><max>6.0.0</max></php></required></dependencies>
+</package>

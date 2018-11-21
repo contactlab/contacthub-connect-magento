@@ -29,27 +29,10 @@ class Contactlab_Hub_Model_Cron extends Mage_Core_Model_Abstract
 		return $this->_getConfig('cron_subscribers/enabled')?true:false;
 	}
 	
-	/**
-	 * Log function call.
-	 * @param String $functionName
-	 * @param String $storeId
-	 */
-	public function logCronCall($functionName, $storeId = false)
-	{
-		Mage::helper('contactlab_hubcommons')
-		->logCronCall(
-				"Contactlab_Subscribers_Model_Cron::$functionName", $storeId
-				);
-	}
-	
 	public function exportEvents()
-	{		
-		$this->logCronCall("addExportEventsQueue");	
-		return Mage::getModel("contactlab_hubcommons/task")
-			->setTaskCode("ExportEventsTask")
-			->setModelName('contactlab_hub/task_exportEvents')
-			->setDescription('Export Events')
-			->save();
+	{
+        Mage::getModel('contactlab_hub/exporter_events')->export();
+
 	}
 	
 	public function exportPreviousCustomers()
@@ -57,14 +40,8 @@ class Contactlab_Hub_Model_Cron extends Mage_Core_Model_Abstract
 		if (!$this->_isExportPreviousCustomersEnabled() )
 		{
 			return;
-		}		
-	
-		$this->logCronCall("addExportPreviousCustomersQueue");		
-		return Mage::getModel("contactlab_hubcommons/task")		
-			->setTaskCode("ExportPreviousCustomersTask")
-			->setModelName('contactlab_hub/task_exportPreviousCustomers')
-			->setDescription('Export Previous Coustomers')	
-			->save();
+		}
+        Mage::getModel("contactlab_hub/exporter_previousCustomers")->export();
 	}
 	
 	public function getAbandonedCarts()
@@ -80,13 +57,8 @@ class Contactlab_Hub_Model_Cron extends Mage_Core_Model_Abstract
 		if (!$this->_isImportSubscribersEnabled()) 
 		{
 			return;
-		}		
-		$this->logCronCall("addImportSubscribersQueue", $storeId);
-		return Mage::getModel("contactlab_hubcommons/task")		
-			->setTaskCode("ImportSubscribersTask")
-			->setModelName('contactlab_hub/task_importSubscribers')
-			->setDescription('Import Subscribers')
-			->save();
+		}
+        Mage::getModel("contactlab_hub/importer_subscribers")->import();
 	}
 	
 	/**
@@ -94,11 +66,6 @@ class Contactlab_Hub_Model_Cron extends Mage_Core_Model_Abstract
 	 */
 	public function cleanEvents()
 	{
-	    $this->logCronCall("cleanOldEvents");
-	    return Mage::getModel("contactlab_hubcommons/task")
-	    ->setTaskCode("CleanEventsTask")
-	    ->setModelName('contactlab_hub/task_cleanEvents')
-	    ->setDescription('Clean Events')
-	    ->save();
+        Mage::getModel('contactlab_hub/event')->cleanEvents();
 	}
 }

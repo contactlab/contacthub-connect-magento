@@ -1,5 +1,5 @@
 <?php
-class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons_Model_Exporter_Abstract
+class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Mage_Core_Model_Abstract
 {
 	protected $_helper;	
 	protected $_connectionWrite;
@@ -44,12 +44,6 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 		return $this->_connectionRead;
 	}
 	
-	/** Write xml object. */
-	protected function writeXml()
-	{
-		return $this;
-	}
-	
 	/**
 	 * Is enabled.
 	 * @return bool
@@ -72,7 +66,7 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 			$this->setStoreId($storeId);			
 			if (!$this->isEnabled())
 			{
-				Mage::helper("contactlab_hubcommons")->logWarn("Module export is disabled");
+				Mage::helper("contactlab_hub")->log("Module export is disabled");
 				return "Module export is disabled";
 			}
 			$this->_collectAbandonedCarts();
@@ -117,14 +111,6 @@ class Contactlab_Hub_Model_Exporter_AbandonedCarts extends Contactlab_Hubcommons
 			$collection->getSelect()->join( array('subscribers'=> $this->_subscriberTable), 'subscribers.subscriber_email = main_table.customer_email', array());
 			$collection->addFieldToFilter('subscribers.subscriber_status', array('eq' => Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED));
 		}
-		/*
-		$this->_helper()->log('ABANDONED CART');
-		$this->_helper()->log($collection->getSelect());
-		$this->_helper()->log('FINE ABANDONED CART');
-		*/
-		
-		//echo $collection->getSelect()."\n\n";
-		
 		
 		foreach ($collection as $cart)
 		{	
