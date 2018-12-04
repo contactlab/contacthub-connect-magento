@@ -16,7 +16,11 @@ class Contactlab_Hub_Adminhtml_Contactlab_Hub_ExportController extends Mage_Admi
     public function resetAction()
     {    	
     	Mage::getModel("contactlab_hub/exporter_PreviousCustomers")->resetExport();
-    	Mage::getModel("contactlab_hub/cron")->exportPreviousCustomers();
+        $this->_getSession()->addSuccess(
+            Mage::helper('contactlab_hub')->__('The queue of all previous customers has been correctly reset.')
+        );
+    	// prevent timeout in controller
+        // Mage::getModel("contactlab_hub/cron")->exportPreviousCustomers();
     	return $this->_redirect('adminhtml/contactlab_hub_logs');
     }
     
