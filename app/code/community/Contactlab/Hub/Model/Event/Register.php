@@ -9,9 +9,11 @@ class Contactlab_Hub_Model_Event_Register extends Contactlab_Hub_Model_Event
         {
             return;
         }
+        $email = $this->getEvent()->getCustomer()->getEmail();
         $eventData = array();
         $this->setName('formCompiled')
             ->setModel('register')
+            ->setIdentityEmail($email)
             ->setNeedUpdateIdentity(false)
             ->setEventData(json_encode($eventData));
         return parent::_assignData();

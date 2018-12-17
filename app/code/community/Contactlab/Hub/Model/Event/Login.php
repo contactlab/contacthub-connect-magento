@@ -7,9 +7,11 @@ class Contactlab_Hub_Model_Event_Login extends Contactlab_Hub_Model_Event
 		{
 			return;
 		}
+        $email = $this->getEvent()->getCustomer()->getEmail();
 		$eventData = array();
 		$this->setName('loggedIn')
 			->setModel('login')
+            ->setIdentityEmail($email)
 			->setNeedUpdateIdentity(true)
 			->setEventData(json_encode($eventData));				
 		return parent::_assignData();
