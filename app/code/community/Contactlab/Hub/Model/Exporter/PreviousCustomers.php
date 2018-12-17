@@ -166,13 +166,14 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Mage_Core_Model_Ab
 	}
 	
 	protected function _insertSubscribers()
-	{	
+	{
 	    $query = "  SELECT ne.customer_id
                     ,ne.store_id
                     ,ne.subscriber_email as email
                     FROM ".$this->_subscriberTable." as ne
                     LEFT OUTER JOIN ".$this->_previouscustomersTable." as chp ON ne.subscriber_email = chp.email
                     WHERE ne.store_id IN (0, ".$this->getStoreId().")
+                    AND ne.customer_id = 0 
                     AND ne.subscriber_status = ".Mage_Newsletter_Model_Subscriber::STATUS_SUBSCRIBED."
                     AND chp.id IS NULL   ";
 	    if($this->_mode == self::PARTIAL_EXPORT)
@@ -182,9 +183,17 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Mage_Core_Model_Ab
 	        {
 	            $query .=" LIMIT 0, ". $exportable;
 	        }
-	    }	    
-	    
-	    return $this;
+	    }
+        $results = $this->_getReadConnection()->fetchAll($query);
+
+        foreach ($results as $row)
+        {
+            /* CUSTOMER INFORMATIONS */
+            $query = "	INSERT INTO ".$this->_previouscustomersTable." SET ".$this->_buildInsertQuery($row);
+            //echo var_dump($row);
+            $this->_getWriteConnection()->query($query, $row);
+        }
+        return $this;
 	}
 	
 	private function _buildInsertQuery($data)

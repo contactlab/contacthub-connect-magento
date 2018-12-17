@@ -275,23 +275,6 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         $websiteId = Mage::getModel('core/store')->load($this->getStoreId())->getWebsiteId();
         $customer = Mage::getModel("customer/customer")->setWebsiteId($websiteId)->loadByEmail($this->getIdentityEmail());
         if ($customer) {
-            /*
-            if ($customer->getPrefix()) {
-                $base->title = $customer->getPrefix();
-            }
-            if ($customer->getFirstname()) {
-                $base->firstName = $customer->getFirstname();
-            }
-            if ($customer->getLastname()) {
-                $base->lastName = $customer->getLastname();
-            }
-            if ($customer->getGender()) {
-                $base->gender = $customer->getGender() == 1 ? 'Male' : 'Female';
-            }
-            if ($customer->getDob()) {
-                $base->dob = date('Y-m-d', strtotime($customer->getDob()));
-            }
-            */
             $customerAddressId = $customer->getDefaultBilling();
             
             if (intval($customerAddressId)) {
@@ -324,10 +307,15 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
             }
             $extraBaseProperties = $this->_helper()->getExtraProperties($customer, 'base');
             $base = (object) array_merge( (array)$base, $extraBaseProperties );
+
+            $customerData->externalId = $this->_helper()->getExternalId($customer);
+
         }
-        if (in_array($this->getName(), array('campaignSubscribed', 'campaignUnsubscribed'))) {
+        if (in_array($this->getName(), array('campaignSubscribed', 'campaignUnsubscribed')))
+        {
             $subscriber = Mage::getModel('newsletter/subscriber')->loadByEmail($this->getIdentityEmail());
-            if ($subscriber->getId()) {
+            if ($subscriber->getId())
+            {
                 $subcriberObj = new stdClass();
                 $subcriberObj->id = $this->_helper()->getConfigData('events/campaignName', $this->getStoreId());
                 $subcriberObj->kind = "DIGITAL_MESSAGE";
@@ -345,13 +333,12 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
                 }
                 $subscriptions[] = $subcriberObj;
                 $base->subscriptions = $subscriptions;
-            }
-        }
 
-        $externalId = $this->_helper()->getExternalId($customer);
-        if($externalId)
-        {
-            $customerData->externalId = $externalId;
+                if(!$customerData->externalId)
+                {
+                    $customerData->externalId = $subscriber->getSubscriberEmail();
+                }
+            }
         }
 
         $customerData->base = $base;
