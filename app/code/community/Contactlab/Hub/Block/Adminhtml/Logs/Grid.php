@@ -96,7 +96,7 @@ class Contactlab_Hub_Block_Adminhtml_Logs_Grid extends Mage_Adminhtml_Block_Widg
 
     public function getRowUrl($row)
     {
-       return $this->getUrl('*/*/edit', array('id' => $row->getId()));
+       return false;
     }
 
     protected function _prepareMassaction()

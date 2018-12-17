@@ -329,6 +329,10 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
             {
                 $value = $customer->getEntityId();
             }
+            elseif($attributeCode == 'email')
+            {
+                $value = $customer->getEmail();
+            }
             else
             {
                 $attribute = Mage::getModel('eav/entity_attribute')
