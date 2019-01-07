@@ -214,20 +214,21 @@ class Contactlab_Hub_Model_Exporter_PreviousCustomers extends Mage_Core_Model_Ab
 	
 	protected function _getRemoteIp($customerId)
 	{
-		$query= "SELECT remote_ip FROM ".$this->_quoteTable." WHERE customer_id = ".$customerId." ORDER BY created_at limit 0,1";
+		$query = "SELECT remote_ip FROM ".$this->_quoteTable." WHERE customer_id = ".$customerId." ORDER BY created_at limit 0,1";
 		$remoteIp = $this->_getReadConnection()->fetchOne($query);
+
 		if(!$remoteIp)
 		{
 			if (!empty($_SERVER['HTTP_CLIENT_IP'])) 
 			{
     			$remoteIp =  $_SERVER['HTTP_CLIENT_IP'];
 			} 
-			else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) 
+			elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))
 			{
     			$ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
     			$remoteIp =  trim($ips[count($ips) - 1]); //real IP address behind proxy IP			
-			} 
-			else 
+			}
+			elseif(!empty($_SERVER['REMOTE_ADDR']))
 			{
     			$remoteIp =  $_SERVER['REMOTE_ADDR']; //no proxy found
 			}

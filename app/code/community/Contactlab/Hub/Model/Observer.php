@@ -126,8 +126,12 @@ class Contactlab_Hub_Model_Observer
     public function traceCustomerLogin($observer)
     {
         $cookie = json_decode(Mage::getSingleton('core/cookie')->get('_ch'), true);
-        if ($cookie && $cookie['customerId']) {
-            $this->_helper()->deleteTrackingCookie();
+        if ($cookie)
+        {
+            if(array_key_exists($cookie, 'customerId'))
+            {
+                $this->_helper()->deleteTrackingCookie();
+            }
         }
         
         $event = Mage::getModel('contactlab_hub/event_login');

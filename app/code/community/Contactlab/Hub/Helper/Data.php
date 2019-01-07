@@ -303,17 +303,20 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
                 $customer->getStoreId())
         );
         $attributesMap = $attributesMap['customer_mapping'];
-        foreach ($attributesMap as $map)
+        if(count($attributesMap) > 0)
         {
-            if($type == $map['hub_type'])
+            foreach ($attributesMap as $map)
             {
-                $value = $this->_getCustomerAttributeValue($map['magento_attribute'], $customer);
-                if($value)
+                if($type == $map['hub_type'])
                 {
-                    $extraProperties[$map['hub_attribute']] = $value;
+                    $value = $this->_getCustomerAttributeValue($map['magento_attribute'], $customer);
+                    if($value)
+                    {
+                        $extraProperties[$map['hub_attribute']] = $value;
+                    }
                 }
-            }
 
+            }
         }
         return $extraProperties;
     }
