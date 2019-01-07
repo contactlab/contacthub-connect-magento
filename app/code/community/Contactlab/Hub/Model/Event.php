@@ -246,8 +246,12 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         $remoteCustomerHub = null;
         if ($this->getIdentityEmail()) {
             $remoteCustomerHub = $this->_getHub()->getRemoteCustomerHub($customerData);
-            if ($remoteCustomerHub->id) {
-                return $remoteCustomerHub->id;
+            if($remoteCustomerHub)
+            {
+                if(property_exists($remoteCustomerHub, "id"))
+                {
+                    return $remoteCustomerHub->id;
+                }
             }
         }
         return $remoteCustomerHub;
@@ -274,7 +278,7 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
         }
         $websiteId = Mage::getModel('core/store')->load($this->getStoreId())->getWebsiteId();
         $customer = Mage::getModel("customer/customer")->setWebsiteId($websiteId)->loadByEmail($this->getIdentityEmail());
-        if ($customer) {
+        if ($customer->getEntityId()) {
             $customerAddressId = $customer->getDefaultBilling();
             
             if (intval($customerAddressId)) {
@@ -334,7 +338,8 @@ class Contactlab_Hub_Model_Event extends Mage_Core_Model_Abstract
                 $subscriptions[] = $subcriberObj;
                 $base->subscriptions = $subscriptions;
 
-                if(!$customerData->externalId)
+
+                if(!property_exists($customerData, "externalId"))
                 {
                     $customerData->externalId = $subscriber->getSubscriberEmail();
                 }
