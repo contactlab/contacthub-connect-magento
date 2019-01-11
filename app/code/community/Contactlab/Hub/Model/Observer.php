@@ -128,7 +128,7 @@ class Contactlab_Hub_Model_Observer
         $cookie = json_decode(Mage::getSingleton('core/cookie')->get('_ch'), true);
         if ($cookie)
         {
-            if(array_key_exists($cookie, 'customerId'))
+            if(array_key_exists('customerId', $cookie))
             {
                 $this->_helper()->deleteTrackingCookie();
             }
