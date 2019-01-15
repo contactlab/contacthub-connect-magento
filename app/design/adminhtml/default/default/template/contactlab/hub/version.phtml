@@ -1,25 +1,66 @@
 <?php /* @var $this Contactlab_Hub_Block_Adminhtml_Version */ ?>
 <div class="grid" style="padding-top: 50px; clear: both">
     <div class="hor-scroll">
-        <h3><?php echo $this->__('Installed version: %s', $this->getPlatformVersion()); ?></h3>
+        <h3><?php echo $this->__('Checks'); ?></h3>
         <table class="data" cellspacing="0" style="width: 40%">
-            <thead>
-                <tr class="headings">
-                    <th><?php echo $this->__('Plugin') ?></th>
-                    <th><?php echo $this->__('Description') ?></th>
-                    <th><?php echo $this->__('Version') ?></th>
-                </tr>
-            </thead>
             <tbody>
-                <?php foreach ($this->getModulesVersion() as $module): ?>
-                <tr class="<?php echo $module->getClass() ?>">
-                    <td><strong><?php echo $module->getName() ?></strong></td>
-                    <td><?php echo $module->getDescription() ?></td>
-                    <td class="a-right"><code><?php echo $module->getVersion() ?></code></td>
-                </tr>
-                <?php endforeach; ?>
+            <?php $php = $this->checkPhpVersion() ?>
+            <tr class="even">
+                <td>PHP Version</td>
+                <td class="last">
+                    <span
+                            class="contactlab-hub-event-status status<?php echo $php['code'] ?>"
+                            title ="<?php echo $php['message'] ?>">
+                    </span>
+                </td>
+            </tr>
+
+            <?php $magento = $this->checkMagentoVersion() ?>
+            <tr class="">
+                <td>Magento Version</td>
+                <td class="last">
+                    <span
+                            class="contactlab-hub-event-status status<?php echo $magento['code'] ?>"
+                            title ="<?php echo $magento['message'] ?>">
+                    </span>
+                </td>
+            </tr>
+
+            <?php $cron = $this->checkCron(); ?>
+            <tr class="even">
+                <td>Cron</td>
+                <td class="last">
+                    <span
+                            class="contactlab-hub-event-status status<?php echo $cron['code'] ?>"
+                            title ="<?php echo $cron['message'] ?>">
+                    </span>
+                </td>
+            </tr>
+
+            <?php $hub = $this->checkModuleVersion() ?>
+            <tr class="">
+                <td>Contactlab Hub Version <?php echo $this->getModuleVersion(); ?></td>
+                <td class="last">
+                    <span
+                            class="contactlab-hub-event-status status<?php echo $hub['code'] ?>"
+                            title ="<?php echo $hub['message'] ?>">
+                    </span>
+                </td>
+            </tr>
+
+            <?php $api = $this->checkApi(); ?>
+            <tr class="even">
+                <td>API</td>
+                <td class="last">
+                    <span
+                            class="contactlab-hub-event-status status<?php echo $api['code'] ?>"
+                            title ="<?php echo $api['message'] ?>">
+                    </span>
+                </td>
+            </tr>
+
+
             </tbody>
         </table>
     </div>
 </div>
-
