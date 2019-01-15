@@ -102,32 +102,21 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
             throw $e;
         }
     }
-    
-    public function getAllCustomers($outputAssoc = false)
+
+    public function getAllCustomers()
     {
-        $result = null;
+        $this->_helper()->log(__METHOD__);
         try {
             $response = $this->curlGet(
                 $this->_getApiUrl('customers'),
-                array('nodeId' => $this->_getNodeId(),
-                    'size' => 20)
+                array('nodeId' => $this->_helper()->getConfigStoredData('settings/apinodeid'),
+                    'size' => 1)
             );
-            $response = json_decode($response, true);
-            //return $response;
-            if (!$response) {
-                throw new \Exception('empty response', 664);
-            }
-            if (!isset($response['_embedded']['customers']) || !is_array($response['_embedded']['customers'])) {
-                throw new \Exception('not valid response', 663);
-            }
-            $result = $response['_embedded']['customers'];
+            $response = json_decode($response);
         } catch (\Exception $e) {
             throw $e;
         }
-        //if (count($result) > 0) {
-        return $result;
-        //}
-        //return null;
+        return $response;
     }
      
     private function _helper()
@@ -241,7 +230,7 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
         if ($this->_getApiProxy()) {
             curl_setopt($curl, CURLOPT_PROXY, $this->_getApiProxy());
         }
-        
+
         if ($this->_getApiToken()) {
             curl_setopt($curl, CURLOPT_HTTPHEADER, array(
                     'X-Forwarded-Ssl:on',
@@ -256,7 +245,14 @@ class Contactlab_Hub_Model_Hub extends Mage_Core_Model_Abstract
             curl_close($curl);
             throw new \Exception($response, 666);
         }
+
+
+        $response = json_decode($response) ?: new \stdClass();
+        $response->curl_http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $response = json_encode($response);
+
         curl_close($curl);
+
         return $response;
     }
 }
