@@ -303,7 +303,7 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
                 $customer->getStoreId())
         );
         $attributesMap = $attributesMap['customer_mapping'];
-        if(count($attributesMap) > 0)
+        if(!empty($attributesMap) && count($attributesMap) > 0)
         {
             foreach ($attributesMap as $map)
             {
