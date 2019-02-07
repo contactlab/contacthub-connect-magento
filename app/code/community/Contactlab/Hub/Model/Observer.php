@@ -173,7 +173,7 @@ class Contactlab_Hub_Model_Observer
             $subscriber->setLastSubscribedAt();
         }
                 
-        if($this->_helper()->isDiabledSendingSubscriptionEmail($subscriber->getStoreId())) {
+        if($this->_helper()->isDiabledSendingSubscriptionEmail($subscriber->getStoreId()) && !$this->needsConfirmationEmail($subscriber)) {
             $subscriber->setImportMode(true);
         }
         
@@ -181,6 +181,32 @@ class Contactlab_Hub_Model_Observer
         $event->setEvent($observer->getEvent()->setSubscriber($subscriber));
         $event->trace();
         return $observer;
+    }
+
+    /* logic taken out of Mage_Newsletter_Model_Subscriber subscribe */
+    protected function needsConfirmationEmail(Mage_Newsletter_Model_Subscriber $subscriber){
+        if(!Mage::getStoreConfigFlag(Mage_Newsletter_Model_Subscriber::XML_PATH_CONFIRMATION_FLAG)){
+
+            return false;
+        }
+
+        if($subscriber->getSubscriberStatus() !== Mage_Newsletter_Model_Subscriber::STATUS_NOT_ACTIVE){
+
+            return false;
+        }
+
+        return !$this->subscriberIsLoggedinCustomer($subscriber);
+    }
+
+    protected function subscriberIsLoggedinCustomer(Mage_Newsletter_Model_Subscriber $subscriber){
+        $customerSession = Mage::getSingleton('customer/session');
+
+        $ownerId = Mage::getModel('customer/customer')
+            ->setWebsiteId(Mage::app()->getStore()->getWebsiteId())
+            ->loadByEmail($subscriber->getEmail())
+            ->getId();
+
+        return $customerSession->isLoggedIn() && $ownerId == $customerSession->getId();
     }
     
     public function traceChangeStoreEvent($observer)
