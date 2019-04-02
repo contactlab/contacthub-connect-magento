@@ -14,7 +14,7 @@ class Contactlab_Hub_Model_Event_Register extends Contactlab_Hub_Model_Event
         $this->setName('formCompiled')
             ->setModel('register')
             ->setIdentityEmail($email)
-            ->setNeedUpdateIdentity(false)
+            ->setNeedUpdateIdentity(true)
             ->setEventData(json_encode($eventData));
         return parent::_assignData();
     }
