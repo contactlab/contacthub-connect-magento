@@ -11,6 +11,8 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
     const EXTRA_PROPERTIES_EXTERNAL_ID = 'contactlab_hub/extra_properties/external_id';
     const EXTRA_PROPERTIES_ATTRIBUTE_MAP = 'contactlab_hub/extra_properties/attribute_map';
 
+    const HUB_ATTRIBUTE_NEST_SEPARATOR ='/';
+
     protected $_saveLog = false;
     protected $_logFilename = false;
 
@@ -310,15 +312,27 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
                 if($type == $map['hub_type'])
                 {
                     $value = $this->_getCustomerAttributeValue($map['magento_attribute'], $customer);
-                    if($value)
+
+                    if(!is_null($value) && $value!=="")
                     {
-                        $extraProperties[$map['hub_attribute']] = $value;
+                        $nestedAttributeValue = $this->_nestAttributeValue($map['hub_attribute'],$value);
+                        $extraProperties = array_merge_recursive($extraProperties,$nestedAttributeValue);
                     }
                 }
-
             }
         }
         return $extraProperties;
+    }
+    
+    protected function _nestAttributeValue($hubAttribute,$attributeValue)
+    {
+        $attributeTree = explode(self::HUB_ATTRIBUTE_NEST_SEPARATOR,$hubAttribute);
+        $extraProperty = [array_pop($attributeTree)=>$attributeValue];
+        while(count($attributeTree)){
+            $extraProperty = [array_pop($attributeTree)=>$extraProperty];
+        }
+
+        return $extraProperty;
     }
 
     protected function _getCustomerAttributeValue($attributeCode, $customer)
@@ -347,9 +361,12 @@ class Contactlab_Hub_Helper_Data extends Mage_Core_Helper_Abstract
                 {
                     if ($attribute->getEntityTypeId() == 1)
                     {
-                        if($customer->getData($attributeCode))
+                        if($customer->hasData($attributeCode))
                         {
-                            if ($attribute->getBackendType() == 'int')
+                            if($attribute->getSourceModel()=='eav/entity_attribute_source_boolean'){
+                                $value = (bool)$customer->getData($attributeCode);
+                            }
+                            elseif($attribute->getBackendType() == 'int')
                             {
                                 $value = Mage::getResourceSingleton('customer/customer')
                                     ->getAttribute($attributeCode)
