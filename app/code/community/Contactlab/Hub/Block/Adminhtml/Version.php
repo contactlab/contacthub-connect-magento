@@ -95,7 +95,7 @@ class Contactlab_Hub_Block_Adminhtml_Version extends Mage_Adminhtml_Block_Abstra
         foreach ($this->_getCronSchedules() as $cronSchedule)
         {
             $datetime2 = new DateTime($cronSchedule->getCreatedAt());
-            $interval = round((strtotime($datetime1) - strtotime($datetime2)) / 60);
+            $interval = round(($datetime1->getTimestamp() - $datetime2->getTimestamp()) / 60);
             if($interval > 5)
             {
                 $intervalTime = $interval;
